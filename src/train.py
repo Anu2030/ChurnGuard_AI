@@ -4,6 +4,7 @@ import json
 import joblib
 import pandas as pd
 import numpy as np
+import shap
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split, GridSearchCV
@@ -164,6 +165,17 @@ def train_and_evaluate():
     metrics_path = os.path.join(config.MODELS_DIR, 'model_metrics.json')
     with open(metrics_path, 'w') as f:
         json.dump({'best_model_name': best_name, 'all_results': results}, f, indent=4)
+        
+    # Generate and save SHAP Explainer
+    print("Generating SHAP Explainer...")
+    if best_name in ['XGBoost', 'Random Forest']:
+        explainer = shap.TreeExplainer(best_model)
+    else:
+        explainer = shap.Explainer(best_model, X_train)
+        
+    explainer_path = os.path.join(config.MODELS_DIR, 'shap_explainer.pkl')
+    joblib.dump(explainer, explainer_path)
+    print(f"SHAP explainer saved to {explainer_path}")
         
     print("Model training and evaluation successfully completed!")
 

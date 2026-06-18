@@ -5,6 +5,7 @@ import numpy as np
 import joblib
 import json
 import streamlit as st
+import shap
 import plotly.express as px
 import plotly.graph_objects as go
 from sklearn.decomposition import PCA
@@ -114,11 +115,14 @@ def load_resources():
     with open(os.path.join(config.MODELS_DIR, 'km_cohorts_data.json'), 'r') as f:
         km_cohorts_data = json.load(f)
         
-    return model, scaler, cox_model, features_list, df_cltv, segment_profiles, km_cohorts_data
+    # Load SHAP Explainer
+    shap_explainer = joblib.load(os.path.join(config.MODELS_DIR, 'shap_explainer.pkl'))
+        
+    return model, scaler, cox_model, features_list, df_cltv, segment_profiles, km_cohorts_data, shap_explainer
 
 # Load assets
 try:
-    model, scaler, cox_model, features_list, df_cltv, segment_profiles, km_cohorts_data = load_resources()
+    model, scaler, cox_model, features_list, df_cltv, segment_profiles, km_cohorts_data, shap_explainer = load_resources()
 except Exception as e:
     st.error(f"Error loading resources: {e}. Please ensure you've run the training, segmentation, and CLTV scripts first.")
     st.stop()
@@ -441,6 +445,79 @@ with tab2:
             showlegend=False
         )
         st.plotly_chart(fig_curve, use_container_width=True)
+        
+        # 3. Explainable AI (SHAP)
+        st.markdown("#### 🧠 AI Prediction Explanation")
+        
+        shap_values = shap_explainer(sim_df)
+        contributions = shap_values.values[0]
+        
+        # Handle shape differences between models
+        if len(contributions.shape) > 1:
+            contributions = contributions[:, 1]
+            
+        shap_df = pd.DataFrame({
+            'Feature': list(sim_df.columns),
+            'Impact': contributions
+        })
+        
+        # Filter top drivers
+        shap_df['Abs_Impact'] = shap_df['Impact'].abs()
+        top_shap = shap_df[shap_df['Abs_Impact'] > 0.05].sort_values(by='Abs_Impact', ascending=False).head(6)
+        
+        top_shap['Color'] = top_shap['Impact'].apply(lambda x: '#FF5E5E' if x > 0 else '#2ECC71')
+        top_shap = top_shap.sort_values(by='Impact', ascending=True)
+        
+        fig_shap = go.Figure(go.Bar(
+            x=top_shap['Impact'],
+            y=top_shap['Feature'],
+            orientation='h',
+            marker_color=top_shap['Color'],
+            text=top_shap['Impact'].apply(lambda x: f"{x:+.2f}"),
+            textposition='auto'
+        ))
+        
+        fig_shap.update_layout(
+            title="Top Factors Driving Risk Score (Log-Odds)",
+            xaxis_title="Impact on Risk",
+            yaxis_title="",
+            template='plotly_dark',
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            height=300,
+            margin=dict(l=10, r=10, t=40, b=10)
+        )
+        st.plotly_chart(fig_shap, use_container_width=True)
+        
+        # 4. Next Best Action (NBA) Prescriptive Engine
+        st.markdown("#### 🚀 Prescriptive Next Best Action (NBA)")
+        positive_drivers = top_shap[top_shap['Impact'] > 0].sort_values('Impact', ascending=False)
+        
+        if prob < 0.3:
+            st.success("**Status:** Secure. **Action:** Cross-sell premium services and enroll in referral program.")
+        elif len(positive_drivers) == 0:
+            st.warning("**Status:** At-Risk (Mixed Signals). **Action:** Schedule a general customer success check-in call.")
+        else:
+            top_driver = positive_drivers.iloc[0]['Feature']
+            
+            # Rule Engine
+            if 'Contract' in top_driver:
+                nba = "Offer a 10-20% discount to lock in a 1-year or 2-year contract."
+            elif 'Fiber optic' in top_driver:
+                nba = "High price sensitivity detected. Check for outages and offer a temporary price freeze."
+            elif 'TechSupport' in top_driver or 'OnlineSecurity' in top_driver:
+                nba = "Offer a 3-month free trial of Premium Tech Support & Security."
+            elif 'MonthlyCharges' in top_driver:
+                nba = "Review data usage and recommend a more cost-effective downgraded plan."
+            elif 'PaymentMethod' in top_driver:
+                nba = "Offer a $5/mo credit for switching to Automatic Credit Card payments."
+            elif 'tenure' in top_driver:
+                nba = "Early tenure risk. Trigger the personalized 'Welcome & Onboarding' sequence."
+            else:
+                nba = f"Address {top_driver} concern with a targeted follow-up."
+                
+            st.error(f"**Primary Churn Driver:** {top_driver}")
+            st.info(f"**Recommended Action:** {nba}")
 
 # ----------------- TAB 3: CUSTOMER SEGMENTATION -----------------
 with tab3:
