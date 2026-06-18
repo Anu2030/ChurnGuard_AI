@@ -1,0 +1,38 @@
+[
+    {
+        "Segment": "High-Spend At-Risk",
+        "Count": 2276,
+        "Avg_Tenure": 15.4,
+        "Avg_MonthlyCharges": 80.78,
+        "Avg_TotalCharges": 1251.26,
+        "Churn_Rate": 48.24,
+        "Strategic_Recommendation": "Proactively offer contract conversions from Month-to-Month to 1/2 Year with pricing discounts. Provide support checks."
+    },
+    {
+        "Segment": "Loyal Premium",
+        "Count": 1904,
+        "Avg_Tenure": 59.5,
+        "Avg_MonthlyCharges": 93.31,
+        "Avg_TotalCharges": 5548.65,
+        "Churn_Rate": 15.39,
+        "Strategic_Recommendation": "Focus on cross-selling and premium upgrades (e.g., streaming bundles). Offer loyalty rewards."
+    },
+    {
+        "Segment": "Loyal Value",
+        "Count": 1160,
+        "Avg_Tenure": 53.6,
+        "Avg_MonthlyCharges": 34.91,
+        "Avg_TotalCharges": 1835.62,
+        "Churn_Rate": 5.0,
+        "Strategic_Recommendation": "Keep satisfied with consistent service quality. Offer multi-year contract discount options to lock in long-term."
+    },
+    {
+        "Segment": "New Budget",
+        "Count": 1703,
+        "Avg_Tenure": 10.2,
+        "Avg_MonthlyCharges": 31.78,
+        "Avg_TotalCharges": 302.29,
+        "Churn_Rate": 24.66,
+        "Strategic_Recommendation": "Smooth onboarding process. Offer entry-level utility upgrades. Send helpful tip sheets to increase feature usage."
+    }
+]
