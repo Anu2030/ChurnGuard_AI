@@ -23,357 +23,715 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom Premium Styling (Dark Theme & Professional Aesthetics)
+# ==================== PREMIUM DESIGN SYSTEM ====================
 st.markdown("""
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-    /* Dark Mode Theme Adjustments */
-    .stApp {
-        background-color: #0E1117;
-        color: #E0E6ED;
+    /* ===== ANIMATIONS ===== */
+    @keyframes pulse-risk {
+        0% { box-shadow: 0 0 0 0 rgba(248, 113, 113, 0.4); }
+        70% { box-shadow: 0 0 0 10px rgba(248, 113, 113, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(248, 113, 113, 0); }
     }
     
-    /* Card Styles */
-    .metric-card {
-        background: rgba(26, 32, 44, 0.65);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+    @keyframes fade-in-up {
+        0% { opacity: 0; transform: translateY(15px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes gradient-sweep {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* ===== GLOBAL RESET & TYPOGRAPHY ===== */
+    *, *::before, *::after { box-sizing: border-box; }
+    
+    .stApp {
+        background: linear-gradient(160deg, #0a0e17 0%, #0d1321 40%, #111827 100%);
+        color: #c9d1d9;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    /* Apply fade-in animation to main content blocks */
+    div[data-testid="stVerticalBlock"] > div {
+        animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Inter', sans-serif !important;
+        color: #e6edf3 !important;
+        letter-spacing: -0.02em;
+    }
+    
+    p, span, div, label {
+        font-family: 'Inter', sans-serif !important;
+    }
+    
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.4); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(99, 102, 241, 0.7); }
+    
+    /* ===== SIDEBAR ===== */
+    section[data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #0d1321 0%, #131b2e 100%) !important;
+        border-right: 1px solid rgba(99, 102, 241, 0.15) !important;
+    }
+    section[data-testid="stSidebar"] .stMarkdown p {
+        color: #8b949e !important;
+    }
+    
+    /* ===== TABS STYLING ===== */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+        background: rgba(13, 19, 33, 0.6);
         border-radius: 12px;
-        padding: 20px;
+        padding: 6px;
+        border: 1px solid rgba(99, 102, 241, 0.1);
+    }
+    .stTabs [data-baseweb="tab"] {
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        color: #8b949e;
+        background: transparent;
+        border: none;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .stTabs [data-baseweb="tab"]:hover {
+        color: #c9d1d9;
+        background: rgba(99, 102, 241, 0.08);
+    }
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2)) !important;
+        color: #a5b4fc !important;
+        font-weight: 600;
+        border: 1px solid rgba(99, 102, 241, 0.25) !important;
+    }
+    .stTabs [data-baseweb="tab-highlight"] { display: none; }
+    .stTabs [data-baseweb="tab-border"] { display: none; }
+    
+    /* ===== GLASSMORPHISM METRIC CARDS ===== */
+    .glass-card {
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.5));
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(99, 102, 241, 0.12);
+        border-radius: 16px;
+        padding: 24px 20px;
         text-align: center;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    .glass-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent-color, #6366f1), transparent);
+        border-radius: 16px 16px 0 0;
+    }
+    .glass-card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(99, 102, 241, 0.35);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(99, 102, 241, 0.08);
+    }
+    .card-icon {
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+        display: block;
         transition: transform 0.3s ease;
     }
-    .metric-card:hover {
-        transform: translateY(-5px);
-        border-color: rgba(0, 191, 255, 0.4);
+    .glass-card:hover .card-icon {
+        transform: scale(1.15);
     }
-    .metric-value {
-        font-size: 2rem;
-        font-weight: 700;
-        color: #00BFFF;
-        margin-top: 10px;
-    }
-    .metric-title {
-        font-size: 0.9rem;
-        font-weight: 500;
-        color: #A0AEC0;
+    .card-label {
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: #64748b;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 1.5px;
+        margin-bottom: 6px;
     }
-    
-    /* Strategic Grid Card Styles */
-    .strategy-card {
-        border-left: 5px solid #00BFFF;
-        background: rgba(26, 32, 44, 0.8);
-        border-radius: 0 8px 8px 0;
-        padding: 15px;
-        margin-bottom: 15px;
-    }
-    .strategy-card.high-risk {
-        border-left-color: #FF5E5E;
-    }
-    .strategy-card.loyal {
-        border-left-color: #2ECC71;
-    }
-    .strategy-card.save {
-        border-left-color: #F1C40F;
-    }
-    
-    /* Headers */
-    h1, h2, h3 {
-        font-family: 'Outfit', sans-serif;
-    }
-    .glow-header {
+    .card-value {
+        font-size: 1.9rem;
         font-weight: 800;
-        background: linear-gradient(90deg, #00BFFF, #8A2BE2);
+        letter-spacing: -0.03em;
+        margin-top: 4px;
+        font-family: 'JetBrains Mono', monospace !important;
+    }
+    
+    /* ===== SECTION HEADERS ===== */
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 28px 0 18px 0;
+        padding-bottom: 12px;
+        border-bottom: 1px solid rgba(99, 102, 241, 0.12);
+    }
+    .section-header .icon {
+        font-size: 1.4rem;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15));
+        padding: 8px 10px;
+        border-radius: 10px;
+        border: 1px solid rgba(99, 102, 241, 0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .section-header:hover .icon {
+        transform: rotate(-5deg) scale(1.05);
+        box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+    }
+    .section-header .text {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #e6edf3;
+        letter-spacing: -0.01em;
+    }
+    .section-desc {
+        color: #8b949e;
+        font-size: 0.88rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+    }
+    
+    /* ===== STRATEGY CARDS V2 ===== */
+    .strat-card {
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.7), rgba(30, 41, 59, 0.4));
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-left: 4px solid var(--card-accent, #6366f1);
+        border-radius: 0 12px 12px 0;
+        padding: 18px 20px;
+        margin-bottom: 14px;
+        transition: all 0.3s ease;
+    }
+    .strat-card:hover {
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+        border-left-width: 6px;
+        transform: translateX(6px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    .strat-card h4 {
+        font-size: 1rem;
+        font-weight: 700;
+        margin: 0 0 6px 0;
+    }
+    .strat-card p {
+        font-size: 0.82rem;
+        color: #8b949e;
+        line-height: 1.55;
+        margin: 0;
+    }
+    .strat-card b { color: #a5b4fc; }
+    
+    /* ===== NBA RESULT CARDS ===== */
+    .nba-card {
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.5));
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(99, 102, 241, 0.15);
+        border-radius: 14px;
+        padding: 20px 22px;
+        margin-top: 12px;
+        transition: all 0.3s ease;
+    }
+    .nba-card.high-risk {
+        animation: pulse-risk 2s infinite;
+    }
+    .nba-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+    .nba-card .nba-label {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 8px;
+    }
+    .nba-card .nba-text {
+        font-size: 0.92rem;
+        line-height: 1.6;
+        color: #c9d1d9;
+    }
+    
+    /* ===== MAIN HEADER ===== */
+    .hero-header {
+        font-size: 2.2rem;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        background: linear-gradient(135deg, #818cf8 0%, #a78bfa 25%, #c084fc 50%, #e879f9 75%, #818cf8 100%);
+        background-size: 200% auto;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        margin-bottom: 25px;
+        background-clip: text;
+        margin-bottom: 6px;
+        line-height: 1.2;
+        animation: gradient-sweep 4s linear infinite;
+    }
+    .hero-subtitle {
+        font-size: 0.88rem;
+        color: #64748b;
+        font-weight: 400;
+        margin-bottom: 28px;
+        letter-spacing: 0.02em;
+    }
+    
+    /* ===== SIDEBAR BRANDING ===== */
+    .sidebar-brand {
+        text-align: center;
+        padding: 20px 10px 24px 10px;
+        border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        margin-bottom: 20px;
+    }
+    .sidebar-brand .logo { 
+        font-size: 2.4rem; 
+        margin-bottom: 6px; 
+        display: inline-block; 
+        transition: transform 0.4s ease;
+    }
+    .sidebar-brand:hover .logo {
+        transform: rotate(15deg) scale(1.1);
+    }
+    .sidebar-brand .name {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #e6edf3;
+        letter-spacing: -0.01em;
+    }
+    .sidebar-brand .version {
+        font-size: 0.68rem;
+        color: #64748b;
+        font-weight: 500;
+        margin-top: 4px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+    .sidebar-nav {
+        padding: 8px 0;
+    }
+    .sidebar-nav .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #8b949e;
+        margin-bottom: 6px;
+        transition: all 0.2s ease;
+        cursor: default;
+    }
+    .sidebar-nav .nav-item:hover {
+        background: rgba(99, 102, 241, 0.12);
+        color: #c9d1d9;
+        transform: translateX(4px);
+    }
+    .sidebar-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-size: 0.65rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+    }
+    
+    /* ===== FOOTER ===== */
+    .app-footer {
+        text-align: center;
+        padding: 24px 0;
+        margin-top: 40px;
+        border-top: 1px solid rgba(99, 102, 241, 0.08);
+        color: #475569;
+        font-size: 0.75rem;
+        letter-spacing: 0.03em;
+        transition: color 0.3s ease;
+    }
+    .app-footer:hover { color: #64748b; }
+    .app-footer a { color: #818cf8; text-decoration: none; transition: color 0.3s ease; }
+    .app-footer a:hover { color: #a78bfa; text-decoration: underline; }
+    
+    /* ===== HIDE STREAMLIT DEFAULTS ===== */
+    #MainMenu { visibility: hidden; }
+    footer { visibility: hidden; }
+    header[data-testid="stHeader"] { background: transparent; }
+    
+    /* ===== FORM WIDGETS ===== */
+    .stSelectbox label, .stSlider label {
+        color: #94a3b8 !important;
+        font-weight: 500 !important;
+        font-size: 0.82rem !important;
+    }
+    div[data-baseweb="select"] > div {
+        background: rgba(15, 23, 42, 0.6) !important;
+        border-color: rgba(99, 102, 241, 0.15) !important;
+        border-radius: 8px !important;
+        transition: all 0.3s ease;
+    }
+    div[data-baseweb="select"] > div:hover {
+        border-color: rgba(99, 102, 241, 0.4) !important;
+        box-shadow: 0 0 10px rgba(99, 102, 241, 0.1);
+    }
+    /* Slider improvements */
+    .stSlider > div > div > div > div {
+        background-color: #818cf8 !important;
+    }
+    
+    /* ===== DATAFRAME ===== */
+    .stDataFrame {
+        border: 1px solid rgba(99, 102, 241, 0.1) !important;
+        border-radius: 12px !important;
+        overflow: hidden;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# Helper function to load data and models
+# ==================== LOAD DATA & MODELS ====================
 @st.cache_resource
 def load_resources():
-    # Load model and encoders
     model = joblib.load(config.BEST_MODEL_PATH)
     scaler = joblib.load(config.SCALER_PATH)
     cox_model = joblib.load(os.path.join(config.MODELS_DIR, 'cox_model.pkl'))
     
-    # Load features list
     with open(os.path.join(config.MODELS_DIR, 'features.json'), 'r') as f:
         features_list = json.load(f)
         
-    # Load precalculated data
     df_cltv = pd.read_csv(config.CLTV_DATA_PATH)
     
-    # Load segment profiles
     with open(os.path.join(config.MODELS_DIR, 'segment_profiles.json'), 'r') as f:
         segment_profiles = json.load(f)
         
-    # Load KM cohorts data
     with open(os.path.join(config.MODELS_DIR, 'km_cohorts_data.json'), 'r') as f:
         km_cohorts_data = json.load(f)
         
-    # Load SHAP Explainer
     shap_explainer = joblib.load(os.path.join(config.MODELS_DIR, 'shap_explainer.pkl'))
         
     return model, scaler, cox_model, features_list, df_cltv, segment_profiles, km_cohorts_data, shap_explainer
 
-# Load assets
 try:
     model, scaler, cox_model, features_list, df_cltv, segment_profiles, km_cohorts_data, shap_explainer = load_resources()
 except Exception as e:
     st.error(f"Error loading resources: {e}. Please ensure you've run the training, segmentation, and CLTV scripts first.")
     st.stop()
 
-# Sidebar Setup
-st.sidebar.markdown("<h2 style='color:#00BFFF;'>Pipeline Options</h2>", unsafe_allow_html=True)
-st.sidebar.info("This project tracks Customer Churn prediction, Customer Segmentation, and Survival-based Customer Lifetime Value (CLTV) modeling.")
+# ==================== PLOTLY CHART THEME ====================
+CHART_LAYOUT = dict(
+    template='plotly_dark',
+    plot_bgcolor='rgba(0,0,0,0)',
+    paper_bgcolor='rgba(0,0,0,0)',
+    font=dict(family='Inter, sans-serif', color='#8b949e', size=12),
+    title_font=dict(size=14, color='#c9d1d9', family='Inter, sans-serif'),
+    margin=dict(l=20, r=20, t=50, b=20),
+    xaxis=dict(gridcolor='rgba(99, 102, 241, 0.06)', zerolinecolor='rgba(99, 102, 241, 0.1)'),
+    yaxis=dict(gridcolor='rgba(99, 102, 241, 0.06)', zerolinecolor='rgba(99, 102, 241, 0.1)'),
+    legend=dict(bgcolor='rgba(0,0,0,0)', font=dict(size=11)),
+    colorway=['#818cf8', '#a78bfa', '#c084fc', '#f472b6', '#fb923c', '#34d399', '#38bdf8']
+)
 
-# Title
-st.markdown("<h1 class='glow-header'>Customer Analytics Suite & CLTV Predictor</h1>", unsafe_allow_html=True)
+COLOR_MAP_CHURN = {'Yes': '#f87171', 'No': '#34d399'}
+COLOR_MAP_SEGMENTS = {
+    'Loyal Premium': '#34d399',
+    'Loyal Value': '#38bdf8',
+    'High-Spend At-Risk': '#f87171',
+    'New Budget': '#fbbf24'
+}
 
-# Define Tabs
+# ==================== SIDEBAR ====================
+with st.sidebar:
+    st.markdown("""
+    <div class="sidebar-brand">
+        <span class="logo">🔬</span>
+        <div class="name">ChurnGuard AI</div>
+        <div class="version">Enterprise Analytics Suite v2.0</div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div class="sidebar-nav">
+        <div class="nav-item">📊 Executive Dashboard</div>
+        <div class="nav-item">🎯 Risk Simulator</div>
+        <div class="nav-item">👥 Customer Segments</div>
+        <div class="nav-item">📈 CLTV & Survival</div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("---")
+    st.markdown("""
+    <div style="padding: 12px 14px;">
+        <div style="font-size:0.72rem;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">Pipeline Status</div>
+        <div style="font-size:0.8rem;color:#8b949e;margin-bottom:6px;">
+            <span style="color:#34d399;">●</span> XGBoost Model <span class="sidebar-badge" style="background:rgba(52,211,153,0.12);color:#34d399;">Trained</span>
+        </div>
+        <div style="font-size:0.8rem;color:#8b949e;margin-bottom:6px;">
+            <span style="color:#34d399;">●</span> SHAP Explainer <span class="sidebar-badge" style="background:rgba(52,211,153,0.12);color:#34d399;">Active</span>
+        </div>
+        <div style="font-size:0.8rem;color:#8b949e;margin-bottom:6px;">
+            <span style="color:#38bdf8;">●</span> K-Means (K=4) <span class="sidebar-badge" style="background:rgba(56,189,248,0.12);color:#38bdf8;">Fitted</span>
+        </div>
+        <div style="font-size:0.8rem;color:#8b949e;">
+            <span style="color:#a78bfa;">●</span> Cox PH Model <span class="sidebar-badge" style="background:rgba(167,139,250,0.12);color:#a78bfa;">Ready</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("---")
+    st.markdown("""
+    <div style="padding: 0 14px;">
+        <div style="font-size:0.72rem;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">Tech Stack</div>
+        <div style="font-size:0.78rem;color:#64748b;line-height:1.8;">
+            XGBoost · Scikit-learn · SHAP<br>
+            Lifelines · Plotly · Streamlit<br>
+            K-Means · PCA · Cox PH
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+# ==================== HEADER ====================
+st.markdown('<div class="hero-header">ChurnGuard Analytics Suite</div>', unsafe_allow_html=True)
+st.markdown('<div class="hero-subtitle">ML-powered churn prediction · Customer segmentation · Survival-based CLTV modeling · Explainable AI</div>', unsafe_allow_html=True)
+
+# ==================== TABS ====================
 tab1, tab2, tab3, tab4 = st.tabs([
-    "📊 Executive Summary & EDA", 
+    "📊 Executive Summary", 
     "🎯 Churn Risk Simulator", 
     "👥 Customer Segmentation", 
     "📈 CLTV & Survival Analytics"
 ])
 
-# ----------------- TAB 1: EXECUTIVE SUMMARY & EDA -----------------
+# ==================== TAB 1: EXECUTIVE SUMMARY ====================
 with tab1:
-    st.subheader("Business Metrics Dashboard")
+    st.markdown("""
+    <div class="section-header">
+        <span class="icon">📊</span>
+        <span class="text">Business Metrics Overview</span>
+    </div>
+    """, unsafe_allow_html=True)
     
-    # Pre-calculated values
     total_customers = df_cltv.shape[0]
     churn_rate = (df_cltv['Churn'].value_counts(normalize=True).get('Yes', 0) * 100)
     avg_cltv = df_cltv['CLTV'].mean()
     total_projected_value = df_cltv.loc[df_cltv['Churn'] == 'No', 'CLTV'].sum()
     
-    # Display cards
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-title">Total Customers</div>
-            <div class="metric-value">{total_customers:,}</div>
+        <div class="glass-card" style="--accent-color: #818cf8;">
+            <span class="card-icon">👥</span>
+            <div class="card-label">Total Customers</div>
+            <div class="card-value" style="color: #818cf8;">{total_customers:,}</div>
         </div>
         """, unsafe_allow_html=True)
     with col2:
         st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-title">Overall Churn Rate</div>
-            <div class="metric-value" style="color: #FF5E5E;">{churn_rate:.2f}%</div>
+        <div class="glass-card" style="--accent-color: #f87171;">
+            <span class="card-icon">⚠️</span>
+            <div class="card-label">Churn Rate</div>
+            <div class="card-value" style="color: #f87171;">{churn_rate:.1f}%</div>
         </div>
         """, unsafe_allow_html=True)
     with col3:
         st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-title">Average CLTV</div>
-            <div class="metric-value" style="color: #2ECC71;">${avg_cltv:,.2f}</div>
+        <div class="glass-card" style="--accent-color: #34d399;">
+            <span class="card-icon">💎</span>
+            <div class="card-label">Average CLTV</div>
+            <div class="card-value" style="color: #34d399;">${avg_cltv:,.0f}</div>
         </div>
         """, unsafe_allow_html=True)
     with col4:
         st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-title">Total Active CLTV Value</div>
-            <div class="metric-value" style="color: #00BFFF;">${total_projected_value:,.2f}</div>
+        <div class="glass-card" style="--accent-color: #38bdf8;">
+            <span class="card-icon">🏦</span>
+            <div class="card-label">Active Portfolio</div>
+            <div class="card-value" style="color: #38bdf8;">${total_projected_value/1e6:.1f}M</div>
         </div>
         """, unsafe_allow_html=True)
         
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Visual EDA Section
-    st.subheader("Key Drivers of Customer Churn")
+    st.markdown("""
+    <div class="section-header">
+        <span class="icon">🔍</span>
+        <span class="text">Key Churn Drivers</span>
+    </div>
+    <div class="section-desc">Visual analysis of the primary factors correlated with customer attrition.</div>
+    """, unsafe_allow_html=True)
+    
     col_plot1, col_plot2 = st.columns(2)
     
     with col_plot1:
-        # Churn by Contract Type
         contract_churn = df_cltv.groupby(['Contract', 'Churn']).size().reset_index(name='Count')
         fig_contract = px.bar(
             contract_churn, x='Contract', y='Count', color='Churn',
-            title='Churn Counts by Contract Type',
+            title='Churn by Contract Type',
             barmode='group',
-            color_discrete_map={'Yes': '#FF5E5E', 'No': '#2ECC71'},
-            template='plotly_dark'
+            color_discrete_map=COLOR_MAP_CHURN,
         )
-        fig_contract.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+        fig_contract.update_layout(**CHART_LAYOUT)
+        fig_contract.update_traces(marker_line_width=0, opacity=0.9)
         st.plotly_chart(fig_contract, use_container_width=True)
         
     with col_plot2:
-        # Churn by Monthly Charges Box Plot
         fig_charges = px.box(
             df_cltv, x='Churn', y='MonthlyCharges',
             color='Churn',
-            title='Monthly Charges Distribution by Churn',
-            color_discrete_map={'Yes': '#FF5E5E', 'No': '#2ECC71'},
-            template='plotly_dark'
+            title='Monthly Charges by Churn Status',
+            color_discrete_map=COLOR_MAP_CHURN,
         )
-        fig_charges.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+        fig_charges.update_layout(**CHART_LAYOUT)
         st.plotly_chart(fig_charges, use_container_width=True)
         
-    # Additional Plot: Churn by Payment Method
     payment_churn = df_cltv.groupby(['PaymentMethod', 'Churn']).size().reset_index(name='Count')
     fig_payment = px.bar(
         payment_churn, y='PaymentMethod', x='Count', color='Churn',
         title='Churn Distribution by Payment Method',
         barmode='stack',
         orientation='h',
-        color_discrete_map={'Yes': '#FF5E5E', 'No': '#2ECC71'},
-        template='plotly_dark',
-        height=400
+        color_discrete_map=COLOR_MAP_CHURN,
+        height=380
     )
-    fig_payment.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)')
+    fig_payment.update_layout(**CHART_LAYOUT)
+    fig_payment.update_traces(marker_line_width=0, opacity=0.9)
     st.plotly_chart(fig_payment, use_container_width=True)
 
-# ----------------- TAB 2: CHURN RISK SIMULATOR -----------------
+# ==================== TAB 2: CHURN RISK SIMULATOR ====================
 with tab2:
-    st.subheader("Customer Risk Assessment & Lifetime Value Simulator")
-    st.write("Modify the demographics and service preferences of a customer in the form below to run real-time churn predictions and compute survival-based CLTV.")
+    st.markdown("""
+    <div class="section-header">
+        <span class="icon">🎯</span>
+        <span class="text">Real-Time Customer Risk Assessment</span>
+    </div>
+    <div class="section-desc">Configure customer attributes to simulate churn probability, survival-based CLTV, AI-driven explanations, and prescriptive next-best-actions.</div>
+    """, unsafe_allow_html=True)
     
-    col_sim_in, col_sim_out = st.columns([1, 1])
+    col_sim_in, col_sim_out = st.columns([1, 1], gap="large")
     
     with col_sim_in:
-        st.markdown("### Customer Attributes")
+        st.markdown("""
+        <div class="section-header" style="margin-top:0;">
+            <span class="icon">📝</span>
+            <span class="text">Customer Profile</span>
+        </div>
+        """, unsafe_allow_html=True)
         
-        sim_gender = st.selectbox("Gender", ["Female", "Male"])
-        sim_senior = st.selectbox("Senior Citizen", ["No", "Yes"])
-        sim_partner = st.selectbox("Partner (Married)", ["No", "Yes"])
-        sim_dependents = st.selectbox("Dependents (Children/Parents)", ["No", "Yes"])
-        sim_tenure = st.slider("Tenure (Months with company)", 1, 72, 12)
-        sim_phone = st.selectbox("Phone Service", ["Yes", "No"])
+        c1, c2 = st.columns(2)
+        with c1:
+            sim_gender = st.selectbox("Gender", ["Female", "Male"])
+            sim_senior = st.selectbox("Senior Citizen", ["No", "Yes"])
+            sim_partner = st.selectbox("Partner", ["No", "Yes"])
+        with c2:
+            sim_dependents = st.selectbox("Dependents", ["No", "Yes"])
+            sim_phone = st.selectbox("Phone Service", ["Yes", "No"])
+            if sim_phone == "Yes":
+                sim_lines = st.selectbox("Multiple Lines", ["No", "Yes"])
+            else:
+                sim_lines = "No phone service"
         
-        # MultipleLines dependent on Phone Service
-        if sim_phone == "Yes":
-            sim_lines = st.selectbox("Multiple Lines", ["No", "Yes"])
-        else:
-            sim_lines = "No phone service"
-            
-        sim_internet = st.selectbox("Internet Service Provider", ["Fiber optic", "DSL", "No"])
+        sim_tenure = st.slider("Tenure (Months)", 1, 72, 12)
+        sim_internet = st.selectbox("Internet Service", ["Fiber optic", "DSL", "No"])
         
-        # Internet dependent options
         if sim_internet != "No":
-            sim_sec = st.selectbox("Online Security Add-on", ["No", "Yes"])
-            sim_back = st.selectbox("Online Backup Add-on", ["No", "Yes"])
-            sim_prot = st.selectbox("Device Protection Add-on", ["No", "Yes"])
-            sim_support = st.selectbox("Tech Support Add-on", ["No", "Yes"])
-            sim_tv = st.selectbox("Streaming TV Add-on", ["No", "Yes"])
-            sim_movies = st.selectbox("Streaming Movies Add-on", ["No", "Yes"])
+            c3, c4 = st.columns(2)
+            with c3:
+                sim_sec = st.selectbox("Online Security", ["No", "Yes"])
+                sim_back = st.selectbox("Online Backup", ["No", "Yes"])
+                sim_prot = st.selectbox("Device Protection", ["No", "Yes"])
+            with c4:
+                sim_support = st.selectbox("Tech Support", ["No", "Yes"])
+                sim_tv = st.selectbox("Streaming TV", ["No", "Yes"])
+                sim_movies = st.selectbox("Streaming Movies", ["No", "Yes"])
         else:
-            sim_sec = "No internet service"
-            sim_back = "No internet service"
-            sim_prot = "No internet service"
-            sim_support = "No internet service"
-            sim_tv = "No internet service"
-            sim_movies = "No internet service"
+            sim_sec = sim_back = sim_prot = sim_support = sim_tv = sim_movies = "No internet service"
             
         sim_contract = st.selectbox("Contract Type", ["Month-to-month", "One year", "Two year"])
         sim_billing = st.selectbox("Paperless Billing", ["Yes", "No"])
         sim_payment = st.selectbox("Payment Method", [
             "Electronic check", "Mailed check", "Bank transfer (automatic)", "Credit card (automatic)"
         ])
-        
         sim_monthly = st.slider("Monthly Charges ($)", 18.0, 120.0, 70.0)
-        sim_total = sim_monthly * sim_tenure  # Safe estimate for Total Charges
+        sim_total = sim_monthly * sim_tenure
         
     with col_sim_out:
-        st.markdown("### Risk Engine & CLTV Predictions")
+        st.markdown("""
+        <div class="section-header" style="margin-top:0;">
+            <span class="icon">⚡</span>
+            <span class="text">Risk Engine Output</span>
+        </div>
+        """, unsafe_allow_html=True)
         
-        # Assemble input dictionary according to preprocessed features
+        # Build feature vector
         input_dict = {feat: 0 for feat in features_list}
-        
-        # Set numericals
-        # Need to scale them using the saved scaler
-        # To do that, we create a 1-row DataFrame of numerical features
         num_df = pd.DataFrame([[sim_tenure, sim_monthly, sim_total]], columns=config.NUMERIC_COLS)
         scaled_nums = scaler.transform(num_df)[0]
-        
         input_dict['tenure'] = scaled_nums[0]
         input_dict['MonthlyCharges'] = scaled_nums[1]
         input_dict['TotalCharges'] = scaled_nums[2]
         
-        # Set categorical dummies
-        if sim_gender == "Male":
-            input_dict['gender_Male'] = 1
-        if sim_senior == "Yes":
-            input_dict['SeniorCitizen_Yes'] = 1
-        if sim_partner == "Yes":
-            input_dict['Partner_Yes'] = 1
-        if sim_dependents == "Yes":
-            input_dict['Dependents_Yes'] = 1
-        if sim_phone == "Yes":
-            input_dict['PhoneService_Yes'] = 1
-            
-        if sim_lines == "No phone service":
-            input_dict['MultipleLines_No phone service'] = 1
-        elif sim_lines == "Yes":
-            input_dict['MultipleLines_Yes'] = 1
-            
-        if sim_internet == "Fiber optic":
-            input_dict['InternetService_Fiber optic'] = 1
-        elif sim_internet == "No":
-            input_dict['InternetService_No'] = 1
-            
+        if sim_gender == "Male": input_dict['gender_Male'] = 1
+        if sim_senior == "Yes": input_dict['SeniorCitizen_Yes'] = 1
+        if sim_partner == "Yes": input_dict['Partner_Yes'] = 1
+        if sim_dependents == "Yes": input_dict['Dependents_Yes'] = 1
+        if sim_phone == "Yes": input_dict['PhoneService_Yes'] = 1
+        if sim_lines == "No phone service": input_dict['MultipleLines_No phone service'] = 1
+        elif sim_lines == "Yes": input_dict['MultipleLines_Yes'] = 1
+        if sim_internet == "Fiber optic": input_dict['InternetService_Fiber optic'] = 1
+        elif sim_internet == "No": input_dict['InternetService_No'] = 1
+        
         for name, val in [
             ('OnlineSecurity', sim_sec), ('OnlineBackup', sim_back), 
             ('DeviceProtection', sim_prot), ('TechSupport', sim_support), 
             ('StreamingTV', sim_tv), ('StreamingMovies', sim_movies)
         ]:
-            if val == "No internet service":
-                input_dict[f'{name}_No internet service'] = 1
-            elif val == "Yes":
-                input_dict[f'{name}_Yes'] = 1
+            if val == "No internet service": input_dict[f'{name}_No internet service'] = 1
+            elif val == "Yes": input_dict[f'{name}_Yes'] = 1
                 
-        if sim_contract == "One year":
-            input_dict['Contract_One year'] = 1
-        elif sim_contract == "Two year":
-            input_dict['Contract_Two year'] = 1
+        if sim_contract == "One year": input_dict['Contract_One year'] = 1
+        elif sim_contract == "Two year": input_dict['Contract_Two year'] = 1
+        if sim_billing == "Yes": input_dict['PaperlessBilling_Yes'] = 1
+        if sim_payment == "Credit card (automatic)": input_dict['PaymentMethod_Credit card (automatic)'] = 1
+        elif sim_payment == "Electronic check": input_dict['PaymentMethod_Electronic check'] = 1
+        elif sim_payment == "Mailed check": input_dict['PaymentMethod_Mailed check'] = 1
             
-        if sim_billing == "Yes":
-            input_dict['PaperlessBilling_Yes'] = 1
-            
-        if sim_payment == "Credit card (automatic)":
-            input_dict['PaymentMethod_Credit card (automatic)'] = 1
-        elif sim_payment == "Electronic check":
-            input_dict['PaymentMethod_Electronic check'] = 1
-        elif sim_payment == "Mailed check":
-            input_dict['PaymentMethod_Mailed check'] = 1
-            
-        # Convert input dict to DataFrame
         sim_df = pd.DataFrame([input_dict])
-        
-        # Run classification churn model prediction
         prob = model.predict_proba(sim_df)[0, 1]
         
-        # 1. Gauge chart for Risk
-        risk_color = "#2ECC71" if prob < 0.3 else ("#F1C40F" if prob < 0.7 else "#FF5E5E")
-        risk_level = "Low Risk" if prob < 0.3 else ("Medium Risk" if prob < 0.7 else "High Risk")
+        # Risk Gauge
+        risk_color = "#34d399" if prob < 0.3 else ("#fbbf24" if prob < 0.7 else "#f87171")
+        risk_level = "LOW RISK" if prob < 0.3 else ("MEDIUM RISK" if prob < 0.7 else "HIGH RISK")
+        risk_bg = "rgba(52,211,153,0.08)" if prob < 0.3 else ("rgba(251,191,36,0.08)" if prob < 0.7 else "rgba(248,113,113,0.08)")
         
         fig_gauge = go.Figure(go.Indicator(
-            mode = "gauge+number",
-            value = prob * 100,
-            domain = {'x': [0, 1], 'y': [0, 1]},
-            title = {'text': f"Churn Probability - {risk_level}", 'font': {'size': 20, 'color': '#E0E6ED'}},
-            gauge = {
-                'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': "#E0E6ED"},
-                'bar': {'color': risk_color},
+            mode="gauge+number+delta",
+            value=prob * 100,
+            number={'suffix': '%', 'font': {'size': 38, 'color': risk_color, 'family': 'JetBrains Mono'}},
+            domain={'x': [0, 1], 'y': [0, 1]},
+            title={'text': f"Churn Probability — {risk_level}", 'font': {'size': 14, 'color': '#8b949e', 'family': 'Inter'}},
+            gauge={
+                'axis': {'range': [None, 100], 'tickwidth': 1, 'tickcolor': "#475569", 'dtick': 25},
+                'bar': {'color': risk_color, 'thickness': 0.3},
                 'bgcolor': "rgba(0,0,0,0)",
-                'borderwidth': 2,
-                'bordercolor': "gray",
+                'borderwidth': 0,
                 'steps': [
-                    {'range': [0, 30], 'color': 'rgba(46, 204, 113, 0.15)'},
-                    {'range': [30, 70], 'color': 'rgba(241, 196, 15, 0.15)'},
-                    {'range': [70, 100], 'color': 'rgba(255, 94, 94, 0.15)'}
+                    {'range': [0, 30], 'color': 'rgba(52, 211, 153, 0.08)'},
+                    {'range': [30, 70], 'color': 'rgba(251, 191, 36, 0.08)'},
+                    {'range': [70, 100], 'color': 'rgba(248, 113, 113, 0.08)'}
                 ],
+                'threshold': {
+                    'line': {'color': risk_color, 'width': 3},
+                    'thickness': 0.8,
+                    'value': prob * 100
+                }
             }
         ))
-        fig_gauge.update_layout(paper_bgcolor='rgba(0,0,0,0)', font={'color': '#E0E6ED'}, height=250)
+        fig_gauge.update_layout(paper_bgcolor='rgba(0,0,0,0)', font={'color': '#c9d1d9'}, height=220, margin=dict(l=30,r=30,t=40,b=10))
         st.plotly_chart(fig_gauge, use_container_width=True)
         
-        # 2. Survival-based Dynamic CLTV Prediction
-        # Build Cox covariate row
+        # CLTV via Cox Survival
         cox_row_dict = {
             'MonthlyCharges': sim_monthly,
             'Contract_One year': 1 if sim_contract == "One year" else 0,
@@ -386,20 +744,14 @@ with tab2:
             'PaperlessBilling_Yes': 1 if sim_billing == "Yes" else 0
         }
         cox_df = pd.DataFrame([cox_row_dict])
-        
-        # Predict survival function for this customer
-        # Predict returns a dataframe with rows as index times and 1 column of probabilities
         customer_survival = cox_model.predict_survival_function(cox_df)
         
-        # Get probability at current tenure
         closest_t = min(customer_survival.index, key=lambda x: abs(x - sim_tenure))
         s_current = customer_survival.loc[closest_t].values[0]
-        
-        # Calculate expected remaining months
         future_times = [t for t in customer_survival.index if t > sim_tenure and t <= 72]
         
         if s_current == 0 or len(future_times) == 0:
-            remaining_tenure = 6.0  # fallback
+            remaining_tenure = 6.0
         else:
             s_future = customer_survival.loc[future_times].iloc[:, 0]
             remaining_tenure = (s_future / s_current).sum()
@@ -408,175 +760,211 @@ with tab2:
         profit_margin = 0.70
         sim_cltv = expected_total_tenure * sim_monthly * profit_margin
         
-        # Display CLTV predictions
-        st.markdown("#### Projected Lifetime Value")
-        col_c1, col_c2 = st.columns(2)
+        # Metrics Row
+        col_c1, col_c2, col_c3 = st.columns(3)
         with col_c1:
-            st.metric("Expected Add. Months", f"{remaining_tenure:.1f} months")
+            st.markdown(f"""
+            <div class="glass-card" style="--accent-color: #a78bfa; padding: 14px 12px;">
+                <div class="card-label" style="font-size:0.65rem;">Remaining Months</div>
+                <div class="card-value" style="color: #a78bfa; font-size: 1.4rem;">{remaining_tenure:.0f}</div>
+            </div>""", unsafe_allow_html=True)
         with col_c2:
-            st.metric("Predicted CLTV (Profit)", f"${sim_cltv:.2f}")
+            st.markdown(f"""
+            <div class="glass-card" style="--accent-color: #34d399; padding: 14px 12px;">
+                <div class="card-label" style="font-size:0.65rem;">Predicted CLTV</div>
+                <div class="card-value" style="color: #34d399; font-size: 1.4rem;">${sim_cltv:,.0f}</div>
+            </div>""", unsafe_allow_html=True)
+        with col_c3:
+            st.markdown(f"""
+            <div class="glass-card" style="--accent-color: #38bdf8; padding: 14px 12px;">
+                <div class="card-label" style="font-size:0.65rem;">Survival at Tenure</div>
+                <div class="card-value" style="color: #38bdf8; font-size: 1.4rem;">{s_current*100:.0f}%</div>
+            </div>""", unsafe_allow_html=True)
             
-        # Plot single customer survival probability over time
+        st.markdown("<br>", unsafe_allow_html=True)
+            
+        # Survival Curve
         fig_curve = go.Figure()
         fig_curve.add_trace(go.Scatter(
-            x=customer_survival.index, 
-            y=customer_survival.iloc[:, 0], 
+            x=list(customer_survival.index), 
+            y=list(customer_survival.iloc[:, 0]), 
             mode='lines', 
             name='Survival Probability',
-            line=dict(color='#00BFFF', width=3)
+            line=dict(color='#818cf8', width=2.5),
+            fill='tozeroy',
+            fillcolor='rgba(129, 140, 248, 0.06)'
         ))
-        # Add a marker for current tenure
         fig_curve.add_trace(go.Scatter(
-            x=[sim_tenure], 
-            y=[s_current], 
-            mode='markers', 
-            name='Current Tenure State',
-            marker=dict(color='#FF5E5E', size=10, symbol='circle')
+            x=[sim_tenure], y=[s_current], 
+            mode='markers+text', 
+            name='Current State',
+            marker=dict(color='#f87171', size=10, symbol='circle', line=dict(width=2, color='#0a0e17')),
+            text=[f'{s_current*100:.0f}%'], textposition='top center', textfont=dict(color='#f87171', size=11)
         ))
-        
         fig_curve.update_layout(
-            title="Customer Survival Probability Curve (Decay)",
-            xaxis_title="Tenure (Months)",
-            yaxis_title="Survival Probability",
-            template='plotly_dark',
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)',
-            height=280,
-            showlegend=False
+            **CHART_LAYOUT,
+            title="Individual Survival Curve",
+            xaxis_title="Tenure (Months)", yaxis_title="Survival Probability",
+            height=250, showlegend=False
         )
         st.plotly_chart(fig_curve, use_container_width=True)
         
-        # 3. Explainable AI (SHAP)
-        st.markdown("#### 🧠 AI Prediction Explanation")
+        # SHAP Explanation
+        st.markdown("""
+        <div class="section-header">
+            <span class="icon">🧠</span>
+            <span class="text">AI Prediction Explanation (SHAP)</span>
+        </div>
+        """, unsafe_allow_html=True)
         
         shap_values = shap_explainer(sim_df)
         contributions = shap_values.values[0]
-        
-        # Handle shape differences between models
         if len(contributions.shape) > 1:
             contributions = contributions[:, 1]
             
-        shap_df = pd.DataFrame({
-            'Feature': list(sim_df.columns),
-            'Impact': contributions
-        })
-        
-        # Filter top drivers
+        shap_df = pd.DataFrame({'Feature': list(sim_df.columns), 'Impact': contributions})
         shap_df['Abs_Impact'] = shap_df['Impact'].abs()
         top_shap = shap_df[shap_df['Abs_Impact'] > 0.05].sort_values(by='Abs_Impact', ascending=False).head(6)
-        
-        top_shap['Color'] = top_shap['Impact'].apply(lambda x: '#FF5E5E' if x > 0 else '#2ECC71')
         top_shap = top_shap.sort_values(by='Impact', ascending=True)
         
         fig_shap = go.Figure(go.Bar(
             x=top_shap['Impact'],
             y=top_shap['Feature'],
             orientation='h',
-            marker_color=top_shap['Color'],
-            text=top_shap['Impact'].apply(lambda x: f"{x:+.2f}"),
-            textposition='auto'
+            marker_color=top_shap['Impact'].apply(lambda x: '#f87171' if x > 0 else '#34d399'),
+            marker_line_width=0,
+            text=top_shap['Impact'].apply(lambda x: f"{x:+.3f}"),
+            textposition='auto',
+            textfont=dict(family='JetBrains Mono', size=11)
         ))
-        
+        fig_shap.update_layout(**CHART_LAYOUT)
         fig_shap.update_layout(
-            title="Top Factors Driving Risk Score (Log-Odds)",
-            xaxis_title="Impact on Risk",
+            title="Feature Impact on Churn Risk (Log-Odds)",
+            xaxis_title="← Reduces Risk          Increases Risk →",
             yaxis_title="",
-            template='plotly_dark',
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)',
-            height=300,
-            margin=dict(l=10, r=10, t=40, b=10)
+            height=280,
+            margin=dict(l=10, r=10, t=50, b=30)
         )
         st.plotly_chart(fig_shap, use_container_width=True)
         
-        # 4. Next Best Action (NBA) Prescriptive Engine
-        st.markdown("#### 🚀 Prescriptive Next Best Action (NBA)")
+        # Next Best Action Engine
+        st.markdown("""
+        <div class="section-header">
+            <span class="icon">🚀</span>
+            <span class="text">Prescriptive Next Best Action</span>
+        </div>
+        """, unsafe_allow_html=True)
+        
         positive_drivers = top_shap[top_shap['Impact'] > 0].sort_values('Impact', ascending=False)
         
         if prob < 0.3:
-            st.success("**Status:** Secure. **Action:** Cross-sell premium services and enroll in referral program.")
+            st.markdown("""
+            <div class="nba-card" style="border-color: rgba(52,211,153,0.3);">
+                <div class="nba-label" style="color: #34d399;">✅ STATUS: SECURE</div>
+                <div class="nba-text">This customer profile shows <strong>low churn risk</strong>. 
+                <strong>Recommended:</strong> Cross-sell premium add-on services and enroll in the referral rewards program to maximize CLTV.</div>
+            </div>
+            """, unsafe_allow_html=True)
         elif len(positive_drivers) == 0:
-            st.warning("**Status:** At-Risk (Mixed Signals). **Action:** Schedule a general customer success check-in call.")
+            st.markdown("""
+            <div class="nba-card" style="border-color: rgba(251,191,36,0.3);">
+                <div class="nba-label" style="color: #fbbf24;">⚠️ STATUS: MIXED SIGNALS</div>
+                <div class="nba-text">No single dominant risk driver identified. 
+                <strong>Recommended:</strong> Schedule a proactive customer success check-in call to assess satisfaction.</div>
+            </div>
+            """, unsafe_allow_html=True)
         else:
             top_driver = positive_drivers.iloc[0]['Feature']
             
-            # Rule Engine
             if 'Contract' in top_driver:
-                nba = "Offer a 10-20% discount to lock in a 1-year or 2-year contract."
+                nba_icon = "📋"; nba = "Offer a <strong>10-20% discount</strong> to lock in a 1-year or 2-year contract upgrade."
             elif 'Fiber optic' in top_driver:
-                nba = "High price sensitivity detected. Check for outages and offer a temporary price freeze."
+                nba_icon = "🌐"; nba = "Price sensitivity detected. <strong>Check service quality</strong>, investigate outages, and offer a temporary price freeze."
             elif 'TechSupport' in top_driver or 'OnlineSecurity' in top_driver:
-                nba = "Offer a 3-month free trial of Premium Tech Support & Security."
+                nba_icon = "🛡️"; nba = "Offer a <strong>3-month complimentary trial</strong> of Premium Tech Support & Online Security bundle."
             elif 'MonthlyCharges' in top_driver:
-                nba = "Review data usage and recommend a more cost-effective downgraded plan."
+                nba_icon = "💰"; nba = "Review data usage patterns and recommend a <strong>more cost-effective plan</strong> to improve perceived value."
             elif 'PaymentMethod' in top_driver:
-                nba = "Offer a $5/mo credit for switching to Automatic Credit Card payments."
+                nba_icon = "💳"; nba = "Offer a <strong>$5/month credit</strong> for switching to Automatic Credit Card payments."
             elif 'tenure' in top_driver:
-                nba = "Early tenure risk. Trigger the personalized 'Welcome & Onboarding' sequence."
+                nba_icon = "🆕"; nba = "Early lifecycle risk. Trigger the <strong>personalized Welcome & Onboarding</strong> nurture sequence."
             else:
-                nba = f"Address {top_driver} concern with a targeted follow-up."
+                nba_icon = "🎯"; nba = f"Address the <strong>{top_driver}</strong> concern with a targeted customer outreach follow-up."
                 
-            st.error(f"**Primary Churn Driver:** {top_driver}")
-            st.info(f"**Recommended Action:** {nba}")
+            st.markdown(f"""
+            <div class="nba-card high-risk" style="border-color: rgba(248,113,113,0.3);">
+                <div class="nba-label" style="color: #f87171;">🚨 PRIMARY CHURN DRIVER: {top_driver}</div>
+                <div class="nba-text">{nba_icon} {nba}</div>
+            </div>
+            """, unsafe_allow_html=True)
 
-# ----------------- TAB 3: CUSTOMER SEGMENTATION -----------------
+# ==================== TAB 3: CUSTOMER SEGMENTATION ====================
 with tab3:
-    st.subheader("K-Means Behavioral Segmentation (K=4)")
-    st.write("We clustered customers on their engagement history (Tenure, Monthly Charges, and Total Charges). "
-             "This segments our base into 4 distinct groups with unique characteristics and retention strategies.")
-             
-    # Display cards for each segment
+    st.markdown("""
+    <div class="section-header">
+        <span class="icon">👥</span>
+        <span class="text">Behavioral Customer Segmentation</span>
+    </div>
+    <div class="section-desc">K-Means clustering (K=4) on engagement signals — tenure, monthly charges, and total charges — reveals four distinct customer archetypes with unique retention strategies.</div>
+    """, unsafe_allow_html=True)
+    
     col_seg1, col_seg2 = st.columns(2)
     with col_seg1:
         st.markdown("""
-        <div class="strategy-card loyal">
-            <h4 style="color:#2ECC71;margin-bottom:5px;">Loyal Premium</h4>
-            <p style="font-size:0.9rem;margin-bottom:0;">High tenure, high monthly spend. These are VIP subscribers who buy multiple add-ons. 
-            <b>Strategy:</b> Premium cross-selling (e.g. streaming, home protection) and exclusive loyalty benefits.</p>
+        <div class="strat-card" style="--card-accent: #34d399;">
+            <h4 style="color:#34d399;margin:0 0 6px 0;">🏆 Loyal Premium</h4>
+            <p>High tenure, high monthly spend. VIP subscribers with multiple add-ons. 
+            <b>Strategy:</b> Premium cross-selling (streaming, home protection) and exclusive loyalty benefits.</p>
         </div>
-        
-        <div class="strategy-card strategy-card.save high-risk">
-            <h4 style="color:#FF5E5E;margin-bottom:5px;">High-Spend At-Risk</h4>
-            <p style="font-size:0.9rem;margin-bottom:0;">Low tenure but high monthly charges. These are typically new fiber-optic signups on month-to-month contracts. 
+        <div class="strat-card" style="--card-accent: #f87171;">
+            <h4 style="color:#f87171;margin:0 0 6px 0;">🔥 High-Spend At-Risk</h4>
+            <p>Low tenure, high monthly charges. Typically new fiber-optic signups on month-to-month contracts. 
             <b>Strategy:</b> Proactive support outreach, contract upgrade discounts, lock-in pricing offers.</p>
         </div>
         """, unsafe_allow_html=True)
         
     with col_seg2:
         st.markdown("""
-        <div class="strategy-card">
-            <h4 style="color:#00BFFF;margin-bottom:5px;">Loyal Value</h4>
-            <p style="font-size:0.9rem;margin-bottom:0;">High tenure, low monthly spend. Budget-conscious subscribers with long-term contracts. 
-            <b>Strategy:</b> Offer minor upgrades, reward their longevity, contract roll-overs.</p>
+        <div class="strat-card" style="--card-accent: #38bdf8;">
+            <h4 style="color:#38bdf8;margin:0 0 6px 0;">💙 Loyal Value</h4>
+            <p>High tenure, low monthly spend. Budget-conscious subscribers with long-term contracts. 
+            <b>Strategy:</b> Offer minor upgrades, reward longevity, contract roll-overs.</p>
         </div>
-        
-        <div class="strategy-card strategy-card.save" style="border-left-color: #F1C40F;">
-            <h4 style="color:#F1C40F;margin-bottom:5px;">New Budget</h4>
-            <p style="font-size:0.9rem;margin-bottom:0;">Low tenure, low monthly spend. New trial-like subscribers. 
-            <b>Strategy:</b> Frictionless digital onboarding, utility tutorials, engagement campaigns to increase usage.</p>
+        <div class="strat-card" style="--card-accent: #fbbf24;">
+            <h4 style="color:#fbbf24;margin:0 0 6px 0;">🌱 New Budget</h4>
+            <p>Low tenure, low monthly spend. New trial-like subscribers. 
+            <b>Strategy:</b> Frictionless digital onboarding, utility tutorials, engagement campaigns.</p>
         </div>
         """, unsafe_allow_html=True)
         
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # Segment profile table
-    st.subheader("Segment Metrics Profiles")
+    st.markdown("""
+    <div class="section-header">
+        <span class="icon">📋</span>
+        <span class="text">Segment Metrics Profiles</span>
+    </div>
+    """, unsafe_allow_html=True)
+    
     st.dataframe(pd.DataFrame(segment_profiles).rename(columns={
         'Count': 'Customer Count',
         'Avg_Tenure': 'Avg Tenure (m)',
-        'Avg_MonthlyCharges': 'Avg Monthly Charges ($)',
-        'Avg_TotalCharges': 'Avg Total Charges ($)',
+        'Avg_MonthlyCharges': 'Avg Monthly ($)',
+        'Avg_TotalCharges': 'Avg Total ($)',
         'Churn_Rate': 'Churn Rate (%)',
-        'Strategic_Recommendation': 'Marketing Retention Action'
+        'Strategic_Recommendation': 'Retention Action'
     }), use_container_width=True, hide_index=True)
     
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # 3D PCA Visualizer
-    st.subheader("Interactive 3D Customer Cluster Space")
-    st.write("We apply PCA (Principal Component Analysis) to project the 3 scaled variables into 3 dimensions for high-fidelity interactive visualization.")
+    st.markdown("""
+    <div class="section-header">
+        <span class="icon">🌐</span>
+        <span class="text">Interactive 3D Cluster Space</span>
+    </div>
+    <div class="section-desc">PCA projection of scaled engagement variables into 3D space for high-fidelity visualization of cluster separation.</div>
+    """, unsafe_allow_html=True)
     
-    # Run PCA dynamically
     features = ['tenure', 'MonthlyCharges', 'TotalCharges']
     scaler_pca = StandardScaler()
     scaled_feats = scaler_pca.fit_transform(df_cltv[features])
@@ -587,157 +975,148 @@ with tab3:
     df_pca['PCA 1'] = pca_coords[:, 0]
     df_pca['PCA 2'] = pca_coords[:, 1]
     df_pca['PCA 3'] = pca_coords[:, 2]
-    
-    # Sample down to 2500 points for snappy rendering in browser
     df_pca_sample = df_pca.sample(n=2500, random_state=config.RANDOM_STATE)
     
     fig_pca = px.scatter_3d(
         df_pca_sample, x='PCA 1', y='PCA 2', z='PCA 3',
         color='Segment',
         hover_data=['tenure', 'MonthlyCharges', 'TotalCharges', 'Churn'],
-        title="3D Projection of Customer Segments",
-        color_discrete_map={
-            'Loyal Premium': '#2ECC71',
-            'Loyal Value': '#00BFFF',
-            'High-Spend At-Risk': '#FF5E5E',
-            'New Budget': '#F1C40F'
-        },
-        template='plotly_dark',
+        title="3D Customer Segment Projection",
+        color_discrete_map=COLOR_MAP_SEGMENTS,
         height=600
     )
-    
     fig_pca.update_layout(
+        **CHART_LAYOUT,
         scene=dict(
-            xaxis=dict(backgroundcolor="rgba(0,0,0,0)", gridcolor="rgba(255,255,255,0.05)"),
-            yaxis=dict(backgroundcolor="rgba(0,0,0,0)", gridcolor="rgba(255,255,255,0.05)"),
-            zaxis=dict(backgroundcolor="rgba(0,0,0,0)", gridcolor="rgba(255,255,255,0.05)"),
+            xaxis=dict(backgroundcolor="rgba(0,0,0,0)", gridcolor="rgba(99,102,241,0.06)"),
+            yaxis=dict(backgroundcolor="rgba(0,0,0,0)", gridcolor="rgba(99,102,241,0.06)"),
+            zaxis=dict(backgroundcolor="rgba(0,0,0,0)", gridcolor="rgba(99,102,241,0.06)"),
         ),
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)'
     )
+    fig_pca.update_traces(marker=dict(size=3, opacity=0.75, line=dict(width=0)))
     st.plotly_chart(fig_pca, use_container_width=True)
 
-# ----------------- TAB 4: CLTV & SURVIVAL ANALYTICS -----------------
+# ==================== TAB 4: CLTV & SURVIVAL ANALYTICS ====================
 with tab4:
-    st.subheader("Survival Analysis & Lifetime Value Cohorts")
-    st.write("Using survival analysis, we model the probability of a customer staying active over time. "
-             "Longer survival directly drives higher Customer Lifetime Value.")
+    st.markdown("""
+    <div class="section-header">
+        <span class="icon">📈</span>
+        <span class="text">Survival Analysis & Lifetime Value Cohorts</span>
+    </div>
+    <div class="section-desc">Modeling the probability of customer retention over time using Kaplan-Meier estimation and Cox Proportional Hazards. Longer survival directly drives higher CLTV.</div>
+    """, unsafe_allow_html=True)
              
     col_surv_left, col_surv_right = st.columns(2)
     
     with col_surv_left:
-        # Kaplan-Meier Cohort curves
-        st.markdown("#### Baseline Survival Curves by Contract Type")
-        fig_km = go.Figure()
+        st.markdown("""
+        <div class="section-header" style="margin-top:0;">
+            <span class="icon">📉</span>
+            <span class="text">Kaplan-Meier Curves by Contract</span>
+        </div>
+        """, unsafe_allow_html=True)
         
+        km_colors = {'Month-to-month': '#f87171', 'One year': '#fbbf24', 'Two year': '#34d399'}
+        fig_km = go.Figure()
         for contract_type, c_data in km_cohorts_data.items():
             fig_km.add_trace(go.Scatter(
                 x=c_data['timeline'],
                 y=c_data['survival_probability'],
                 mode='lines',
                 name=contract_type,
-                line=dict(width=3)
+                line=dict(width=2.5, color=km_colors.get(contract_type, '#818cf8'))
             ))
-            
-        fig_km.update_layout(
-            xaxis_title="Tenure (Months)",
-            yaxis_title="Probability of Retaining Customer",
-            template='plotly_dark',
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)',
-            height=400
-        )
+        fig_km.update_layout(**CHART_LAYOUT, height=400, xaxis_title="Tenure (Months)", yaxis_title="Retention Probability")
         st.plotly_chart(fig_km, use_container_width=True)
         
     with col_surv_right:
-        # CLTV Distribution histogram
-        st.markdown("#### Customer Lifetime Value Distribution")
+        st.markdown("""
+        <div class="section-header" style="margin-top:0;">
+            <span class="icon">💎</span>
+            <span class="text">CLTV Distribution</span>
+        </div>
+        """, unsafe_allow_html=True)
+        
         fig_cltv_dist = px.histogram(
             df_cltv, x='CLTV', color='CLTV_Level',
             nbins=50,
-            title='Count of Customers by CLTV Value ($)',
-            color_discrete_map={'Low Value': '#FF5E5E', 'Medium Value': '#F1C40F', 'High Value': '#2ECC71'},
-            template='plotly_dark'
+            title='Customer Count by Lifetime Value ($)',
+            color_discrete_map={'Low Value': '#f87171', 'Medium Value': '#fbbf24', 'High Value': '#34d399'},
         )
-        fig_cltv_dist.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', height=400)
+        fig_cltv_dist.update_layout(**CHART_LAYOUT, height=400)
+        fig_cltv_dist.update_traces(marker_line_width=0, opacity=0.85)
         st.plotly_chart(fig_cltv_dist, use_container_width=True)
         
-    # Churn Risk vs CLTV Strategy Matrix
     st.markdown("<br>", unsafe_allow_html=True)
-    st.subheader("Risk vs. Lifetime Value Matrix (Strategic Action Plan)")
-    st.write("By crossing predicted Churn Probability (ML model) and Customer Lifetime Value (Survival Model), "
-             "we categorize customers into 4 strategic buckets for optimal budget allocation.")
+    
+    st.markdown("""
+    <div class="section-header">
+        <span class="icon">🎯</span>
+        <span class="text">Risk vs. Lifetime Value Strategy Matrix</span>
+    </div>
+    <div class="section-desc">Crossing ML-predicted churn probability with survival-based CLTV to create four strategic action buckets for optimal budget allocation.</div>
+    """, unsafe_allow_html=True)
              
-    # Calculate categories on the full dataset using a threshold of 0.3 for Churn Risk
-    # and median CLTV for Value Tier
-    # Let's predict probabilities for all preprocessed customers to be accurate
     try:
         df_ml = pd.read_csv(config.PREPROCESSED_DATA_PATH)
         X_all = df_ml.drop(config.TARGET_COL, axis=1)
         churn_probs = model.predict_proba(X_all)[:, 1]
     except:
-        # Fallback if preprocessed features differ (should not occur)
         churn_probs = np.where(df_cltv['Churn'] == 'Yes', 0.8, 0.1)
         
     df_matrix = df_cltv.copy()
     df_matrix['Churn_Prob'] = churn_probs
     median_cltv = df_matrix['CLTV'].median()
     
-    # Define buckets
     def assign_bucket(row):
         is_high_risk = row['Churn_Prob'] >= 0.4
         is_high_val = row['CLTV'] >= median_cltv
-        
-        if is_high_risk and is_high_val:
-            return "VIP at Risk (Retain at all costs)"
-        elif not is_high_risk and is_high_val:
-            return "VIP Loyal (Nurture & Upsell)"
-        elif is_high_risk and not is_high_val:
-            return "Low-Value Churner (Automate Save)"
-        else:
-            return "Stable Budget (Standard Care)"
+        if is_high_risk and is_high_val: return "VIP at Risk"
+        elif not is_high_risk and is_high_val: return "VIP Loyal"
+        elif is_high_risk and not is_high_val: return "Low-Value Churner"
+        else: return "Stable Budget"
             
     df_matrix['Action_Bucket'] = df_matrix.apply(assign_bucket, axis=1)
     bucket_counts = df_matrix['Action_Bucket'].value_counts()
     
     col_b1, col_b2 = st.columns(2)
     with col_b1:
-        st.markdown("#### Customer Base Distribution in Strategy Matrix")
         fig_pie = px.pie(
             values=bucket_counts.values,
             names=bucket_counts.index,
-            hole=0.4,
+            hole=0.45,
             color=bucket_counts.index,
             color_discrete_map={
-                'VIP at Risk (Retain at all costs)': '#FF5E5E',
-                'VIP Loyal (Nurture & Upsell)': '#2ECC71',
-                'Low-Value Churner (Automate Save)': '#F1C40F',
-                'Stable Budget (Standard Care)': '#00BFFF'
+                'VIP at Risk': '#f87171',
+                'VIP Loyal': '#34d399',
+                'Low-Value Churner': '#fbbf24',
+                'Stable Budget': '#38bdf8'
             },
-            template='plotly_dark'
         )
-        fig_pie.update_layout(paper_bgcolor='rgba(0,0,0,0)', height=380)
+        fig_pie.update_layout(**CHART_LAYOUT, height=400, title="Strategic Bucket Distribution", showlegend=True)
+        fig_pie.update_traces(textfont=dict(family='JetBrains Mono', size=12), textinfo='percent+label')
         st.plotly_chart(fig_pie, use_container_width=True)
         
     with col_b2:
-        st.markdown("#### Strategic Playbooks")
-        
         st.markdown(f"""
-        <div class="strategy-card high-risk">
-            <h5 style="color:#FF5E5E;margin-bottom:3px;">VIP at Risk ({bucket_counts.get('VIP at Risk (Retain at all costs)', 0):,} Customers)</h5>
-            <p style="font-size:0.85rem;margin-bottom:0;">High Lifetime Value but high probability of churning. 
-            <b>Playbook:</b> Assign direct account manager. Offer maximum contract discount incentives. Prioritize resolving technical issues.</p>
+        <div class="strat-card" style="--card-accent: #f87171;">
+            <h4 style="color:#f87171;margin:0 0 6px 0;">🚨 VIP at Risk ({bucket_counts.get('VIP at Risk', 0):,})</h4>
+            <p>High CLTV, high churn risk. <b>Playbook:</b> Assign dedicated account manager. Maximum contract discount incentives. Priority technical issue resolution.</p>
         </div>
-        
-        <div class="strategy-card loyal">
-            <h5 style="color:#2ECC71;margin-bottom:3px;">VIP Loyal ({bucket_counts.get('VIP Loyal (Nurture & Upsell)', 0):,} Customers)</h5>
-            <p style="font-size:0.85rem;margin-bottom:0;">High Lifetime Value and low churn risk. 
-            <b>Playbook:</b> Enroll in referral programs. Cross-sell premium add-ons. Request reviews / case studies.</p>
+        <div class="strat-card" style="--card-accent: #34d399;">
+            <h4 style="color:#34d399;margin:0 0 6px 0;">💚 VIP Loyal ({bucket_counts.get('VIP Loyal', 0):,})</h4>
+            <p>High CLTV, low churn risk. <b>Playbook:</b> Enroll in referral programs. Cross-sell premium add-ons. Request reviews and case studies.</p>
         </div>
-        
-        <div class="strategy-card strategy-card.save" style="border-left-color: #F1C40F;">
-            <h5 style="color:#F1C40F;margin-bottom:3px;">Low-Value Churner ({bucket_counts.get('Low-Value Churner (Automate Save)', 0):,} Customers)</h5>
-            <p style="font-size:0.85rem;margin-bottom:0;">Low Lifetime Value, High Churn Risk. 
-            <b>Playbook:</b> Target with automated, low-cost digital email offers (e.g. 10% coupon for paperless billing sign-up). Do not spend manual sales representative hours.</p>
+        <div class="strat-card" style="--card-accent: #fbbf24;">
+            <h4 style="color:#fbbf24;margin:0 0 6px 0;">⚡ Low-Value Churner ({bucket_counts.get('Low-Value Churner', 0):,})</h4>
+            <p>Low CLTV, high churn risk. <b>Playbook:</b> Automated digital email campaigns with low-cost offers. No manual sales rep hours.</p>
         </div>
         """, unsafe_allow_html=True)
+
+# ==================== FOOTER ====================
+st.markdown("""
+<div class="app-footer">
+    <strong>ChurnGuard AI</strong> · Built with XGBoost, SHAP, Lifelines & Streamlit · 
+    <a href="https://github.com/Anu2030/churn_cltv" target="_blank">GitHub Repository</a>
+</div>
+""", unsafe_allow_html=True)
