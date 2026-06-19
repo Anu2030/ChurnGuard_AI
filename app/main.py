@@ -65,8 +65,8 @@ st.markdown("""
         letter-spacing: -0.02em;
     }
     
-    p, span, div, label {
-        font-family: 'Inter', sans-serif !important;
+    label, p {
+        font-family: 'Inter', sans-serif;
     }
     
     /* ===== SCROLLBAR ===== */
@@ -389,6 +389,19 @@ st.markdown("""
         border-radius: 12px !important;
         overflow: hidden;
     }
+    
+    /* ===== RESPONSIVE FLUIDITY ===== */
+    @media (max-width: 768px) {
+        .hero-header { font-size: 1.8rem; }
+        .hero-subtitle { font-size: 0.8rem; }
+        .glass-card { padding: 16px 14px; }
+        .card-value { font-size: 1.5rem; }
+        .section-header .text { font-size: 1rem; }
+        .section-header .icon { font-size: 1.2rem; }
+        .strat-card { padding: 14px 16px; margin-bottom: 10px; }
+        .nba-card { padding: 16px 18px; }
+        .stTabs [data-baseweb="tab"] { padding: 8px 12px; font-size: 0.75rem; }
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -497,11 +510,13 @@ st.markdown('<div class="hero-header">ChurnGuard Analytics Suite</div>', unsafe_
 st.markdown('<div class="hero-subtitle">ML-powered churn prediction · Customer segmentation · Survival-based CLTV modeling · Explainable AI</div>', unsafe_allow_html=True)
 
 # ==================== TABS ====================
-tab1, tab2, tab3, tab4 = st.tabs([
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
     "📊 Executive Summary", 
     "🎯 Churn Risk Simulator", 
     "👥 Customer Segmentation", 
-    "📈 CLTV & Survival Analytics"
+    "📈 CLTV & Survival Analytics",
+    "🗂️ Batch CSV Scoring",
+    "🛒 RFM Transaction Analytics"
 ])
 
 # ==================== TAB 1: EXECUTIVE SUMMARY ====================
@@ -757,7 +772,10 @@ with tab2:
             remaining_tenure = (s_future / s_current).sum()
             
         expected_total_tenure = sim_tenure + remaining_tenure
-        profit_margin = 0.70
+        
+        st.markdown("<br><div style='font-size:0.85rem; color:#8b949e; margin-bottom:-10px;'>Adjust Expected Profit Margin</div>", unsafe_allow_html=True)
+        profit_margin = st.slider("Profit Margin (%)", min_value=10, max_value=100, value=70, step=5, label_visibility="collapsed") / 100.0
+        
         sim_cltv = expected_total_tenure * sim_monthly * profit_margin
         
         # Metrics Row
@@ -1112,6 +1130,187 @@ with tab4:
             <p>Low CLTV, high churn risk. <b>Playbook:</b> Automated digital email campaigns with low-cost offers. No manual sales rep hours.</p>
         </div>
         """, unsafe_allow_html=True)
+
+# ==================== TAB 5: BATCH CSV SCORING ====================
+with tab5:
+    st.markdown("""
+    <div class="section-header">
+        <span class="icon">🗂️</span>
+        <span class="text">Batch Customer Scoring</span>
+    </div>
+    <div class="section-desc">Upload a raw CSV of customer data to automatically clean, preprocess, score churn risk, and output the results.</div>
+    """, unsafe_allow_html=True)
+    
+    uploaded_file = st.file_uploader("Upload Raw Customer Data (CSV)", type="csv")
+    
+    if uploaded_file is not None:
+        try:
+            batch_df = pd.read_csv(uploaded_file)
+            st.success(f"Successfully loaded {batch_df.shape[0]} rows!")
+            
+            with st.spinner("Processing data and generating predictions..."):
+                import sys
+                import os
+                sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+                from src import config
+                from src.preprocess import clean_data
+                
+                # 1. Clean data
+                clean_batch = clean_data(batch_df)
+                
+                # 2. Extract features exactly as model expects
+                cat_cols = [c for c in config.CATEGORICAL_COLS if c in clean_batch.columns and c != config.TARGET_COL]
+                encode_batch = pd.get_dummies(clean_batch, columns=cat_cols, drop_first=True)
+                
+                bool_cols = encode_batch.select_dtypes(include='bool').columns
+                encode_batch[bool_cols] = encode_batch[bool_cols].astype(int)
+                
+                num_cols = [c for c in config.NUMERIC_COLS if c in encode_batch.columns]
+                encode_batch[num_cols] = scaler.transform(encode_batch[num_cols])
+                
+                # Ensure all required features are present
+                for feat in features_list:
+                    if feat not in encode_batch.columns:
+                        encode_batch[feat] = 0
+                        
+                # Order features
+                X_batch = encode_batch[features_list]
+                
+                # 3. Predict
+                churn_probs = model.predict_proba(X_batch)[:, 1]
+                batch_df['Churn_Risk_Probability'] = churn_probs.round(4)
+                batch_df['Risk_Level'] = np.where(churn_probs > 0.7, 'High', np.where(churn_probs > 0.3, 'Medium', 'Low'))
+                
+                st.markdown("### Scoring Results Preview")
+                st.dataframe(batch_df[['customerID', 'tenure', 'MonthlyCharges', 'Churn_Risk_Probability', 'Risk_Level']].head(15), use_container_width=True)
+                
+                # 4. Download
+                csv_out = batch_df.to_csv(index=False).encode('utf-8')
+                st.download_button(
+                    label="📥 Download Full Scored CSV",
+                    data=csv_out,
+                    file_name='scored_customers_batch.csv',
+                    mime='text/csv',
+                )
+        except Exception as e:
+            st.error(f"An error occurred during batch processing: {e}")
+
+# ==================== TAB 6: RFM TRANSACTION ANALYTICS ====================
+with tab6:
+    st.markdown("""
+    <div class="section-header">
+        <span class="icon">🛒</span>
+        <span class="text">RFM Transaction Analytics</span>
+    </div>
+    <div class="section-desc">Analysis of historical transaction data to categorize customers based on Recency, Frequency, and Monetary value.</div>
+    """, unsafe_allow_html=True)
+    
+    try:
+        df_rfm = pd.read_csv(config.RFM_DATA_PATH)
+        
+        st.info("💡 **What is RFM?** RFM is an industry-standard behavioral model that ranks customers based on **Recency** (days since last purchase), **Frequency** (number of purchases), and **Monetary** value (total spend). It groups customers into strategic buckets like 'Champions' or 'At Risk' to drive highly targeted retention marketing.")
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        
+        # Calculate Averages
+        avg_r = int(df_rfm['Recency'].mean())
+        avg_f = int(df_rfm['Frequency'].mean())
+        avg_m = int(df_rfm['Monetary'].mean())
+        
+        m_col1, m_col2, m_col3 = st.columns(3)
+        with m_col1:
+            st.markdown(f"""
+            <div class="glass-card">
+                <span class="card-icon">⏳</span>
+                <div class="card-label">Avg Recency</div>
+                <div class="card-value">{avg_r} <span style="font-size:1rem;color:#8b949e;">days</span></div>
+            </div>
+            """, unsafe_allow_html=True)
+        with m_col2:
+            st.markdown(f"""
+            <div class="glass-card">
+                <span class="card-icon">🔄</span>
+                <div class="card-label">Avg Frequency</div>
+                <div class="card-value">{avg_f} <span style="font-size:1rem;color:#8b949e;">txns</span></div>
+            </div>
+            """, unsafe_allow_html=True)
+        with m_col3:
+            st.markdown(f"""
+            <div class="glass-card">
+                <span class="card-icon">💰</span>
+                <div class="card-label">Avg Monetary</div>
+                <div class="card-value">${avg_m:,}</div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        st.markdown("<br>", unsafe_allow_html=True)
+        
+        col_r1, col_r2 = st.columns([2, 1])
+        
+        with col_r1:
+            st.markdown("#### RFM Segment Distribution")
+            rfm_counts = df_rfm['RFM_Segment'].value_counts().reset_index()
+            rfm_counts.columns = ['Segment', 'Count']
+            
+            fig_donut = px.pie(
+                rfm_counts, 
+                names='Segment', 
+                values='Count',
+                hole=0.65,
+                title=None,
+                color='Segment',
+                color_discrete_map={
+                    'Champions': '#34d399',
+                    'Loyal Customers': '#38bdf8',
+                    'Potential Loyalists': '#818cf8',
+                    'At Risk': '#fbbf24',
+                    'Hibernating': '#f87171',
+                    'Needs Attention': '#94a3b8'
+                }
+            )
+            fig_donut.update_traces(
+                textinfo='percent+label',
+                textposition='outside',
+                hovertemplate="<b>%{label}</b><br>Count: %{value}<br>Share: %{percent}<extra></extra>",
+                marker=dict(line=dict(color='#0d1321', width=3)),
+                textfont_size=13
+            )
+            fig_donut.update_layout(**CHART_LAYOUT)
+            fig_donut.update_layout(
+                title='',
+                title_text='',
+                margin=dict(t=20, l=40, r=40, b=40),
+                showlegend=False,
+                annotations=[dict(text=f"Total<br><b>{rfm_counts['Count'].sum():,}</b>", x=0.5, y=0.5, font_size=22, showarrow=False, font_color="#e6edf3")]
+            )
+            st.plotly_chart(fig_donut, use_container_width=True)
+            
+        with col_r2:
+            st.markdown("#### Segment Strategies")
+            st.markdown("""
+            <div class="strat-card" style="--card-accent: #34d399;">
+                <h4 style="color:#34d399;margin:0 0 6px 0;">🏆 Champions</h4>
+                <p>Bought recently, buy often, and spend the most. Reward them.</p>
+            </div>
+            <div class="strat-card" style="--card-accent: #38bdf8;">
+                <h4 style="color:#38bdf8;margin:0 0 6px 0;">💚 Loyal Customers</h4>
+                <p>Good frequency and recency. Upsell higher-value products.</p>
+            </div>
+            <div class="strat-card" style="--card-accent: #fbbf24;">
+                <h4 style="color:#fbbf24;margin:0 0 6px 0;">⚠️ At Risk</h4>
+                <p>Used to buy often, but haven't recently. Send "We miss you" incentives.</p>
+            </div>
+            <div class="strat-card" style="--card-accent: #f87171;">
+                <h4 style="color:#f87171;margin:0 0 6px 0;">❄️ Hibernating</h4>
+                <p>Last purchase was long ago. Low marketing priority.</p>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        st.markdown("### RFM Customer Table")
+        st.dataframe(df_rfm[['customerID', 'Recency', 'Frequency', 'Monetary', 'RFM_Segment', 'Churn']].head(50), use_container_width=True)
+        
+    except FileNotFoundError:
+        st.warning(f"RFM data not found. Please run `python src/generate_transactions.py` and then `python src/rfm_analysis.py` to generate the synthetic transaction data.")
 
 # ==================== FOOTER ====================
 st.markdown("""

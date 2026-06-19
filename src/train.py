@@ -36,19 +36,24 @@ def train_and_evaluate():
     print(f"Train set: {X_train.shape[0]} rows, {X_train.shape[1]} features")
     print(f"Test set: {X_test.shape[0]} rows, {X_test.shape[1]} features")
     
+    # Calculate scale_pos_weight for XGBoost
+    neg_class_count = (y_train == 0).sum()
+    pos_class_count = (y_train == 1).sum()
+    scale_pos_weight_val = neg_class_count / pos_class_count
+    
     # Initialize models
     models = {
         'Logistic Regression': {
-            'model': LogisticRegression(max_iter=1000, random_state=config.RANDOM_STATE),
+            'model': LogisticRegression(max_iter=1000, random_state=config.RANDOM_STATE, class_weight='balanced'),
             'tune': False
         },
         'Random Forest': {
-            'model': RandomForestClassifier(random_state=config.RANDOM_STATE),
+            'model': RandomForestClassifier(random_state=config.RANDOM_STATE, class_weight='balanced'),
             'tune': True,
             'grid': config.GRID_PARAMS_RF
         },
         'XGBoost': {
-            'model': XGBClassifier(eval_metric='logloss', random_state=config.RANDOM_STATE),
+            'model': XGBClassifier(eval_metric='logloss', random_state=config.RANDOM_STATE, scale_pos_weight=scale_pos_weight_val),
             'tune': True,
             'grid': config.GRID_PARAMS_XGB
         }

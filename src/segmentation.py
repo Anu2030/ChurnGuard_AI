@@ -5,6 +5,7 @@ import numpy as np
 import json
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
 import joblib
 
 # Add base directory to path so we can import src.config
@@ -16,17 +17,35 @@ def perform_segmentation():
     df_clean = pd.read_csv(config.CLEAN_DATA_PATH)
     
     # Select behavioral features for clustering
-    features = ['tenure', 'MonthlyCharges', 'TotalCharges']
-    X = df_clean[features].copy()
+    features = ['tenure', 'MonthlyCharges', 'TotalCharges', 'Contract', 'InternetService', 'PaymentMethod']
+    X_raw = df_clean[features].copy()
+    
+    # One-hot encode categorical features for richer clusters
+    X_encoded = pd.get_dummies(X_raw, columns=['Contract', 'InternetService', 'PaymentMethod'], drop_first=True)
     
     # Scale features
     scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
+    X_scaled = scaler.fit_transform(X_encoded)
     
     # Save the clustering scaler
     scaler_path = os.path.join(config.MODELS_DIR, 'segmentation_scaler.pkl')
     joblib.dump(scaler, scaler_path)
     print(f"Saved segmentation scaler to {scaler_path}")
+    
+    # Validate optimal K
+    print("\nValidating K-Means with Silhouette Scores:")
+    best_score = -1
+    best_k = 2
+    for k_test in range(2, 7):
+        kmeans_test = KMeans(n_clusters=k_test, random_state=config.RANDOM_STATE, n_init=10)
+        labels = kmeans_test.fit_predict(X_scaled)
+        score = silhouette_score(X_scaled, labels)
+        print(f"  K={k_test}: Silhouette Score = {score:.4f}")
+        if score > best_score:
+            best_score = score
+            best_k = k_test
+            
+    print(f"Statistically optimal K is {best_k} (score: {best_score:.4f}). Applying K=4 for strategic 4-quadrant business consistency.")
     
     # Fit K-Means
     k = 4

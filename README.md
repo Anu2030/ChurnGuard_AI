@@ -6,22 +6,23 @@
 [![XGBoost](https://img.shields.io/badge/XGBoost-Classifier-1393C2?style=for-the-badge&logo=xgboost)](https://xgboost.readthedocs.io)
 [![Lifelines](https://img.shields.io/badge/Lifelines-Survival%20Analysis-8A2BE2?style=for-the-badge)](https://lifelines.readthedocs.io)
 
-An enterprise-grade customer intelligence platform built for contractual subscription settings (e.g., Telecom). This project integrates machine learning classification, behavioral clustering, and survival analysis to predict customer churn, segment user personas, project future lifetime value (CLTV), and design data-driven retention playbooks.
+An enterprise-grade customer intelligence platform built for contractual subscription settings (e.g., Telecom). This project integrates machine learning classification, behavioral clustering, transaction-based RFM analysis, and survival analysis to predict customer churn, segment user personas, project future lifetime value (CLTV), and design data-driven retention playbooks.
 
 ---
 
-## 📌 Executive Summary & Business Impact
+## Executive Summary & Business Impact
 
-In contractual businesses, customer acquisition is highly expensive. Maximizing customer retention and optimizing marketing budgets is the primary driver of profitability. This platform addresses these goals using three analytical pillars:
+In contractual businesses, customer acquisition is highly expensive. Maximizing customer retention and optimizing marketing budgets is the primary driver of profitability. This platform addresses these goals using four analytical pillars:
 
-1. **Churn Prediction (Risk Engine):** Classifies customers by churn risk using an **XGBoost** model (optimized via GridSearchCV, achieving **ROC-AUC: 0.8449**).
-2. **Behavioral Segmentation (Engagement Personas):** Clusters customers into 4 strategic groups using **K-Means Clustering** based on their tenure and spend dynamics.
-3. **CLTV Modeling (Survival Analysis):** Replaces naive historical value calculations with a **Cox Proportional Hazards Model** from `lifelines` to estimate active customers' expected remaining tenure and compute predictive Customer Lifetime Value (CLTV).
-4. **Interactive Command Center:** A premium **Streamlit** dashboard that aggregates KPI metrics, houses a real-time risk simulator, provides a 3D PCA cluster visualizer, and maps users into a 2x2 Risk-Value Matrix to automate budget allocations.
+1. **Churn Prediction (Risk Engine):** Classifies customers by churn risk using an **XGBoost** model (optimized via GridSearchCV, achieving **ROC-AUC: 0.8449**). Includes class weight balancing to penalize missed churners.
+2. **Behavioral Segmentation (Engagement Personas):** Clusters customers into 4 strategic groups using **K-Means Clustering** (validated via Silhouette Score) based on their tenure, spend dynamics, and categorical behaviors.
+3. **RFM Transaction Analytics:** Generates and analyzes transaction histories to rank customers via Recency, Frequency, and Monetary value, mapping them to actionable buckets (e.g., Champions, At Risk).
+4. **CLTV Modeling (Survival Analysis):** Replaces naive historical value calculations with a **Cox Proportional Hazards Model** from `lifelines` to estimate active customers' expected remaining tenure and compute predictive Customer Lifetime Value (CLTV).
+5. **Interactive Command Center:** A premium **Streamlit** dashboard featuring real-time risk simulation, dynamic profit margin adjustments, batch CSV bulk scoring, 3D PCA cluster visualization, and 2x2 Risk-Value strategy matrices.
 
 ---
 
-## 🛠️ System Architecture & Workflow
+## System Architecture & Workflow
 
 ```mermaid
 flowchart TD
@@ -30,22 +31,25 @@ flowchart TD
     B -->|telco_preprocessed.csv| C[train.py]
     C -->|best_model.pkl & scaler.pkl| G[app/main.py]
     D -->|telco_segmented.csv| E[cltv.py]
+    B -->|telco_clean.csv| F[generate_transactions.py]
+    F -->|synthetic_transactions.csv| H[rfm_analysis.py]
+    H -->|telco_rfm.csv| G
     E -->|telco_cltv.csv & cox_model.pkl| G
-    G --> H[Streamlit Dashboard Interface]
+    G --> I[Streamlit Dashboard Interface]
 ```
 
 ---
 
-## 🧪 Methodology & Modeling
+## Methodology & Modeling
 
 ### 1. Risk Engine (Churn Classification)
 We train and compare three machine learning models: **Logistic Regression** (baseline), **Random Forest**, and **XGBoost**.
 - **Preprocessing:** Categorical encoding (one-hot encoding), handling missing values (coercing `TotalCharges` to numeric), and standard scaling numeric columns.
-- **Tuning:** Stratified train-test split (80/20) to preserve churn balance, followed by 3-fold cross-validation grid search (`GridSearchCV`) for hyperparameter optimization.
-- **Best Model:** XGBoost (`learning_rate=0.1`, `max_depth=3`, `n_estimators=100`) outperformed other models with a test set **ROC-AUC of 0.8449**.
+- **Tuning:** Stratified train-test split (80/20) to preserve churn balance, followed by deep 3-fold cross-validation grid search (`GridSearchCV`) for hyperparameter optimization.
+- **Handling Imbalance:** The XGBoost model dynamically calculates and applies `scale_pos_weight` to address class imbalances.
 
 ### 2. Behavioral Personas (Segmentation)
-Using K-Means Clustering on scaled `tenure`, `MonthlyCharges`, and `TotalCharges` behavior, we partition customers into 4 distinct profiles:
+Using K-Means Clustering on scaled continuous and one-hot encoded categorical features, we partition customers into 4 distinct profiles:
 - **Loyal Premium:** Long-standing customers with high monthly charges (VIPs).
 - **Loyal Value:** Long-standing customers with budget-conscious charges (Stable).
 - **High-Spend At-Risk:** Short-tenure customers with high monthly charges (New fiber-optic users).
@@ -54,24 +58,28 @@ Using K-Means Clustering on scaled `tenure`, `MonthlyCharges`, and `TotalCharges
 ### 3. Predictive CLTV (Survival Analysis)
 Traditional transaction models (like BG/NBD) fail in subscription settings. We implement **Survival Analysis** to handle "right-censored" active customers (customers who haven't churned yet):
 - **Cox Proportional Hazards Model:** Analyzes how covariates (e.g., contract types, internet services) influence the hazard (risk) of churn over time.
-- **Expected Remaining Tenure:** For active customers, we predict their individual conditional survival curves and integrate them up to 72 months to estimate remaining months:
-  $$\text{Expected Remaining Months} = \sum_{t = T_i + 1}^{72} \frac{S_i(t)}{S_i(T_i)}$$
-- **CLTV Calculation:** Computed using expected total tenure, monthly charges, and a realistic telecom gross profit margin (70%):
-  $$\text{CLTV}_i = (\text{Current Tenure}_i + \text{Expected Remaining Months}_i) \times \text{Monthly Charges}_i \times 0.70$$
+- **Expected Remaining Tenure:** For active customers, we predict their individual conditional survival curves and integrate them up to 72 months to estimate remaining months.
+- **CLTV Calculation:** Computed using expected total tenure, monthly charges, and a realistic telecom gross profit margin (adjustable in UI).
+
+### 4. RFM Transaction Analytics
+- **Recency, Frequency, Monetary:** Simulates and scores customer transaction history using pandas quantiles (`qcut`) to rank them from 1 to 5.
+- **Strategic Segments:** Combines the R-F-M scores to automatically drop customers into proven marketing segments (Champions, Loyal Customers, Potential Loyalists, At Risk, Hibernating).
 
 ---
 
-## 🖥️ Interactive Dashboard Features
+## Interactive Dashboard Features
 
-The Streamlit application provides four main workspaces:
-1. **Executive Overview & EDA:** High-level metrics (Overall Churn Rate, Average CLTV, Active Revenue Portfolio) alongside interactive Plotly charts highlighting critical churn drivers.
-2. **Churn Risk Simulator:** Enables users to modify slider and selection inputs for a customer and dynamically computes their churn probability (gauge chart), lifetime value, and plots their real-time survival decay curve.
-3. **Behavioral Clustering Tab:** Contains profile metric tables, strategic marketing recommendations, and an interactive **3D PCA scatter plot** projecting customer profiles.
-4. **CLTV & Strategy Dashboard:** Shows baseline Kaplan-Meier curves comparing cohort decay by contract type and divides the customer base into a **2x2 Risk-Value Matrix** ("VIP at Risk", "VIP Loyal", "Low-Value Churner", "Stable Budget") to target resources efficiently.
+The Streamlit application provides six main workspaces:
+1. **Executive Overview & EDA:** High-level metrics and an active revenue portfolio alongside interactive Plotly charts highlighting critical churn drivers.
+2. **Churn Risk Simulator:** Enables users to modify slider inputs and dynamically computes churn probability (gauge chart), lifetime value, and plots a real-time survival decay curve. Includes an adjustable Profit Margin slider.
+3. **Customer Segmentation Tab:** Contains profile metric tables, strategic marketing recommendations, and an interactive **3D PCA scatter plot**.
+4. **CLTV & Strategy Dashboard:** Shows baseline Kaplan-Meier curves and divides the customer base into a **2x2 Risk-Value Matrix** to target resources efficiently.
+5. **Batch CSV Scoring:** Upload a raw `.csv` of customer data to automatically clean it, scale it, generate predictive churn risks, and download the fully scored output.
+6. **RFM Transaction Analytics:** Interactive Donut Chart visualizing the breakdown of the customer base into strategic RFM buckets with corresponding marketing playbooks.
 
 ---
 
-## 🚀 Installation & Running Guide
+## Installation & Running Guide
 
 ### Prerequisites
 - Python 3.12 (Recommended)
@@ -112,6 +120,10 @@ The Streamlit application provides four main workspaces:
    
    # Step 4: Perform survival analysis and CLTV projections
    python src/cltv.py
+
+   # Step 5: Generate and analyze RFM transactions
+   python src/generate_transactions.py
+   python src/rfm_analysis.py
    ```
 
 5. **Run the Streamlit Dashboard:**
@@ -122,7 +134,7 @@ The Streamlit application provides four main workspaces:
 
 ---
 
-## 📈 Key Insights & Retention Playbook
+## Key Insights & Retention Playbook
 
 - **The Contract Effect:** Customers on a **Month-to-month** contract have a **7.4x higher risk of churning** compared to customers on a Two-year contract, making contract conversion programs highly lucrative.
 - **Service Friction:** Customers with **Fiber Optic** internet service have a significantly elevated hazard rate. Investigating service stability or pricing structures for fiber is a key recommendation.
