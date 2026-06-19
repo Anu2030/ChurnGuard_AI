@@ -6,4 +6,8 @@ seaborn
 streamlit
 plotly
 joblib
-jupyter
+xgboost
+lifelines
+shap
+pytest
+flake8

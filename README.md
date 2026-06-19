@@ -139,3 +139,45 @@ The Streamlit application provides six main workspaces:
 - **The Contract Effect:** Customers on a **Month-to-month** contract have a **7.4x higher risk of churning** compared to customers on a Two-year contract, making contract conversion programs highly lucrative.
 - **Service Friction:** Customers with **Fiber Optic** internet service have a significantly elevated hazard rate. Investigating service stability or pricing structures for fiber is a key recommendation.
 - **VIP at Risk Bucket:** Accounts for high revenue but presents elevated churn probability. The playbook recommends prioritizing direct support outreach and offering contract upgrade incentives to secure these accounts.
+
+---
+
+## MLOps & Software Engineering
+
+### Running Automated Tests
+
+The `tests/` directory contains a `pytest` test suite that validates core data processing logic.
+
+```bash
+pytest tests/ -v
+```
+
+The suite covers:
+- `test_preprocess.py` — Validates that `clean_data` correctly handles blank `TotalCharges`, properly fills NaN values, maps `SeniorCitizen` integers, and preserves `customerID`.
+- `test_config.py` — Ensures all configuration paths, hyperparameter grids, and feature lists are structurally valid.
+
+### CI/CD with GitHub Actions
+
+A continuous integration pipeline is configured at `.github/workflows/ci.yml`. It runs automatically on every push or pull request to `main`. The pipeline:
+
+1. Spins up an Ubuntu environment with Python 3.12.
+2. Installs all dependencies from `requirements.txt`.
+3. Runs `flake8` to check for syntax errors and undefined names in `src/`, `app/`, and `tests/`.
+4. Runs the full `pytest` test suite to ensure no regressions.
+
+### Docker Deployment
+
+The application can be containerized and deployed anywhere using Docker.
+
+```bash
+# Build the Docker image
+docker build -t churnguard-ai .
+
+# Run the container
+docker run -p 8501:8501 churnguard-ai
+```
+
+The app will be available at `http://localhost:8501`.
+
+The `.dockerignore` file ensures the image stays lean by excluding local virtual environments, `__pycache__`, and development tooling from the build context.
+
