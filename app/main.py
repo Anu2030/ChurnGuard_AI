@@ -17,8 +17,8 @@ from src import config
 
 # Set page config
 st.set_page_config(
-    page_title="Customer Churn & CLTV Analytics",
-    page_icon="📈",
+    page_title="ChurnGuard AI — Customer Analytics Suite",
+    page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -29,339 +29,403 @@ st.markdown("""
 <style>
     /* ===== ANIMATIONS ===== */
     @keyframes pulse-risk {
-        0% { box-shadow: 0 0 0 0 rgba(248, 113, 113, 0.4); }
-        70% { box-shadow: 0 0 0 10px rgba(248, 113, 113, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(248, 113, 113, 0); }
+        0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.5); }
+        70% { box-shadow: 0 0 0 12px rgba(244, 63, 94, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
     }
-    
+    @keyframes pulse-badge {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
+    }
     @keyframes fade-in-up {
-        0% { opacity: 0; transform: translateY(15px); }
+        0% { opacity: 0; transform: translateY(18px); }
         100% { opacity: 1; transform: translateY(0); }
     }
-    
     @keyframes gradient-sweep {
         0% { background-position: 0% 50%; }
         50% { background-position: 100% 50%; }
         100% { background-position: 0% 50%; }
     }
+    @keyframes top-bar-sweep {
+        0% { background-position: 0% 50%; }
+        100% { background-position: 200% 50%; }
+    }
+    @keyframes icon-spin-in {
+        0% { transform: rotate(-8deg) scale(0.9); opacity: 0; }
+        100% { transform: rotate(0deg) scale(1); opacity: 1; }
+    }
+
+    /* ===== ANIMATED TOP BAR ===== */
+    .stApp::before {
+        content: '';
+        display: block;
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #14b8a6, #8b5cf6, #f43f5e, #f59e0b, #14b8a6);
+        background-size: 200% auto;
+        animation: top-bar-sweep 4s linear infinite;
+        z-index: 9999;
+    }
 
     /* ===== GLOBAL RESET & TYPOGRAPHY ===== */
     *, *::before, *::after { box-sizing: border-box; }
-    
     .stApp {
-        background: linear-gradient(160deg, #0a0e17 0%, #0d1321 40%, #111827 100%);
-        color: #c9d1d9;
+        background: linear-gradient(160deg, #080c14 0%, #0c1220 45%, #101828 100%);
+        color: #cbd5e1;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
-    
-    /* Apply fade-in animation to main content blocks */
     div[data-testid="stVerticalBlock"] > div {
-        animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
-    
     h1, h2, h3, h4, h5, h6 {
         font-family: 'Inter', sans-serif !important;
-        color: #e6edf3 !important;
+        color: #f1f5f9 !important;
         letter-spacing: -0.02em;
     }
-    
-    label, p {
-        font-family: 'Inter', sans-serif;
-    }
-    
+    label, p { font-family: 'Inter', sans-serif; }
+
     /* ===== SCROLLBAR ===== */
-    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.4); border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(99, 102, 241, 0.7); }
-    
+    ::-webkit-scrollbar-thumb { background: rgba(20, 184, 166, 0.35); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(20, 184, 166, 0.6); }
+
     /* ===== SIDEBAR ===== */
     section[data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #0d1321 0%, #131b2e 100%) !important;
-        border-right: 1px solid rgba(99, 102, 241, 0.15) !important;
+        background: linear-gradient(180deg, #080c14 0%, #0d1520 100%) !important;
+        border-right: 1px solid rgba(20, 184, 166, 0.12) !important;
+        box-shadow: 4px 0 24px rgba(0,0,0,0.4);
     }
-    section[data-testid="stSidebar"] .stMarkdown p {
-        color: #8b949e !important;
+    section[data-testid="stSidebar"]::before {
+        content: '';
+        position: absolute;
+        left: 0; top: 0; bottom: 0;
+        width: 3px;
+        background: linear-gradient(180deg, #14b8a6, #8b5cf6, #f43f5e);
+        border-radius: 0 2px 2px 0;
     }
-    
+    section[data-testid="stSidebar"] .stMarkdown p { color: #64748b !important; }
+
     /* ===== TABS STYLING ===== */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-        background: rgba(13, 19, 33, 0.6);
-        border-radius: 12px;
+        gap: 4px;
+        background: rgba(8, 12, 20, 0.7);
+        border-radius: 14px;
         padding: 6px;
-        border: 1px solid rgba(99, 102, 241, 0.1);
+        border: 1px solid rgba(20, 184, 166, 0.1);
+        backdrop-filter: blur(12px);
     }
     .stTabs [data-baseweb="tab"] {
-        border-radius: 8px;
-        padding: 10px 20px;
+        border-radius: 10px;
+        padding: 10px 18px;
         font-weight: 500;
-        font-size: 0.85rem;
-        color: #8b949e;
+        font-size: 0.83rem;
+        color: #64748b;
         background: transparent;
         border: none;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
     }
     .stTabs [data-baseweb="tab"]:hover {
-        color: #c9d1d9;
-        background: rgba(99, 102, 241, 0.08);
+        color: #e2e8f0;
+        background: rgba(20, 184, 166, 0.07);
     }
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2)) !important;
-        color: #a5b4fc !important;
+        background: linear-gradient(135deg, rgba(20, 184, 166, 0.18), rgba(139, 92, 246, 0.18)) !important;
+        color: #5eead4 !important;
         font-weight: 600;
-        border: 1px solid rgba(99, 102, 241, 0.25) !important;
+        border: 1px solid rgba(20, 184, 166, 0.25) !important;
+        box-shadow: 0 0 18px rgba(20, 184, 166, 0.12);
     }
     .stTabs [data-baseweb="tab-highlight"] { display: none; }
     .stTabs [data-baseweb="tab-border"] { display: none; }
-    
+
     /* ===== GLASSMORPHISM METRIC CARDS ===== */
     .glass-card {
-        background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.5));
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(99, 102, 241, 0.12);
-        border-radius: 16px;
-        padding: 24px 20px;
+        background: linear-gradient(135deg, rgba(12, 18, 32, 0.85), rgba(20, 30, 50, 0.6));
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 18px;
+        padding: 26px 22px;
         text-align: center;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
+    }
+    .glass-card::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 10%; right: 10%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--accent-color, #14b8a6), transparent);
+        border-radius: 0 0 18px 18px;
+        opacity: 0.7;
+        transition: opacity 0.3s ease;
     }
     .glass-card::before {
         content: '';
         position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 3px;
-        background: linear-gradient(90deg, var(--accent-color, #6366f1), transparent);
-        border-radius: 16px 16px 0 0;
+        inset: 0;
+        background: radial-gradient(ellipse at 50% 0%, rgba(20,184,166,0.06) 0%, transparent 60%);
+        pointer-events: none;
     }
     .glass-card:hover {
-        transform: translateY(-6px);
-        border-color: rgba(99, 102, 241, 0.35);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(99, 102, 241, 0.08);
+        transform: translateY(-7px);
+        border-color: rgba(20, 184, 166, 0.25);
+        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4), 0 0 40px rgba(20, 184, 166, 0.08);
     }
+    .glass-card:hover::after { opacity: 1; }
     .card-icon {
-        font-size: 1.8rem;
-        margin-bottom: 8px;
+        font-size: 1.9rem;
+        margin-bottom: 10px;
         display: block;
-        transition: transform 0.3s ease;
-    }
-    .glass-card:hover .card-icon {
-        transform: scale(1.15);
+        animation: icon-spin-in 0.5s ease forwards;
     }
     .card-label {
-        font-size: 0.72rem;
-        font-weight: 600;
-        color: #64748b;
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: #475569;
         text-transform: uppercase;
-        letter-spacing: 1.5px;
-        margin-bottom: 6px;
+        letter-spacing: 2px;
+        margin-bottom: 8px;
     }
     .card-value {
-        font-size: 1.9rem;
+        font-size: 2rem;
         font-weight: 800;
-        letter-spacing: -0.03em;
+        letter-spacing: -0.04em;
         margin-top: 4px;
         font-family: 'JetBrains Mono', monospace !important;
     }
-    
+
     /* ===== SECTION HEADERS ===== */
     .section-header {
         display: flex;
         align-items: center;
-        gap: 12px;
-        margin: 28px 0 18px 0;
-        padding-bottom: 12px;
-        border-bottom: 1px solid rgba(99, 102, 241, 0.12);
+        gap: 14px;
+        margin: 30px 0 18px 0;
+        padding-bottom: 14px;
+        border-bottom: 1px solid rgba(20, 184, 166, 0.1);
+        position: relative;
+    }
+    .section-header::before {
+        content: '';
+        position: absolute;
+        bottom: -1px; left: 0;
+        width: 60px; height: 2px;
+        background: linear-gradient(90deg, #14b8a6, #8b5cf6);
+        border-radius: 2px;
     }
     .section-header .icon {
-        font-size: 1.4rem;
-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.15));
-        padding: 8px 10px;
-        border-radius: 10px;
-        border: 1px solid rgba(99, 102, 241, 0.15);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        font-size: 1.3rem;
+        background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(139, 92, 246, 0.15));
+        padding: 9px 11px;
+        border-radius: 11px;
+        border: 1px solid rgba(20, 184, 166, 0.2);
+        transition: transform 0.35s ease, box-shadow 0.35s ease;
+        animation: icon-spin-in 0.5s ease forwards;
     }
     .section-header:hover .icon {
-        transform: rotate(-5deg) scale(1.05);
-        box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+        transform: rotate(-6deg) scale(1.08);
+        box-shadow: 0 0 20px rgba(20, 184, 166, 0.3);
     }
     .section-header .text {
-        font-size: 1.15rem;
+        font-size: 1.12rem;
         font-weight: 700;
-        color: #e6edf3;
+        color: #f1f5f9;
         letter-spacing: -0.01em;
     }
     .section-desc {
-        color: #8b949e;
-        font-size: 0.88rem;
-        line-height: 1.6;
-        margin-bottom: 20px;
+        color: #64748b;
+        font-size: 0.87rem;
+        line-height: 1.65;
+        margin-bottom: 22px;
     }
-    
-    /* ===== STRATEGY CARDS V2 ===== */
+
+    /* ===== STRATEGY CARDS ===== */
     .strat-card {
-        background: linear-gradient(135deg, rgba(15, 23, 42, 0.7), rgba(30, 41, 59, 0.4));
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        border-left: 4px solid var(--card-accent, #6366f1);
-        border-radius: 0 12px 12px 0;
+        background: linear-gradient(135deg, rgba(12, 18, 32, 0.75), rgba(20, 30, 50, 0.45));
+        backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-left: 4px solid var(--card-accent, #14b8a6);
+        border-radius: 0 14px 14px 0;
         padding: 18px 20px;
         margin-bottom: 14px;
         transition: all 0.3s ease;
     }
     .strat-card:hover {
-        background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.6));
+        background: linear-gradient(135deg, rgba(12, 18, 32, 0.92), rgba(20, 30, 50, 0.65));
         border-left-width: 6px;
-        transform: translateX(6px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        transform: translateX(7px);
+        box-shadow: 0 12px 28px rgba(0,0,0,0.25);
     }
-    .strat-card h4 {
-        font-size: 1rem;
-        font-weight: 700;
-        margin: 0 0 6px 0;
-    }
-    .strat-card p {
-        font-size: 0.82rem;
-        color: #8b949e;
-        line-height: 1.55;
-        margin: 0;
-    }
-    .strat-card b { color: #a5b4fc; }
-    
+    .strat-card h4 { font-size: 1rem; font-weight: 700; margin: 0 0 6px 0; }
+    .strat-card p { font-size: 0.82rem; color: #64748b; line-height: 1.6; margin: 0; }
+    .strat-card b { color: #5eead4; }
+
     /* ===== NBA RESULT CARDS ===== */
     .nba-card {
-        background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.5));
-        backdrop-filter: blur(16px);
-        border: 1px solid rgba(99, 102, 241, 0.15);
-        border-radius: 14px;
-        padding: 20px 22px;
+        background: linear-gradient(135deg, rgba(12, 18, 32, 0.85), rgba(20, 30, 50, 0.55));
+        backdrop-filter: blur(18px);
+        border: 1px solid rgba(20, 184, 166, 0.15);
+        border-radius: 16px;
+        padding: 22px 24px;
         margin-top: 12px;
         transition: all 0.3s ease;
     }
-    .nba-card.high-risk {
-        animation: pulse-risk 2s infinite;
-    }
-    .nba-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    }
+    .nba-card.high-risk { animation: pulse-risk 2s infinite; }
+    .nba-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.25); }
     .nba-card .nba-label {
-        font-size: 0.7rem;
-        font-weight: 600;
+        font-size: 0.68rem;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 1.5px;
-        margin-bottom: 8px;
+        letter-spacing: 2px;
+        margin-bottom: 10px;
     }
-    .nba-card .nba-text {
-        font-size: 0.92rem;
-        line-height: 1.6;
-        color: #c9d1d9;
+    .nba-card .nba-text { font-size: 0.92rem; line-height: 1.65; color: #cbd5e1; }
+
+    /* ===== MAIN HERO HEADER ===== */
+    .hero-wrapper {
+        padding: 12px 0 6px 0;
+        position: relative;
     }
-    
-    /* ===== MAIN HEADER ===== */
+    .model-status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(20, 184, 166, 0.1);
+        border: 1px solid rgba(20, 184, 166, 0.25);
+        border-radius: 20px;
+        padding: 4px 12px 4px 8px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: #5eead4;
+        letter-spacing: 0.05em;
+        margin-bottom: 12px;
+    }
+    .model-status-pill .dot {
+        width: 7px; height: 7px;
+        background: #14b8a6;
+        border-radius: 50%;
+        animation: pulse-badge 2s ease-in-out infinite;
+        box-shadow: 0 0 8px rgba(20, 184, 166, 0.6);
+    }
     .hero-header {
-        font-size: 2.2rem;
+        font-size: 2.6rem;
         font-weight: 900;
-        letter-spacing: -0.04em;
-        background: linear-gradient(135deg, #818cf8 0%, #a78bfa 25%, #c084fc 50%, #e879f9 75%, #818cf8 100%);
-        background-size: 200% auto;
+        letter-spacing: -0.05em;
+        background: linear-gradient(135deg, #5eead4 0%, #a78bfa 35%, #f43f5e 65%, #5eead4 100%);
+        background-size: 250% auto;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        margin-bottom: 6px;
-        line-height: 1.2;
-        animation: gradient-sweep 4s linear infinite;
+        margin-bottom: 8px;
+        line-height: 1.15;
+        animation: gradient-sweep 5s linear infinite;
     }
     .hero-subtitle {
-        font-size: 0.88rem;
-        color: #64748b;
+        font-size: 0.87rem;
+        color: #475569;
         font-weight: 400;
-        margin-bottom: 28px;
-        letter-spacing: 0.02em;
+        margin-bottom: 30px;
+        letter-spacing: 0.03em;
+        line-height: 1.6;
     }
-    
+    .hero-subtitle span {
+        color: #5eead4;
+        font-weight: 600;
+    }
+
     /* ===== SIDEBAR BRANDING ===== */
     .sidebar-brand {
         text-align: center;
-        padding: 20px 10px 24px 10px;
-        border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+        padding: 24px 10px 26px 10px;
+        border-bottom: 1px solid rgba(20, 184, 166, 0.1);
         margin-bottom: 20px;
     }
-    .sidebar-brand .logo { 
-        font-size: 2.4rem; 
-        margin-bottom: 6px; 
-        display: inline-block; 
+    .sidebar-logo-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 52px; height: 52px;
+        background: linear-gradient(135deg, #14b8a6, #8b5cf6);
+        border-radius: 14px;
+        font-size: 1.3rem;
+        font-weight: 900;
+        color: #fff;
+        margin-bottom: 10px;
+        font-family: 'JetBrains Mono', monospace;
+        box-shadow: 0 8px 24px rgba(20, 184, 166, 0.35);
         transition: transform 0.4s ease;
     }
-    .sidebar-brand:hover .logo {
-        transform: rotate(15deg) scale(1.1);
-    }
+    .sidebar-brand:hover .sidebar-logo-badge { transform: rotate(6deg) scale(1.05); }
     .sidebar-brand .name {
         font-size: 1.05rem;
         font-weight: 700;
-        color: #e6edf3;
+        color: #f1f5f9;
         letter-spacing: -0.01em;
     }
     .sidebar-brand .version {
-        font-size: 0.68rem;
-        color: #64748b;
+        font-size: 0.67rem;
+        color: #475569;
         font-weight: 500;
         margin-top: 4px;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.06em;
         text-transform: uppercase;
     }
-    .sidebar-nav {
-        padding: 8px 0;
-    }
+    .sidebar-nav { padding: 8px 0; }
     .sidebar-nav .nav-item {
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 12px 16px;
-        border-radius: 8px;
-        font-size: 0.85rem;
+        padding: 11px 16px;
+        border-radius: 10px;
+        font-size: 0.84rem;
         font-weight: 500;
-        color: #8b949e;
-        margin-bottom: 6px;
+        color: #64748b;
+        margin-bottom: 4px;
         transition: all 0.2s ease;
         cursor: default;
     }
     .sidebar-nav .nav-item:hover {
-        background: rgba(99, 102, 241, 0.12);
-        color: #c9d1d9;
-        transform: translateX(4px);
+        background: rgba(20, 184, 166, 0.1);
+        color: #e2e8f0;
+        transform: translateX(5px);
     }
     .sidebar-badge {
         display: inline-block;
         padding: 2px 8px;
         border-radius: 6px;
-        font-size: 0.65rem;
-        font-weight: 600;
-        letter-spacing: 0.05em;
+        font-size: 0.64rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
     }
-    
+    .sidebar-badge.live {
+        animation: pulse-badge 2.5s ease-in-out infinite;
+    }
+
     /* ===== FOOTER ===== */
     .app-footer {
         text-align: center;
-        padding: 24px 0;
-        margin-top: 40px;
-        border-top: 1px solid rgba(99, 102, 241, 0.08);
-        color: #475569;
-        font-size: 0.75rem;
-        letter-spacing: 0.03em;
+        padding: 28px 0;
+        margin-top: 50px;
+        border-top: 1px solid rgba(20, 184, 166, 0.08);
+        color: #334155;
+        font-size: 0.74rem;
+        letter-spacing: 0.04em;
         transition: color 0.3s ease;
     }
-    .app-footer:hover { color: #64748b; }
-    .app-footer a { color: #818cf8; text-decoration: none; transition: color 0.3s ease; }
+    .app-footer:hover { color: #475569; }
+    .app-footer a { color: #5eead4; text-decoration: none; transition: color 0.3s ease; }
     .app-footer a:hover { color: #a78bfa; text-decoration: underline; }
-    
+
     /* ===== HIDE STREAMLIT DEFAULTS ===== */
     #MainMenu { visibility: hidden; }
     footer { visibility: hidden; }
     header[data-testid="stHeader"] { background: transparent; }
-    
+
     /* ===== FORM WIDGETS ===== */
     .stSelectbox label, .stSlider label {
         color: #94a3b8 !important;
@@ -369,38 +433,40 @@ st.markdown("""
         font-size: 0.82rem !important;
     }
     div[data-baseweb="select"] > div {
-        background: rgba(15, 23, 42, 0.6) !important;
-        border-color: rgba(99, 102, 241, 0.15) !important;
-        border-radius: 8px !important;
+        background: rgba(8, 12, 20, 0.7) !important;
+        border-color: rgba(20, 184, 166, 0.15) !important;
+        border-radius: 10px !important;
         transition: all 0.3s ease;
     }
     div[data-baseweb="select"] > div:hover {
-        border-color: rgba(99, 102, 241, 0.4) !important;
-        box-shadow: 0 0 10px rgba(99, 102, 241, 0.1);
+        border-color: rgba(20, 184, 166, 0.4) !important;
+        box-shadow: 0 0 12px rgba(20, 184, 166, 0.1);
     }
-    /* Slider improvements */
-    .stSlider > div > div > div > div {
-        background-color: #818cf8 !important;
-    }
-    
+    .stSlider > div > div > div > div { background-color: #14b8a6 !important; }
+
     /* ===== DATAFRAME ===== */
     .stDataFrame {
-        border: 1px solid rgba(99, 102, 241, 0.1) !important;
-        border-radius: 12px !important;
+        border: 1px solid rgba(20, 184, 166, 0.1) !important;
+        border-radius: 14px !important;
         overflow: hidden;
     }
-    
-    /* ===== RESPONSIVE FLUIDITY ===== */
+
+    /* ===== INFO / ALERT BOXES ===== */
+    .stAlert {
+        border-radius: 12px !important;
+        border-left-color: #14b8a6 !important;
+    }
+
+    /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
-        .hero-header { font-size: 1.8rem; }
+        .hero-header { font-size: 1.9rem; }
         .hero-subtitle { font-size: 0.8rem; }
         .glass-card { padding: 16px 14px; }
-        .card-value { font-size: 1.5rem; }
+        .card-value { font-size: 1.55rem; }
         .section-header .text { font-size: 1rem; }
-        .section-header .icon { font-size: 1.2rem; }
         .strat-card { padding: 14px 16px; margin-bottom: 10px; }
         .nba-card { padding: 16px 18px; }
-        .stTabs [data-baseweb="tab"] { padding: 8px 12px; font-size: 0.75rem; }
+        .stTabs [data-baseweb="tab"] { padding: 8px 10px; font-size: 0.74rem; }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -438,57 +504,59 @@ CHART_LAYOUT = dict(
     template='plotly_dark',
     plot_bgcolor='rgba(0,0,0,0)',
     paper_bgcolor='rgba(0,0,0,0)',
-    font=dict(family='Inter, sans-serif', color='#8b949e', size=12),
-    title_font=dict(size=14, color='#c9d1d9', family='Inter, sans-serif'),
+    font=dict(family='Inter, sans-serif', color='#64748b', size=12),
+    title_font=dict(size=14, color='#e2e8f0', family='Inter, sans-serif'),
     margin=dict(l=20, r=20, t=50, b=20),
-    xaxis=dict(gridcolor='rgba(99, 102, 241, 0.06)', zerolinecolor='rgba(99, 102, 241, 0.1)'),
-    yaxis=dict(gridcolor='rgba(99, 102, 241, 0.06)', zerolinecolor='rgba(99, 102, 241, 0.1)'),
+    xaxis=dict(gridcolor='rgba(20, 184, 166, 0.07)', zerolinecolor='rgba(20, 184, 166, 0.12)'),
+    yaxis=dict(gridcolor='rgba(20, 184, 166, 0.07)', zerolinecolor='rgba(20, 184, 166, 0.12)'),
     legend=dict(bgcolor='rgba(0,0,0,0)', font=dict(size=11)),
-    colorway=['#818cf8', '#a78bfa', '#c084fc', '#f472b6', '#fb923c', '#34d399', '#38bdf8']
+    colorway=['#14b8a6', '#8b5cf6', '#f43f5e', '#f59e0b', '#38bdf8', '#10b981', '#a78bfa']
 )
 
-COLOR_MAP_CHURN = {'Yes': '#f87171', 'No': '#34d399'}
+COLOR_MAP_CHURN = {'Yes': '#f43f5e', 'No': '#14b8a6'}
 COLOR_MAP_SEGMENTS = {
-    'Loyal Premium': '#34d399',
+    'Loyal Premium': '#14b8a6',
     'Loyal Value': '#38bdf8',
-    'High-Spend At-Risk': '#f87171',
-    'New Budget': '#fbbf24'
+    'High-Spend At-Risk': '#f43f5e',
+    'New Budget': '#f59e0b'
 }
 
 # ==================== SIDEBAR ====================
 with st.sidebar:
     st.markdown("""
     <div class="sidebar-brand">
-        <span class="logo">🔬</span>
+        <div class="sidebar-logo-badge">CG</div>
         <div class="name">ChurnGuard AI</div>
-        <div class="version">Enterprise Analytics Suite v2.0</div>
+        <div class="version">Enterprise Analytics v2.0</div>
     </div>
     """, unsafe_allow_html=True)
-    
+
     st.markdown("""
     <div class="sidebar-nav">
         <div class="nav-item">📊 Executive Dashboard</div>
         <div class="nav-item">🎯 Risk Simulator</div>
         <div class="nav-item">👥 Customer Segments</div>
-        <div class="nav-item">📈 CLTV & Survival</div>
+        <div class="nav-item">📈 CLTV &amp; Survival</div>
+        <div class="nav-item">🗂️ Batch Scoring</div>
+        <div class="nav-item">🛒 RFM Analytics</div>
     </div>
     """, unsafe_allow_html=True)
-    
+
     st.markdown("---")
     st.markdown("""
     <div style="padding: 12px 14px;">
-        <div style="font-size:0.72rem;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">Pipeline Status</div>
-        <div style="font-size:0.8rem;color:#8b949e;margin-bottom:6px;">
-            <span style="color:#34d399;">●</span> XGBoost Model <span class="sidebar-badge" style="background:rgba(52,211,153,0.12);color:#34d399;">Trained</span>
+        <div style="font-size:0.68rem;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Pipeline Status</div>
+        <div style="font-size:0.8rem;color:#64748b;margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+            <span class="sidebar-badge live" style="background:rgba(20,184,166,0.15);color:#14b8a6;">● LIVE</span> XGBoost · ROC-AUC 0.844
         </div>
-        <div style="font-size:0.8rem;color:#8b949e;margin-bottom:6px;">
-            <span style="color:#34d399;">●</span> SHAP Explainer <span class="sidebar-badge" style="background:rgba(52,211,153,0.12);color:#34d399;">Active</span>
+        <div style="font-size:0.8rem;color:#64748b;margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+            <span class="sidebar-badge" style="background:rgba(20,184,166,0.1);color:#5eead4;">✓</span> SHAP Explainer Active
         </div>
-        <div style="font-size:0.8rem;color:#8b949e;margin-bottom:6px;">
-            <span style="color:#38bdf8;">●</span> K-Means (K=4) <span class="sidebar-badge" style="background:rgba(56,189,248,0.12);color:#38bdf8;">Fitted</span>
+        <div style="font-size:0.8rem;color:#64748b;margin-bottom:8px;display:flex;align-items:center;gap:8px;">
+            <span class="sidebar-badge" style="background:rgba(139,92,246,0.1);color:#a78bfa;">✓</span> K-Means K=4 Fitted
         </div>
-        <div style="font-size:0.8rem;color:#8b949e;">
-            <span style="color:#a78bfa;">●</span> Cox PH Model <span class="sidebar-badge" style="background:rgba(167,139,250,0.12);color:#a78bfa;">Ready</span>
+        <div style="font-size:0.8rem;color:#64748b;display:flex;align-items:center;gap:8px;">
+            <span class="sidebar-badge" style="background:rgba(56,189,248,0.1);color:#38bdf8;">✓</span> Cox PH Model Ready
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -506,8 +574,21 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
 # ==================== HEADER ====================
-st.markdown('<div class="hero-header">ChurnGuard Analytics Suite</div>', unsafe_allow_html=True)
-st.markdown('<div class="hero-subtitle">ML-powered churn prediction · Customer segmentation · Survival-based CLTV modeling · Explainable AI</div>', unsafe_allow_html=True)
+st.markdown("""
+<div class="hero-wrapper">
+    <div class="model-status-pill">
+        <span class="dot"></span>
+        XGBoost Active &nbsp;|&nbsp; ROC-AUC 0.844 &nbsp;|&nbsp; Recall 79.7%
+    </div>
+    <div class="hero-header">ChurnGuard Analytics Suite</div>
+    <div class="hero-subtitle">
+        <span>ML-Powered</span> Churn Prediction &nbsp;·&nbsp; 
+        <span>Survival-Based</span> CLTV &nbsp;·&nbsp; 
+        <span>Explainable AI</span> (SHAP) &nbsp;·&nbsp; 
+        RFM Segmentation
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
 # ==================== TABS ====================
 tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
@@ -1059,7 +1140,7 @@ with tab4:
             df_cltv, x='CLTV', color='CLTV_Level',
             nbins=50,
             title='Customer Count by Lifetime Value ($)',
-            color_discrete_map={'Low Value': '#f87171', 'Medium Value': '#fbbf24', 'High Value': '#34d399'},
+            color_discrete_map={'Low Value': '#f43f5e', 'Medium Value': '#f59e0b', 'High Value': '#14b8a6'},
         )
         fig_cltv_dist.update_layout(**CHART_LAYOUT, height=400)
         fig_cltv_dist.update_traces(marker_line_width=0, opacity=0.85)
@@ -1105,9 +1186,9 @@ with tab4:
             hole=0.45,
             color=bucket_counts.index,
             color_discrete_map={
-                'VIP at Risk': '#f87171',
-                'VIP Loyal': '#34d399',
-                'Low-Value Churner': '#fbbf24',
+                'VIP at Risk': '#f43f5e',
+                'VIP Loyal': '#14b8a6',
+                'Low-Value Churner': '#f59e0b',
                 'Stable Budget': '#38bdf8'
             },
         )
@@ -1117,16 +1198,16 @@ with tab4:
         
     with col_b2:
         st.markdown(f"""
-        <div class="strat-card" style="--card-accent: #f87171;">
-            <h4 style="color:#f87171;margin:0 0 6px 0;">🚨 VIP at Risk ({bucket_counts.get('VIP at Risk', 0):,})</h4>
+        <div class="strat-card" style="--card-accent: #f43f5e;">
+            <h4 style="color:#f43f5e;margin:0 0 6px 0;">🚨 VIP at Risk ({bucket_counts.get('VIP at Risk', 0):,})</h4>
             <p>High CLTV, high churn risk. <b>Playbook:</b> Assign dedicated account manager. Maximum contract discount incentives. Priority technical issue resolution.</p>
         </div>
-        <div class="strat-card" style="--card-accent: #34d399;">
-            <h4 style="color:#34d399;margin:0 0 6px 0;">💚 VIP Loyal ({bucket_counts.get('VIP Loyal', 0):,})</h4>
+        <div class="strat-card" style="--card-accent: #14b8a6;">
+            <h4 style="color:#14b8a6;margin:0 0 6px 0;">💎 VIP Loyal ({bucket_counts.get('VIP Loyal', 0):,})</h4>
             <p>High CLTV, low churn risk. <b>Playbook:</b> Enroll in referral programs. Cross-sell premium add-ons. Request reviews and case studies.</p>
         </div>
-        <div class="strat-card" style="--card-accent: #fbbf24;">
-            <h4 style="color:#fbbf24;margin:0 0 6px 0;">⚡ Low-Value Churner ({bucket_counts.get('Low-Value Churner', 0):,})</h4>
+        <div class="strat-card" style="--card-accent: #f59e0b;">
+            <h4 style="color:#f59e0b;margin:0 0 6px 0;">⚡ Low-Value Churner ({bucket_counts.get('Low-Value Churner', 0):,})</h4>
             <p>Low CLTV, high churn risk. <b>Playbook:</b> Automated digital email campaigns with low-cost offers. No manual sales rep hours.</p>
         </div>
         """, unsafe_allow_html=True)
@@ -1260,12 +1341,12 @@ with tab6:
                 title=None,
                 color='Segment',
                 color_discrete_map={
-                    'Champions': '#34d399',
+                    'Champions': '#14b8a6',
                     'Loyal Customers': '#38bdf8',
-                    'Potential Loyalists': '#818cf8',
-                    'At Risk': '#fbbf24',
-                    'Hibernating': '#f87171',
-                    'Needs Attention': '#94a3b8'
+                    'Potential Loyalists': '#8b5cf6',
+                    'At Risk': '#f59e0b',
+                    'Hibernating': '#f43f5e',
+                    'Needs Attention': '#64748b'
                 }
             )
             fig_donut.update_traces(
@@ -1288,21 +1369,21 @@ with tab6:
         with col_r2:
             st.markdown("#### Segment Strategies")
             st.markdown("""
-            <div class="strat-card" style="--card-accent: #34d399;">
-                <h4 style="color:#34d399;margin:0 0 6px 0;">🏆 Champions</h4>
-                <p>Bought recently, buy often, and spend the most. Reward them.</p>
+            <div class="strat-card" style="--card-accent: #14b8a6;">
+                <h4 style="color:#14b8a6;margin:0 0 6px 0;">🏆 Champions</h4>
+                <p>Bought recently, buy often, and spend the most. <b>Reward and retain</b> them with loyalty perks.</p>
             </div>
             <div class="strat-card" style="--card-accent: #38bdf8;">
-                <h4 style="color:#38bdf8;margin:0 0 6px 0;">💚 Loyal Customers</h4>
-                <p>Good frequency and recency. Upsell higher-value products.</p>
+                <h4 style="color:#38bdf8;margin:0 0 6px 0;">💙 Loyal Customers</h4>
+                <p>Good frequency and recency. <b>Upsell</b> higher-value products and services.</p>
             </div>
-            <div class="strat-card" style="--card-accent: #fbbf24;">
-                <h4 style="color:#fbbf24;margin:0 0 6px 0;">⚠️ At Risk</h4>
-                <p>Used to buy often, but haven't recently. Send "We miss you" incentives.</p>
+            <div class="strat-card" style="--card-accent: #f59e0b;">
+                <h4 style="color:#f59e0b;margin:0 0 6px 0;">⚠️ At Risk</h4>
+                <p>Used to buy often, but haven't recently. <b>Send win-back</b> incentives immediately.</p>
             </div>
-            <div class="strat-card" style="--card-accent: #f87171;">
-                <h4 style="color:#f87171;margin:0 0 6px 0;">❄️ Hibernating</h4>
-                <p>Last purchase was long ago. Low marketing priority.</p>
+            <div class="strat-card" style="--card-accent: #f43f5e;">
+                <h4 style="color:#f43f5e;margin:0 0 6px 0;">❄️ Hibernating</h4>
+                <p>Last purchase was long ago. <b>Low priority</b> — automated re-engagement only.</p>
             </div>
             """, unsafe_allow_html=True)
             
@@ -1315,7 +1396,7 @@ with tab6:
 # ==================== FOOTER ====================
 st.markdown("""
 <div class="app-footer">
-    <strong>ChurnGuard AI</strong> · Built with XGBoost, SHAP, Lifelines & Streamlit · 
-    <a href="https://github.com/Anu2030/churn_cltv" target="_blank">GitHub Repository</a>
+    <strong>ChurnGuard AI</strong> &nbsp;·&nbsp; XGBoost · SHAP · Lifelines · Cox PH · Streamlit &nbsp;·&nbsp;
+    <a href="https://github.com/Anu2030/ChurnGuard_AI" target="_blank">GitHub Repository</a>
 </div>
 """, unsafe_allow_html=True)
