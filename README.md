@@ -1,183 +1,204 @@
-# End-to-End Customer Analytics: Churn Prediction, Behavioral Segmentation, & CLTV Survival Modeling
+# ChurnGuard AI — End-to-End Customer Analytics Platform
 
-[![Streamlit App](https://img.shields.io/badge/Streamlit-App-FF4B4B?style=for-the-badge&logo=streamlit)](http://localhost:8501)
+[![Streamlit App](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?style=for-the-badge&logo=streamlit)](http://localhost:8501)
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python)](https://python.org)
-[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-ML-F7931E?style=for-the-badge&logo=scikit-learn)](https://scikit-learn.org)
-[![XGBoost](https://img.shields.io/badge/XGBoost-Classifier-1393C2?style=for-the-badge&logo=xgboost)](https://xgboost.readthedocs.io)
+[![XGBoost](https://img.shields.io/badge/XGBoost-ROC--AUC%200.844-1393C2?style=for-the-badge)](https://xgboost.readthedocs.io)
 [![Lifelines](https://img.shields.io/badge/Lifelines-Survival%20Analysis-8A2BE2?style=for-the-badge)](https://lifelines.readthedocs.io)
+[![CI/CD](https://img.shields.io/badge/GitHub%20Actions-CI%2FCD-2088FF?style=for-the-badge&logo=github-actions)](https://github.com/Anu2030/ChurnGuard_AI/actions)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker)](./Dockerfile)
 
-An enterprise-grade customer intelligence platform built for contractual subscription settings (e.g., Telecom). This project integrates machine learning classification, behavioral clustering, transaction-based RFM analysis, and survival analysis to predict customer churn, segment user personas, project future lifetime value (CLTV), and design data-driven retention playbooks.
-
----
-
-## Executive Summary & Business Impact
-
-In contractual businesses, customer acquisition is highly expensive. Maximizing customer retention and optimizing marketing budgets is the primary driver of profitability. This platform addresses these goals using four analytical pillars:
-
-1. **Churn Prediction (Risk Engine):** Classifies customers by churn risk using an **XGBoost** model (optimized via GridSearchCV, achieving **ROC-AUC: 0.8449**). Includes class weight balancing to penalize missed churners.
-2. **Behavioral Segmentation (Engagement Personas):** Clusters customers into 4 strategic groups using **K-Means Clustering** (validated via Silhouette Score) based on their tenure, spend dynamics, and categorical behaviors.
-3. **RFM Transaction Analytics:** Generates and analyzes transaction histories to rank customers via Recency, Frequency, and Monetary value, mapping them to actionable buckets (e.g., Champions, At Risk).
-4. **CLTV Modeling (Survival Analysis):** Replaces naive historical value calculations with a **Cox Proportional Hazards Model** from `lifelines` to estimate active customers' expected remaining tenure and compute predictive Customer Lifetime Value (CLTV).
-5. **Interactive Command Center:** A premium **Streamlit** dashboard featuring real-time risk simulation, dynamic profit margin adjustments, batch CSV bulk scoring, 3D PCA cluster visualization, and 2x2 Risk-Value strategy matrices.
+An enterprise-grade customer intelligence platform built for subscription-based businesses (e.g., Telecom). The platform integrates machine learning classification, behavioral clustering, transaction-based RFM analysis, survival analysis, and explainable AI (SHAP) into a single premium Streamlit dashboard.
 
 ---
 
-## System Architecture & Workflow
+## Executive Summary
+
+In contractual businesses, customer acquisition costs significantly outweigh retention costs. This platform addresses profitability through five analytical pillars:
+
+1. **Churn Prediction:** XGBoost classifier with GridSearchCV tuning achieving **ROC-AUC 0.8444** and **Recall 79.7%** — catching nearly 8 out of every 10 churners.
+2. **Behavioral Segmentation:** K-Means clustering (K=4, validated via Silhouette Score) maps customers into strategic personas with tailored retention playbooks.
+3. **Predictive CLTV:** Cox Proportional Hazards survival model estimates individual expected remaining tenure, enabling forward-looking lifetime value projection.
+4. **RFM Transaction Analytics:** Scores 7,043 customers across 231,710+ synthetic transactions into Champions, At Risk, Hibernating, and other behavioral buckets.
+5. **Explainable AI:** SHAP (SHapley Additive exPlanations) breaks open the XGBoost black box to explain exactly which features drive each individual prediction.
+
+---
+
+## System Architecture
 
 ```mermaid
 flowchart TD
     A[Raw Data: telco.csv] --> B[preprocess.py]
     B -->|telco_clean.csv| D[segmentation.py]
     B -->|telco_preprocessed.csv| C[train.py]
-    C -->|best_model.pkl & scaler.pkl| G[app/main.py]
+    C -->|best_model.pkl + shap_explainer.pkl| G[app/main.py]
     D -->|telco_segmented.csv| E[cltv.py]
     B -->|telco_clean.csv| F[generate_transactions.py]
     F -->|synthetic_transactions.csv| H[rfm_analysis.py]
     H -->|telco_rfm.csv| G
-    E -->|telco_cltv.csv & cox_model.pkl| G
-    G --> I[Streamlit Dashboard Interface]
+    E -->|telco_cltv.csv + cox_model.pkl| G
+    G --> I[Streamlit Dashboard]
 ```
 
 ---
 
-## Methodology & Modeling
+## Model Performance
 
-### 1. Risk Engine (Churn Classification)
-We train and compare three machine learning models: **Logistic Regression** (baseline), **Random Forest**, and **XGBoost**.
-- **Preprocessing:** Categorical encoding (one-hot encoding), handling missing values (coercing `TotalCharges` to numeric), and standard scaling numeric columns.
-- **Tuning:** Stratified train-test split (80/20) to preserve churn balance, followed by deep 3-fold cross-validation grid search (`GridSearchCV`) for hyperparameter optimization.
-- **Handling Imbalance:** The XGBoost model dynamically calculates and applies `scale_pos_weight` to address class imbalances.
+| Model | Accuracy | Precision | Recall | F1 | ROC-AUC |
+|---|---|---|---|---|---|
+| Logistic Regression | 0.7381 | 0.5043 | 0.7834 | 0.6136 | 0.8418 |
+| Random Forest | 0.7587 | 0.5311 | 0.7754 | 0.6304 | 0.8426 |
+| **XGBoost (Winner)** | **0.7360** | **0.5017** | **0.7968** | **0.6157** | **0.8444** |
 
-### 2. Behavioral Personas (Segmentation)
-Using K-Means Clustering on scaled continuous and one-hot encoded categorical features, we partition customers into 4 distinct profiles:
-- **Loyal Premium:** Long-standing customers with high monthly charges (VIPs).
-- **Loyal Value:** Long-standing customers with budget-conscious charges (Stable).
-- **High-Spend At-Risk:** Short-tenure customers with high monthly charges (New fiber-optic users).
-- **New Budget:** Short-tenure customers with low monthly charges (Trials).
+XGBoost was selected as the production model based on highest ROC-AUC. High recall (79.7%) is prioritised over raw accuracy since missing a churner is more costly than a false alarm.
 
-### 3. Predictive CLTV (Survival Analysis)
-Traditional transaction models (like BG/NBD) fail in subscription settings. We implement **Survival Analysis** to handle "right-censored" active customers (customers who haven't churned yet):
-- **Cox Proportional Hazards Model:** Analyzes how covariates (e.g., contract types, internet services) influence the hazard (risk) of churn over time.
-- **Expected Remaining Tenure:** For active customers, we predict their individual conditional survival curves and integrate them up to 72 months to estimate remaining months.
-- **CLTV Calculation:** Computed using expected total tenure, monthly charges, and a realistic telecom gross profit margin (adjustable in UI).
+---
+
+## Methodology
+
+### 1. Churn Classification (Risk Engine)
+- **Models:** Logistic Regression (baseline), Random Forest, XGBoost
+- **Tuning:** 3-fold stratified `GridSearchCV` — 72 fits for RF, 144 fits for XGBoost
+- **Class Imbalance:** Dynamic `scale_pos_weight` in XGBoost penalizes missed churners
+- **Explainability:** SHAP TreeExplainer generates per-customer feature importance
+
+### 2. Behavioral Segmentation
+K-Means on tenure, monthly charges, and total charges. Optimal K selected via Silhouette Score:
+
+| Segment | Profile | Strategy |
+|---|---|---|
+| Loyal Premium | High tenure, high spend | Cross-sell premium add-ons |
+| High-Spend At-Risk | Low tenure, high spend | Contract upgrade discounts |
+| Loyal Value | High tenure, low spend | Reward longevity, roll-overs |
+| New Budget | Low tenure, low spend | Onboarding nurture sequence |
+
+### 3. Survival-Based CLTV
+Traditional methods fail for active (right-censored) customers. The Cox Proportional Hazards model:
+- Analyses how contract type, internet service, and payment method influence churn hazard
+- Predicts individual conditional survival curves
+- Integrates curves to estimate expected remaining tenure
+- Computes CLTV = expected total tenure × monthly charges × profit margin
 
 ### 4. RFM Transaction Analytics
-- **Recency, Frequency, Monetary:** Simulates and scores customer transaction history using pandas quantiles (`qcut`) to rank them from 1 to 5.
-- **Strategic Segments:** Combines the R-F-M scores to automatically drop customers into proven marketing segments (Champions, Loyal Customers, Potential Loyalists, At Risk, Hibernating).
+- Generates 231,710+ synthetic transactions across 7,043 customers
+- Scores each customer on Recency, Frequency, and Monetary value (1–5 scale)
+- Assigns strategic segments: Champions, Loyal Customers, Potential Loyalists, At Risk, Hibernating
 
 ---
 
-## Interactive Dashboard Features
+## Dashboard Features
 
-The Streamlit application provides six main workspaces:
-1. **Executive Overview & EDA:** High-level metrics and an active revenue portfolio alongside interactive Plotly charts highlighting critical churn drivers.
-2. **Churn Risk Simulator:** Enables users to modify slider inputs and dynamically computes churn probability (gauge chart), lifetime value, and plots a real-time survival decay curve. Includes an adjustable Profit Margin slider.
-3. **Customer Segmentation Tab:** Contains profile metric tables, strategic marketing recommendations, and an interactive **3D PCA scatter plot**.
-4. **CLTV & Strategy Dashboard:** Shows baseline Kaplan-Meier curves and divides the customer base into a **2x2 Risk-Value Matrix** to target resources efficiently.
-5. **Batch CSV Scoring:** Upload a raw `.csv` of customer data to automatically clean it, scale it, generate predictive churn risks, and download the fully scored output.
-6. **RFM Transaction Analytics:** Interactive Donut Chart visualizing the breakdown of the customer base into strategic RFM buckets with corresponding marketing playbooks.
+The Streamlit app provides six interactive workspaces:
+
+| Tab | Contents |
+|---|---|
+| Executive Summary | KPI cards, churn driver charts (contract, charges, payment method) |
+| Churn Risk Simulator | Real-time risk gauge, survival curve, SHAP explanation, Next Best Action |
+| Customer Segmentation | Segment profiles, strategy cards, interactive 3D PCA scatter plot |
+| CLTV & Survival | Kaplan-Meier cohort curves, CLTV distribution, 2x2 Risk-Value matrix |
+| Batch CSV Scoring | Upload CSV, auto-score all customers, download results |
+| RFM Analytics | RFM KPI cards, interactive donut chart, segment strategy playbook |
 
 ---
 
-## Installation & Running Guide
+## Installation & Setup
 
 ### Prerequisites
-- Python 3.12 (Recommended)
-- Windows / macOS / Linux
+- Python 3.12
+- Git
 
-### Setup Instructions
+### Quickstart
 
-1. **Clone the Repository:**
+1. **Clone the repository:**
    ```bash
-   git clone https://github.com/<your-username>/churn_cltv.git
-   cd churn_cltv
+   git clone https://github.com/Anu2030/ChurnGuard_AI.git
+   cd ChurnGuard_AI
    ```
 
-2. **Initialize and Activate Virtual Environment:**
+2. **Create and activate virtual environment:**
    ```bash
    python -m venv venv
-   # On Windows:
+   # Windows:
    venv\Scripts\activate
-   # On macOS/Linux:
+   # macOS/Linux:
    source venv/bin/activate
    ```
 
-3. **Install Dependencies:**
+3. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Execute Pipeline Scripts (Sequentially):**
+4. **Run the pipeline (in order):**
    ```bash
-   # Step 1: Preprocess and clean raw data
    python src/preprocess.py
-   
-   # Step 2: Run GridSearchCV and train classification models
    python src/train.py
-   
-   # Step 3: Run K-Means and segment customers
    python src/segmentation.py
-   
-   # Step 4: Perform survival analysis and CLTV projections
    python src/cltv.py
-
-   # Step 5: Generate and analyze RFM transactions
    python src/generate_transactions.py
    python src/rfm_analysis.py
    ```
 
-5. **Run the Streamlit Dashboard:**
+5. **Launch the dashboard:**
    ```bash
    streamlit run app/main.py
    ```
-   *Your browser will automatically open [http://localhost:8501](http://localhost:8501) showing the platform.*
+   The browser will open automatically at [http://localhost:8501](http://localhost:8501).
 
 ---
 
-## Key Insights & Retention Playbook
+## Key Business Insights
 
-- **The Contract Effect:** Customers on a **Month-to-month** contract have a **7.4x higher risk of churning** compared to customers on a Two-year contract, making contract conversion programs highly lucrative.
-- **Service Friction:** Customers with **Fiber Optic** internet service have a significantly elevated hazard rate. Investigating service stability or pricing structures for fiber is a key recommendation.
-- **VIP at Risk Bucket:** Accounts for high revenue but presents elevated churn probability. The playbook recommends prioritizing direct support outreach and offering contract upgrade incentives to secure these accounts.
+- **The Contract Effect:** Month-to-month customers have a **7.4x higher churn hazard** than Two-year contract holders — contract upgrade campaigns are the single highest-ROI retention action.
+- **Service Friction:** Fiber Optic customers show a significantly elevated hazard rate (Cox coef: +0.486). Investigating pricing and service quality for this segment is a priority recommendation.
+- **VIP at Risk:** High-CLTV, high-churn-risk customers are the most important segment — they represent maximum revenue at risk and warrant dedicated account manager outreach.
+- **Electronic Check Risk:** Customers paying by Electronic Check have a 68% higher churn hazard than those on automatic payments, making payment method conversion a low-effort, high-impact lever.
 
 ---
 
 ## MLOps & Software Engineering
 
-### Running Automated Tests
-
-The `tests/` directory contains a `pytest` test suite that validates core data processing logic.
+### Automated Tests
 
 ```bash
 pytest tests/ -v
 ```
 
-The suite covers:
-- `test_preprocess.py` — Validates that `clean_data` correctly handles blank `TotalCharges`, properly fills NaN values, maps `SeniorCitizen` integers, and preserves `customerID`.
-- `test_config.py` — Ensures all configuration paths, hyperparameter grids, and feature lists are structurally valid.
+The `tests/` suite covers:
+- `test_preprocess.py` — Validates `clean_data`: blank `TotalCharges` handling, NaN filling, `SeniorCitizen` mapping, `customerID` preservation.
+- `test_config.py` — Validates configuration paths, hyperparameter grid structure, and feature list integrity.
+
+**All 8 tests pass locally.**
 
 ### CI/CD with GitHub Actions
 
-A continuous integration pipeline is configured at `.github/workflows/ci.yml`. It runs automatically on every push or pull request to `main`. The pipeline:
+`.github/workflows/ci.yml` triggers automatically on every push or pull request to `main`:
 
-1. Spins up an Ubuntu environment with Python 3.12.
-2. Installs all dependencies from `requirements.txt`.
-3. Runs `flake8` to check for syntax errors and undefined names in `src/`, `app/`, and `tests/`.
-4. Runs the full `pytest` test suite to ensure no regressions.
+1. Spins up Ubuntu with Python 3.12
+2. Installs all dependencies from `requirements.txt`
+3. Runs `flake8` (syntax + undefined name checks)
+4. Runs the full `pytest` suite
 
 ### Docker Deployment
 
-The application can be containerized and deployed anywhere using Docker.
-
 ```bash
-# Build the Docker image
+# Build image
 docker build -t churnguard-ai .
 
-# Run the container
+# Run container
 docker run -p 8501:8501 churnguard-ai
 ```
 
-The app will be available at `http://localhost:8501`.
+App available at `http://localhost:8501`. The `.dockerignore` excludes `venv/`, `__pycache__`, and dev tooling from the image.
 
-The `.dockerignore` file ensures the image stays lean by excluding local virtual environments, `__pycache__`, and development tooling from the build context.
+---
 
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| ML Models | XGBoost, Scikit-learn (LR, RF, K-Means, PCA) |
+| Survival Analysis | Lifelines (Cox PH, Kaplan-Meier) |
+| Explainability | SHAP (TreeExplainer) |
+| Dashboard | Streamlit + Plotly |
+| MLOps | Docker, GitHub Actions CI/CD, pytest, flake8 |
+| Data | Python 3.12, Pandas, NumPy, Joblib |
