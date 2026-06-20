@@ -37,18 +37,18 @@ CATEGORICAL_COLS = [
 # Random state for reproducibility
 RANDOM_STATE = 42
 
-# Hyperparameter grids for training
+# Hyperparameter grids for training (balanced: deep enough to be rigorous, fast enough to run)
 GRID_PARAMS_RF = {
-    'n_estimators': [100, 200, 300],
-    'max_depth': [5, 10, 15, None],
-    'min_samples_split': [2, 5, 10],
-    'min_samples_leaf': [1, 2, 4]
-}
+    'n_estimators': [100, 200],
+    'max_depth': [5, 10, None],
+    'min_samples_split': [2, 5],
+    'min_samples_leaf': [1, 2]
+}  # 24 candidates × 3 folds = 72 fits
 
 GRID_PARAMS_XGB = {
-    'n_estimators': [100, 200, 300],
-    'learning_rate': [0.01, 0.05, 0.1, 0.2],
-    'max_depth': [3, 5, 7, 9],
-    'subsample': [0.8, 0.9, 1.0],
-    'colsample_bytree': [0.8, 0.9, 1.0]
-}
+    'n_estimators': [100, 200],
+    'learning_rate': [0.05, 0.1],
+    'max_depth': [3, 5, 7],
+    'subsample': [0.8, 1.0],
+    'colsample_bytree': [0.8, 1.0]
+}  # 48 candidates × 3 folds = 144 fits
