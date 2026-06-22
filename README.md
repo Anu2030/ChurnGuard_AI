@@ -1,4 +1,4 @@
-# ChurnGuard AI — End-to-End Customer Analytics Platform
+# ChurnGuard AI — Enterprise Customer Analytics Platform
 
 [![Streamlit App](https://img.shields.io/badge/Streamlit-Dashboard-FF4B4B?style=for-the-badge&logo=streamlit)](http://localhost:8501)
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python)](https://python.org)
@@ -6,20 +6,50 @@
 [![Lifelines](https://img.shields.io/badge/Lifelines-Survival%20Analysis-8A2BE2?style=for-the-badge)](https://lifelines.readthedocs.io)
 [![CI/CD](https://img.shields.io/badge/GitHub%20Actions-CI%2FCD-2088FF?style=for-the-badge&logo=github-actions)](https://github.com/Anu2030/ChurnGuard_AI/actions)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker)](./Dockerfile)
+[![AI Powered](https://img.shields.io/badge/On--Device%20AI-No%20API%20Key%20Required-14b8a6?style=for-the-badge&logo=openai)](./src/llm_service.py)
 
-An enterprise-grade customer intelligence platform built for subscription-based businesses (e.g., Telecom). The platform integrates machine learning classification, behavioral clustering, transaction-based RFM analysis, survival analysis, and explainable AI (SHAP) into a single premium Streamlit dashboard.
+An enterprise-grade, **AI-powered** customer intelligence platform built for subscription-based businesses (e.g., Telecom). The platform integrates machine learning classification, behavioral clustering, transaction-based RFM analysis, survival analysis, explainable AI (SHAP), and an on-device generative AI engine into a single premium Streamlit dashboard — **no API key required**.
 
 ---
 
 ## Executive Summary
 
-In contractual businesses, customer acquisition costs significantly outweigh retention costs. This platform addresses profitability through five analytical pillars:
+In contractual businesses, customer acquisition costs significantly outweigh retention costs. This platform addresses profitability through six analytical pillars:
 
 1. **Churn Prediction:** XGBoost classifier with GridSearchCV tuning achieving **ROC-AUC 0.8444** and **Recall 79.7%** — catching nearly 8 out of every 10 churners.
 2. **Behavioral Segmentation:** K-Means clustering (K=4, validated via Silhouette Score) maps customers into strategic personas with tailored retention playbooks.
 3. **Predictive CLTV:** Cox Proportional Hazards survival model estimates individual expected remaining tenure, enabling forward-looking lifetime value projection.
 4. **RFM Transaction Analytics:** Scores 7,043 customers across 231,710+ synthetic transactions into Champions, At Risk, Hibernating, and other behavioral buckets.
 5. **Explainable AI:** SHAP (SHapley Additive exPlanations) breaks open the XGBoost black box to explain exactly which features drive each individual prediction.
+6. **On-Device AI Engine:** A local generative AI layer that powers predictive anomaly alerts, chart interpretation, a persistent copilot, and a dynamic natural-language report generator — all without any external API.
+
+---
+
+## 🤖 AI-Powered Features
+
+This platform includes a full suite of intelligent, on-device AI features built without any external API key:
+
+### 🚨 Predictive Anomaly Feed
+The Executive Summary tab opens with a live alert feed that automatically evaluates KPIs and flags critical business anomalies in real time, including churn rate threshold breaches, high-risk segment patterns, and revenue concentration warnings. Alerts are color-coded: **CRITICAL** (red), **WARNING** (amber), and **AI INSIGHT** (blue).
+
+### 🤖 AI Chart Explanations ("Ask AI to Analyze")
+Beneath key Plotly visualizations, interactive **"Ask AI to Analyze"** buttons provide deep, textual interpretations of what each chart is showing. Available on:
+- **Customer Segmentation tab:** 3D cluster space analysis
+- **CLTV & Survival tab:** Kaplan-Meier survival curve interpretation
+- **CLTV & Survival tab:** CLTV distribution breakdown
+
+### 💬 Persistent AI Copilot (Sidebar)
+An always-on **AI Copilot** lives in the sidebar, accessible from every tab. Type any question about customer churn, CLTV, or retention strategy — the copilot responds with context-aware, data-driven insights regardless of which tab you are viewing.
+
+### 🪄 AI Dynamic Report Generator (Tab 7)
+Type a natural-language query like *"Show me a report on Fiber Optic users"* and the AI dynamically:
+- Parses your intent to identify the target segment
+- Filters the dataset to match
+- Displays key segment KPIs (customer count, churn rate, avg CLTV, segment value)
+- Synthesizes a custom Plotly chart
+- Compiles and makes available a downloadable CSV of the segment
+
+Pre-built quick chips for common queries are also available.
 
 ---
 
@@ -36,6 +66,7 @@ flowchart TD
     F -->|synthetic_transactions.csv| H[rfm_analysis.py]
     H -->|telco_rfm.csv| G
     E -->|telco_cltv.csv + cox_model.pkl| G
+    L[src/llm_service.py\nOn-Device AI Engine] --> G
     G --> I[Streamlit Dashboard]
 ```
 
@@ -83,27 +114,39 @@ Traditional methods fail for active (right-censored) customers. The Cox Proporti
 - Scores each customer on Recency, Frequency, and Monetary value (1–5 scale)
 - Assigns strategic segments: Champions, Loyal Customers, Potential Loyalists, At Risk, Hibernating
 
+### 5. On-Device AI Engine (`src/llm_service.py`)
+A custom AI backend module that runs fully locally with no external API dependencies:
+- `generate_executive_summary()` — Narrates KPIs as a professional board-level insight
+- `generate_anomaly_alerts()` — Evaluates live metrics to surface critical anomalies
+- `generate_chart_insight()` — Produces deep-dive textual analysis for specific chart types
+- `generate_nba_email()` — Drafts hyper-personalized retention emails from SHAP features
+- `chat_with_data()` — Conversational Q&A about churn patterns and strategy
+- `parse_dynamic_report_query()` — Translates natural language into dataframe filters
+
 ---
 
 ## Dashboard Features
 
-The Streamlit app provides six interactive workspaces:
+The Streamlit app provides seven interactive AI-powered workspaces:
 
 | Tab | Contents |
 |---|---|
-| Executive Summary | KPI cards, churn driver charts (contract, charges, payment method) |
-| Churn Risk Simulator | Real-time risk gauge, survival curve, SHAP explanation, Next Best Action |
-| Customer Segmentation | Segment profiles, strategy cards, interactive 3D PCA scatter plot |
-| CLTV & Survival | Kaplan-Meier cohort curves, CLTV distribution, 2x2 Risk-Value matrix |
-| Batch CSV Scoring | Upload CSV, auto-score all customers, download results |
-| RFM Analytics | RFM KPI cards, interactive donut chart, segment strategy playbook |
+| 📊 Executive Summary | 🚨 Predictive Anomaly Feed, KPI cards, churn driver charts |
+| 🎯 Churn Risk Simulator | Real-time risk gauge, survival curve, SHAP waterfall, NBA engine, AI retention email |
+| 👥 Customer Segmentation | Segment profiles, strategy cards, 3D PCA scatter, 🤖 AI cluster analysis |
+| 📈 CLTV & Survival | 🤖 AI-analyzed Kaplan-Meier curves, CLTV distribution, 2×2 Risk-Value matrix |
+| 🗂️ Batch CSV Scoring | Upload CSV, auto-score all customers, styled risk table, download results |
+| 🛒 RFM Analytics | RFM KPI cards, interactive donut chart, color-coded customer table |
+| 🪄 AI Report Generator | Natural-language segment queries, dynamic charts & tables, CSV export |
+
+**Sidebar:** Persistent 💬 AI Copilot available on every tab.
 
 ---
 
 ## Installation & Setup
 
 ### Prerequisites
-- Python 3.12
+- Python 3.12+
 - Git
 
 ### Quickstart
@@ -144,6 +187,8 @@ The Streamlit app provides six interactive workspaces:
    ```
    The browser will open automatically at [http://localhost:8501](http://localhost:8501).
 
+> **No API key required.** All AI features run on-device via `src/llm_service.py`.
+
 ---
 
 ## Key Business Insights
@@ -152,6 +197,7 @@ The Streamlit app provides six interactive workspaces:
 - **Service Friction:** Fiber Optic customers show a significantly elevated hazard rate (Cox coef: +0.486). Investigating pricing and service quality for this segment is a priority recommendation.
 - **VIP at Risk:** High-CLTV, high-churn-risk customers are the most important segment — they represent maximum revenue at risk and warrant dedicated account manager outreach.
 - **Electronic Check Risk:** Customers paying by Electronic Check have a 68% higher churn hazard than those on automatic payments, making payment method conversion a low-effort, high-impact lever.
+- **Loyal Premium Value Concentration:** The Loyal Premium cohort (2+ years tenure) represents ~40% of total CLTV but only ~15% of the customer base — protecting this cohort is the highest-priority retention objective.
 
 ---
 
@@ -199,6 +245,7 @@ App available at `http://localhost:8501`. The `.dockerignore` excludes `venv/`, 
 | ML Models | XGBoost, Scikit-learn (LR, RF, K-Means, PCA) |
 | Survival Analysis | Lifelines (Cox PH, Kaplan-Meier) |
 | Explainability | SHAP (TreeExplainer) |
+| On-Device AI | Custom `llm_service.py` engine (no API key) |
 | Dashboard | Streamlit + Plotly |
 | MLOps | Docker, GitHub Actions CI/CD, pytest, flake8 |
 | Data | Python 3.12, Pandas, NumPy, Joblib |

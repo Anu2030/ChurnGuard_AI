@@ -14,6 +14,7 @@ from sklearn.preprocessing import StandardScaler
 # Add base directory to path so we can import src.config
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from src import config
+from src import llm_service
 
 # Set page config
 st.set_page_config(
@@ -54,6 +55,63 @@ st.markdown("""
     @keyframes icon-spin-in {
         0% { transform: rotate(-8deg) scale(0.9); opacity: 0; }
         100% { transform: rotate(0deg) scale(1); opacity: 1; }
+    }
+
+    /* ===== FUTURISTIC AI CONTAINERS ===== */
+    @keyframes ai-glow {
+        0% { box-shadow: 0 0 5px rgba(139, 92, 246, 0.1), inset 0 0 10px rgba(20, 184, 166, 0.05); }
+        50% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3), inset 0 0 20px rgba(20, 184, 166, 0.15); }
+        100% { box-shadow: 0 0 5px rgba(139, 92, 246, 0.1), inset 0 0 10px rgba(20, 184, 166, 0.05); }
+    }
+    @keyframes text-fade-in {
+        0% { opacity: 0; transform: translateY(5px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+    .ai-container {
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85));
+        border: 1px solid rgba(139, 92, 246, 0.4);
+        border-radius: 14px;
+        padding: 24px;
+        margin-top: 15px;
+        margin-bottom: 24px;
+        animation: ai-glow 4s infinite alternate;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(16px);
+    }
+    .ai-container::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #14b8a6, #8b5cf6, #3b82f6, #14b8a6);
+        animation: gradient-sweep 3s linear infinite;
+        background-size: 200% auto;
+    }
+    .ai-header {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8rem;
+        color: #5eead4;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 600;
+        border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+        padding-bottom: 12px;
+    }
+    .ai-header-icon {
+        animation: icon-spin-in 1s ease-out;
+        font-size: 1.2rem;
+    }
+    .ai-text {
+        font-family: 'Inter', sans-serif;
+        color: #f8fafc;
+        font-size: 0.95rem;
+        line-height: 1.7;
+        animation: text-fade-in 1.5s ease-out forwards;
     }
 
     /* ===== ANIMATED TOP BAR ===== */
@@ -457,6 +515,47 @@ st.markdown("""
         border-left-color: #14b8a6 !important;
     }
 
+    /* ===== AI BUTTONS ===== */
+    div.stButton > button {
+        background: linear-gradient(135deg, rgba(20, 184, 166, 0.1), rgba(139, 92, 246, 0.1)) !important;
+        color: #5eead4 !important;
+        border: 1px solid rgba(20, 184, 166, 0.3) !important;
+        border-radius: 10px !important;
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 600 !important;
+        font-size: 0.83rem !important;
+        padding: 10px 18px !important;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        letter-spacing: 0.01em !important;
+    }
+    div.stButton > button:hover {
+        background: linear-gradient(135deg, rgba(20, 184, 166, 0.2), rgba(139, 92, 246, 0.2)) !important;
+        border-color: rgba(20, 184, 166, 0.6) !important;
+        box-shadow: 0 0 18px rgba(20, 184, 166, 0.25), 0 4px 16px rgba(0,0,0,0.3) !important;
+        transform: translateY(-2px);
+        color: #a78bfa !important;
+    }
+    div.stButton > button:active {
+        transform: translateY(0px) !important;
+        box-shadow: 0 0 8px rgba(20, 184, 166, 0.15) !important;
+    }
+    div.stDownloadButton > button {
+        background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(20, 184, 166, 0.08)) !important;
+        color: #38bdf8 !important;
+        border: 1px solid rgba(56, 189, 248, 0.3) !important;
+        border-radius: 10px !important;
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 600 !important;
+        font-size: 0.83rem !important;
+        transition: all 0.25s ease !important;
+    }
+    div.stDownloadButton > button:hover {
+        background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(20, 184, 166, 0.15)) !important;
+        border-color: rgba(56, 189, 248, 0.6) !important;
+        box-shadow: 0 0 16px rgba(56, 189, 248, 0.2) !important;
+        transform: translateY(-2px);
+    }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
         .hero-header { font-size: 1.9rem; }
@@ -539,6 +638,7 @@ with st.sidebar:
         <div class="nav-item">📈 CLTV &amp; Survival</div>
         <div class="nav-item">🗂️ Batch Scoring</div>
         <div class="nav-item">🛒 RFM Analytics</div>
+        <div class="nav-item">💬 Chat with Data</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -573,6 +673,38 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
+    st.markdown("---")
+    st.markdown("""
+    <div style="padding: 0 14px; margin-bottom: 10px;">
+        <div style="font-size:0.72rem;font-weight:600;color:#8b5cf6;text-transform:uppercase;letter-spacing:1.5px;display:flex;align-items:center;gap:6px;">
+            <span>🤖</span> AI Copilot
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    chat_container = st.container(height=280)
+    with chat_container:
+        if "sidebar_messages" not in st.session_state:
+            st.session_state.sidebar_messages = [
+                {"role": "assistant", "content": "Hello! I am your ChurnGuard Copilot. How can I help you analyze customer churn or CLTV today?"}
+            ]
+        for message in st.session_state.sidebar_messages:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
+                
+    if side_prompt := st.chat_input("Ask Copilot...", key="sidebar_chat_input"):
+        st.session_state.sidebar_messages.append({"role": "user", "content": side_prompt})
+        with chat_container:
+            with st.chat_message("user"):
+                st.markdown(side_prompt)
+            with st.chat_message("assistant"):
+                with st.spinner("Thinking..."):
+                    context_data = df_cltv.sample(min(100, len(df_cltv))).to_csv(index=False)
+                    response = llm_service.chat_with_data(side_prompt, context_data)
+                    st.markdown(response)
+        st.session_state.sidebar_messages.append({"role": "assistant", "content": response})
+        st.rerun()
+
 # ==================== HEADER ====================
 st.markdown("""
 <div class="hero-wrapper">
@@ -591,28 +723,55 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==================== TABS ====================
-tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
     "📊 Executive Summary", 
     "🎯 Churn Risk Simulator", 
     "👥 Customer Segmentation", 
     "📈 CLTV & Survival Analytics",
     "🗂️ Batch CSV Scoring",
-    "🛒 RFM Transaction Analytics"
+    "🛒 RFM Transaction Analytics",
+    "🪄 AI Report Generator"
 ])
 
 # ==================== TAB 1: EXECUTIVE SUMMARY ====================
 with tab1:
+    total_customers = df_cltv.shape[0]
+    churn_rate = (df_cltv['Churn'].value_counts(normalize=True).get('Yes', 0) * 100)
+    avg_cltv = df_cltv['CLTV'].mean()
+    total_projected_value = df_cltv.loc[df_cltv['Churn'] == 'No', 'CLTV'].sum()
+    
+    metrics_dict = {
+        'total_customers': total_customers,
+        'churn_rate': round(churn_rate, 1),
+        'avg_cltv': round(avg_cltv, 0),
+        'total_projected_value': total_projected_value
+    }
+    
+    st.markdown("""
+    <div class="section-header" style="margin-top: 0;">
+        <span class="icon">🚨</span>
+        <span class="text">Predictive Anomaly Feed</span>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    alerts = llm_service.generate_anomaly_alerts(metrics_dict)
+    alerts_html = ""
+    for alert in alerts:
+        color = "#f43f5e" if "CRITICAL" in alert else ("#fbbf24" if "WARNING" in alert else "#38bdf8")
+        bg_color = "rgba(244, 63, 94, 0.08)" if "CRITICAL" in alert else ("rgba(251, 191, 36, 0.08)" if "WARNING" in alert else "rgba(56, 189, 248, 0.08)")
+        border_color = "rgba(244, 63, 94, 0.25)" if "CRITICAL" in alert else ("rgba(251, 191, 36, 0.25)" if "WARNING" in alert else "rgba(56, 189, 248, 0.25)")
+        badge = "CRITICAL" if "CRITICAL" in alert else ("WARNING" if "WARNING" in alert else "AI INSIGHT")
+        clean_text = alert.replace("CRITICAL ANOMALY: ", "").replace("WARNING: ", "").replace("INSIGHT: ", "")
+        
+        alerts_html += f'<div style="background: {bg_color}; border: 1px solid {border_color}; border-radius: 10px; padding: 12px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px;"><span style="background: {color}; color: #000; font-size: 0.65rem; font-weight: 800; padding: 2px 8px; border-radius: 6px; letter-spacing: 0.5px;">{badge}</span><span style="font-size: 0.88rem; color: #e2e8f0; font-family: \'Inter\', sans-serif;">{clean_text}</span></div>'
+    st.markdown(f'<div style="margin-bottom: 20px;">{alerts_html}</div>', unsafe_allow_html=True)
+    
     st.markdown("""
     <div class="section-header">
         <span class="icon">📊</span>
         <span class="text">Business Metrics Overview</span>
     </div>
     """, unsafe_allow_html=True)
-    
-    total_customers = df_cltv.shape[0]
-    churn_rate = (df_cltv['Churn'].value_counts(normalize=True).get('Yes', 0) * 100)
-    avg_cltv = df_cltv['CLTV'].mean()
-    total_projected_value = df_cltv.loc[df_cltv['Churn'] == 'No', 'CLTV'].sum()
     
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -649,6 +808,27 @@ with tab1:
         """, unsafe_allow_html=True)
         
     st.markdown("<br>", unsafe_allow_html=True)
+    
+    metrics_dict = {
+        'total_customers': total_customers,
+        'churn_rate': round(churn_rate, 1),
+        'avg_cltv': round(avg_cltv, 0),
+        'total_projected_value': total_projected_value
+    }
+    with st.spinner("Generating AI Executive Insight..."):
+        ai_summary = llm_service.generate_executive_summary(metrics_dict)
+    
+    st.markdown(f"""
+    <div class="ai-container">
+        <div class="ai-header">
+            <span class="ai-header-icon">✨</span>
+            <span>On-Device AI Engine Insight</span>
+        </div>
+        <div class="ai-text">
+            {ai_summary}
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     st.markdown("""
     <div class="section-header">
@@ -997,6 +1177,28 @@ with tab2:
             </div>
             """, unsafe_allow_html=True)
 
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("✨ Generate AI Retention Email"):
+            with st.spinner("Writing personalized email..."):
+                top_shap_features = dict(zip(top_shap['Feature'], top_shap['Impact']))
+                customer_profile = {
+                    "tenure": sim_tenure,
+                    "MonthlyCharges": sim_monthly,
+                    "Contract": sim_contract,
+                    "InternetService": sim_internet
+                }
+                email_draft = llm_service.generate_nba_email(customer_profile, prob, top_shap_features)
+                
+                st.markdown(f"""
+                <div class="ai-container">
+                    <div class="ai-header">
+                        <span class="ai-header-icon">✉️</span>
+                        <span>AI Generated Retention Draft</span>
+                    </div>
+                    <div class="ai-text" style="white-space: pre-wrap;">{email_draft}</div>
+                </div>
+                """, unsafe_allow_html=True)
+
 # ==================== TAB 3: CUSTOMER SEGMENTATION ====================
 with tab3:
     st.markdown("""
@@ -1045,14 +1247,46 @@ with tab3:
     </div>
     """, unsafe_allow_html=True)
     
-    st.dataframe(pd.DataFrame(segment_profiles).rename(columns={
-        'Count': 'Customer Count',
-        'Avg_Tenure': 'Avg Tenure (m)',
-        'Avg_MonthlyCharges': 'Avg Monthly ($)',
-        'Avg_TotalCharges': 'Avg Total ($)',
-        'Churn_Rate': 'Churn Rate (%)',
-        'Strategic_Recommendation': 'Retention Action'
-    }), use_container_width=True, hide_index=True)
+    table_rows = ""
+    for profile in segment_profiles:
+        seg_name = profile['Segment']
+        count = profile['Count']
+        tenure = profile['Avg_Tenure']
+        monthly = profile['Avg_MonthlyCharges']
+        total = profile['Avg_TotalCharges']
+        churn = profile['Churn_Rate']
+        action = profile['Strategic_Recommendation']
+        seg_color = COLOR_MAP_SEGMENTS.get(seg_name, '#e2e8f0')
+        
+        if churn > 30:
+            churn_badge = f'<span style="background: rgba(244, 63, 94, 0.12); color: #f87171; border: 1px solid rgba(244, 63, 94, 0.25); padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; font-family: \'JetBrains Mono\', monospace;">{churn:.1f}%</span>'
+        else:
+            churn_badge = f'<span style="background: rgba(20, 184, 166, 0.12); color: #34d399; border: 1px solid rgba(20, 184, 166, 0.25); padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; font-family: \'JetBrains Mono\', monospace;">{churn:.1f}%</span>'
+            
+        row = f'<tr style="border-bottom: 1px solid rgba(20, 184, 166, 0.08); background: transparent;">'
+        row += f'<td style="padding: 14px 16px; font-weight: 700; color: {seg_color}; font-size: 0.88rem;">{seg_name}</td>'
+        row += f'<td style="padding: 14px 16px; text-align: right; color: #e2e8f0; font-family: \'JetBrains Mono\', monospace; font-size: 0.85rem;">{count:,}</td>'
+        row += f'<td style="padding: 14px 16px; text-align: right; color: #e2e8f0; font-family: \'JetBrains Mono\', monospace; font-size: 0.85rem;">{tenure:.1f} m</td>'
+        row += f'<td style="padding: 14px 16px; text-align: right; color: #e2e8f0; font-family: \'JetBrains Mono\', monospace; font-size: 0.85rem;">${monthly:,.2f}</td>'
+        row += f'<td style="padding: 14px 16px; text-align: right; color: #e2e8f0; font-family: \'JetBrains Mono\', monospace; font-size: 0.85rem;">${total:,.2f}</td>'
+        row += f'<td style="padding: 14px 16px; text-align: right;">{churn_badge}</td>'
+        row += f'<td style="padding: 14px 16px; color: #94a3b8; font-size: 0.82rem; line-height: 1.5; max-width: 350px;">{action}</td>'
+        row += '</tr>'
+        table_rows += row
+        
+    table_html = '<div style="overflow-x: auto; border: 1px solid rgba(20, 184, 166, 0.15); border-radius: 14px; background: linear-gradient(135deg, rgba(8, 12, 20, 0.85), rgba(16, 24, 40, 0.7)); backdrop-filter: blur(24px); box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4); margin-bottom: 25px;">'
+    table_html += '<table style="width: 100%; border-collapse: collapse; text-align: left; font-family: \'Inter\', sans-serif;">'
+    table_html += '<thead><tr style="border-bottom: 1.5px solid rgba(20, 184, 166, 0.2); background: rgba(20, 184, 166, 0.04);">'
+    table_html += '<th style="padding: 14px 16px; font-size: 0.68rem; font-weight: 700; color: #5eead4; text-transform: uppercase; letter-spacing: 1.5px;">Segment</th>'
+    table_html += '<th style="padding: 14px 16px; font-size: 0.68rem; font-weight: 700; color: #5eead4; text-transform: uppercase; letter-spacing: 1.5px; text-align: right;">Customer Count</th>'
+    table_html += '<th style="padding: 14px 16px; font-size: 0.68rem; font-weight: 700; color: #5eead4; text-transform: uppercase; letter-spacing: 1.5px; text-align: right;">Avg Tenure</th>'
+    table_html += '<th style="padding: 14px 16px; font-size: 0.68rem; font-weight: 700; color: #5eead4; text-transform: uppercase; letter-spacing: 1.5px; text-align: right;">Avg Monthly</th>'
+    table_html += '<th style="padding: 14px 16px; font-size: 0.68rem; font-weight: 700; color: #5eead4; text-transform: uppercase; letter-spacing: 1.5px; text-align: right;">Avg Total</th>'
+    table_html += '<th style="padding: 14px 16px; font-size: 0.68rem; font-weight: 700; color: #5eead4; text-transform: uppercase; letter-spacing: 1.5px; text-align: right;">Churn Rate</th>'
+    table_html += '<th style="padding: 14px 16px; font-size: 0.68rem; font-weight: 700; color: #5eead4; text-transform: uppercase; letter-spacing: 1.5px;">Strategic Recommendation</th>'
+    table_html += '</tr></thead><tbody>' + table_rows + '</tbody></table></div>'
+    
+    st.markdown(table_html, unsafe_allow_html=True)
     
     st.markdown("<br>", unsafe_allow_html=True)
     
@@ -1094,6 +1328,27 @@ with tab3:
     )
     fig_pca.update_traces(marker=dict(size=3, opacity=0.75, line=dict(width=0)))
     st.plotly_chart(fig_pca, use_container_width=True)
+    
+    if "show_insight_demographics" not in st.session_state:
+        st.session_state.show_insight_demographics = False
+        
+    if st.button("🤖 Ask AI to Analyze Segment Clusters", key="btn_seg"):
+        st.session_state.show_insight_demographics = not st.session_state.show_insight_demographics
+        
+    if st.session_state.show_insight_demographics:
+        with st.spinner("Analyzing cluster demographics..."):
+            insight = llm_service.generate_chart_insight("demographics")
+            st.markdown(f"""
+            <div class="ai-container" style="margin-top: 10px;">
+                <div class="ai-header">
+                    <span class="ai-header-icon">✨</span>
+                    <span>AI Cluster Demographics Interpretation</span>
+                </div>
+                <div class="ai-text">
+                    {insight}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
 
 # ==================== TAB 4: CLTV & SURVIVAL ANALYTICS ====================
 with tab4:
@@ -1128,6 +1383,27 @@ with tab4:
         fig_km.update_layout(**CHART_LAYOUT, height=400, xaxis_title="Tenure (Months)", yaxis_title="Retention Probability")
         st.plotly_chart(fig_km, use_container_width=True)
         
+        if "show_insight_services" not in st.session_state:
+            st.session_state.show_insight_services = False
+            
+        if st.button("🤖 Ask AI to Analyze Survival Curves", key="btn_surv_km"):
+            st.session_state.show_insight_services = not st.session_state.show_insight_services
+            
+        if st.session_state.show_insight_services:
+            with st.spinner("Analyzing survival curves..."):
+                insight = llm_service.generate_chart_insight("services")
+                st.markdown(f"""
+                <div class="ai-container" style="margin-top: 10px;">
+                    <div class="ai-header">
+                        <span class="ai-header-icon">✨</span>
+                        <span>AI Survival Curve Interpretation</span>
+                    </div>
+                    <div class="ai-text">
+                        {insight}
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+        
     with col_surv_right:
         st.markdown("""
         <div class="section-header" style="margin-top:0;">
@@ -1145,6 +1421,27 @@ with tab4:
         fig_cltv_dist.update_layout(**CHART_LAYOUT, height=400)
         fig_cltv_dist.update_traces(marker_line_width=0, opacity=0.85)
         st.plotly_chart(fig_cltv_dist, use_container_width=True)
+        
+        if "show_insight_financials" not in st.session_state:
+            st.session_state.show_insight_financials = False
+            
+        if st.button("🤖 Ask AI to Analyze CLTV Distribution", key="btn_cltv_dist"):
+            st.session_state.show_insight_financials = not st.session_state.show_insight_financials
+            
+        if st.session_state.show_insight_financials:
+            with st.spinner("Analyzing CLTV distributions..."):
+                insight = llm_service.generate_chart_insight("financials")
+                st.markdown(f"""
+                <div class="ai-container" style="margin-top: 10px;">
+                    <div class="ai-header">
+                        <span class="ai-header-icon">✨</span>
+                        <span>AI CLTV Distribution Interpretation</span>
+                    </div>
+                    <div class="ai-text">
+                        {insight}
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
         
     st.markdown("<br>", unsafe_allow_html=True)
     
@@ -1262,8 +1559,28 @@ with tab5:
                 batch_df['Churn_Risk_Probability'] = churn_probs.round(4)
                 batch_df['Risk_Level'] = np.where(churn_probs > 0.7, 'High', np.where(churn_probs > 0.3, 'Medium', 'Low'))
                 
-                st.markdown("### Scoring Results Preview")
-                st.dataframe(batch_df[['customerID', 'tenure', 'MonthlyCharges', 'Churn_Risk_Probability', 'Risk_Level']].head(15), use_container_width=True)
+                st.markdown("""
+                <div class="section-header" style="margin-top: 18px;">
+                    <span class="icon">📋</span>
+                    <span class="text">Scoring Results Preview</span>
+                </div>
+                """, unsafe_allow_html=True)
+                preview_df = batch_df[['customerID', 'tenure', 'MonthlyCharges', 'Churn_Risk_Probability', 'Risk_Level']].head(15)
+                batch_rows = ""
+                for _, brow in preview_df.iterrows():
+                    rl = brow['Risk_Level']
+                    if rl == 'High':
+                        risk_html = '<span style="background: rgba(244,63,94,0.12); color:#f87171; border:1px solid rgba(244,63,94,0.3); padding:3px 10px; border-radius:20px; font-size:0.78rem; font-weight:700;">High</span>'
+                        prob_color = '#f87171'
+                    elif rl == 'Medium':
+                        risk_html = '<span style="background: rgba(251,191,36,0.12); color:#fbbf24; border:1px solid rgba(251,191,36,0.3); padding:3px 10px; border-radius:20px; font-size:0.78rem; font-weight:700;">Medium</span>'
+                        prob_color = '#fbbf24'
+                    else:
+                        risk_html = '<span style="background: rgba(20,184,166,0.12); color:#34d399; border:1px solid rgba(20,184,166,0.3); padding:3px 10px; border-radius:20px; font-size:0.78rem; font-weight:700;">Low</span>'
+                        prob_color = '#34d399'
+                    batch_rows += f'<tr style="border-bottom: 1px solid rgba(20,184,166,0.07);"><td style="padding:11px 14px; color:#94a3b8; font-size:0.8rem; font-family:JetBrains Mono,monospace;">{brow["customerID"]}</td><td style="padding:11px 14px; text-align:right; color:#e2e8f0; font-family:JetBrains Mono,monospace; font-size:0.83rem;">{int(brow["tenure"])} m</td><td style="padding:11px 14px; text-align:right; color:#e2e8f0; font-family:JetBrains Mono,monospace; font-size:0.83rem;">${brow["MonthlyCharges"]:.2f}</td><td style="padding:11px 14px; text-align:right; color:{prob_color}; font-family:JetBrains Mono,monospace; font-size:0.83rem; font-weight:600;">{brow["Churn_Risk_Probability"]:.3f}</td><td style="padding:11px 14px; text-align:center;">{risk_html}</td></tr>'
+                batch_table = '<div style="overflow-x:auto; border:1px solid rgba(20,184,166,0.15); border-radius:14px; background:linear-gradient(135deg,rgba(8,12,20,0.85),rgba(16,24,40,0.7)); backdrop-filter:blur(20px); box-shadow:0 12px 36px rgba(0,0,0,0.35); margin-bottom:20px;"><table style="width:100%; border-collapse:collapse; font-family:Inter,sans-serif;"><thead><tr style="border-bottom:1.5px solid rgba(20,184,166,0.2); background:rgba(20,184,166,0.04);"><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px;">Customer ID</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Tenure</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Monthly Charges</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Churn Probability</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:center;">Risk Level</th></tr></thead><tbody>' + batch_rows + '</tbody></table></div>'
+                st.markdown(batch_table, unsafe_allow_html=True)
                 
                 # 4. Download
                 csv_out = batch_df.to_csv(index=False).encode('utf-8')
@@ -1387,11 +1704,149 @@ with tab6:
             </div>
             """, unsafe_allow_html=True)
             
-        st.markdown("### RFM Customer Table")
-        st.dataframe(df_rfm[['customerID', 'Recency', 'Frequency', 'Monetary', 'RFM_Segment', 'Churn']].head(50), use_container_width=True)
+        st.markdown("""
+        <div class="section-header">
+            <span class="icon">📋</span>
+            <span class="text">RFM Customer Sample</span>
+        </div>
+        """, unsafe_allow_html=True)
+        rfm_display = df_rfm[['customerID', 'Recency', 'Frequency', 'Monetary', 'RFM_Segment', 'Churn']].head(50)
+        rfm_seg_colors = {'Champions': '#14b8a6', 'Loyal Customers': '#38bdf8', 'Potential Loyalists': '#8b5cf6', 'At Risk': '#f59e0b', 'Hibernating': '#f43f5e', 'Needs Attention': '#64748b'}
+        rfm_rows = ""
+        for _, rrow in rfm_display.iterrows():
+            seg_c = rfm_seg_colors.get(rrow['RFM_Segment'], '#94a3b8')
+            churn_c = '#f87171' if rrow['Churn'] == 'Yes' else '#34d399'
+            rfm_rows += f'<tr style="border-bottom:1px solid rgba(20,184,166,0.07);"><td style="padding:11px 14px; color:#94a3b8; font-size:0.8rem; font-family:JetBrains Mono,monospace;">{rrow["customerID"]}</td><td style="padding:11px 14px; text-align:right; color:#e2e8f0; font-family:JetBrains Mono,monospace; font-size:0.83rem;">{int(rrow["Recency"])} d</td><td style="padding:11px 14px; text-align:right; color:#e2e8f0; font-family:JetBrains Mono,monospace; font-size:0.83rem;">{int(rrow["Frequency"])}</td><td style="padding:11px 14px; text-align:right; color:#e2e8f0; font-family:JetBrains Mono,monospace; font-size:0.83rem;">${rrow["Monetary"]:,.0f}</td><td style="padding:11px 14px; font-size:0.83rem; font-weight:700; color:{seg_c};">{rrow["RFM_Segment"]}</td><td style="padding:11px 14px; text-align:center; font-size:0.8rem; font-weight:700; color:{churn_c};">{rrow["Churn"]}</td></tr>'
+        rfm_table = '<div style="overflow-x:auto; border:1px solid rgba(20,184,166,0.15); border-radius:14px; background:linear-gradient(135deg,rgba(8,12,20,0.85),rgba(16,24,40,0.7)); backdrop-filter:blur(20px); box-shadow:0 12px 36px rgba(0,0,0,0.35); margin-bottom:20px; max-height:480px; overflow-y:auto;"><table style="width:100%; border-collapse:collapse; font-family:Inter,sans-serif;"><thead><tr style="border-bottom:1.5px solid rgba(20,184,166,0.2); background:rgba(20,184,166,0.04);"><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px;">Customer ID</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Recency</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Frequency</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Monetary</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px;">RFM Segment</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:center;">Churn</th></tr></thead><tbody>' + rfm_rows + '</tbody></table></div>'
+        st.markdown(rfm_table, unsafe_allow_html=True)
         
     except FileNotFoundError:
         st.warning(f"RFM data not found. Please run `python src/generate_transactions.py` and then `python src/rfm_analysis.py` to generate the synthetic transaction data.")
+
+# ==================== TAB 7: AI REPORT GENERATOR ====================
+with tab7:
+    st.markdown("""
+    <div class="section-header">
+        <span class="icon">🪄</span>
+        <span class="text">AI Dynamic Report Generator</span>
+    </div>
+    <div class="section-desc">Type a query in natural language to dynamically slice the customer dataset and generate AI-driven custom reports, metrics, and visualizations.</div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("💡 **Suggested Queries:**")
+    col_chip1, col_chip2, col_chip3, col_chip4 = st.columns(4)
+    suggested_query = ""
+    with col_chip1:
+        if st.button("🌐 Fiber Optic Segment", key="chip_fiber", use_container_width=True):
+            suggested_query = "Show me a report on Fiber Optic users"
+    with col_chip2:
+        if st.button("📋 Month-to-Month Contracts", key="chip_m2m", use_container_width=True):
+            suggested_query = "Month-to-month contracts risk analysis"
+    with col_chip3:
+        if st.button("👵 Senior Citizens", key="chip_senior", use_container_width=True):
+            suggested_query = "Senior citizen demographics report"
+    with col_chip4:
+        if st.button("🚨 High Churn Risk", key="chip_churn", use_container_width=True):
+            suggested_query = "Show me historical churned customers"
+            
+    query_input = st.text_input(
+        "Enter your custom report query:", 
+        value=suggested_query if suggested_query else "Show me a report on Fiber Optic users",
+        placeholder="e.g., Show me fiber optic users with month-to-month contracts",
+        key="report_query_input"
+    )
+    
+    if query_input:
+        with st.spinner("AI parsing query and compiling report..."):
+            filters, report_title = llm_service.parse_dynamic_report_query(query_input)
+            
+            filtered_df = df_cltv.copy()
+            for col, val in filters.items():
+                if col in filtered_df.columns:
+                    filtered_df = filtered_df[filtered_df[col] == val]
+                    
+            st.markdown(f"### {report_title}")
+            
+            if filtered_df.empty:
+                st.warning("No customers match the generated filters. Try broadening your query.")
+            else:
+                sub_total = len(filtered_df)
+                sub_churn_rate = (filtered_df['Churn'].value_counts(normalize=True).get('Yes', 0) * 100)
+                sub_avg_cltv = filtered_df['CLTV'].mean()
+                sub_total_value = filtered_df.loc[filtered_df['Churn'] == 'No', 'CLTV'].sum()
+                
+                m1, m2, m3, m4 = st.columns(4)
+                with m1:
+                    st.markdown(f"""
+                    <div class="glass-card" style="--accent-color: #818cf8; padding: 16px 14px;">
+                        <div class="card-label" style="font-size:0.65rem;">Segment Customers</div>
+                        <div class="card-value" style="color: #818cf8; font-size: 1.6rem;">{sub_total:,}</div>
+                    </div>""", unsafe_allow_html=True)
+                with m2:
+                    st.markdown(f"""
+                    <div class="glass-card" style="--accent-color: #f87171; padding: 16px 14px;">
+                        <div class="card-label" style="font-size:0.65rem;">Segment Churn Rate</div>
+                        <div class="card-value" style="color: #f87171; font-size: 1.6rem;">{sub_churn_rate:.1f}%</div>
+                    </div>""", unsafe_allow_html=True)
+                with m3:
+                    st.markdown(f"""
+                    <div class="glass-card" style="--accent-color: #34d399; padding: 16px 14px;">
+                        <div class="card-label" style="font-size:0.65rem;">Segment Avg CLTV</div>
+                        <div class="card-value" style="color: #34d399; font-size: 1.6rem;">${sub_avg_cltv:,.0f}</div>
+                    </div>""", unsafe_allow_html=True)
+                with m4:
+                    st.markdown(f"""
+                    <div class="glass-card" style="--accent-color: #38bdf8; padding: 16px 14px;">
+                        <div class="card-label" style="font-size:0.65rem;">Segment Value</div>
+                        <div class="card-value" style="color: #38bdf8; font-size: 1.6rem;">${sub_total_value/1e6:.2f}M</div>
+                    </div>""", unsafe_allow_html=True)
+                
+                st.markdown("<br>", unsafe_allow_html=True)
+                
+                col_chart, col_table = st.columns([1, 1], gap="medium")
+                with col_chart:
+                    st.markdown("#### AI Visual Synthesis")
+                    if 'Contract' not in filters and len(filtered_df['Contract'].unique()) > 1:
+                        fig_dyn = px.histogram(
+                            filtered_df, x='Contract', color='Churn',
+                            barmode='group',
+                            title="Distribution by Contract Type",
+                            color_discrete_map=COLOR_MAP_CHURN
+                        )
+                    else:
+                        fig_dyn = px.histogram(
+                            filtered_df, x='MonthlyCharges', color='Churn',
+                            nbins=20,
+                            title="Monthly Charges Distribution",
+                            color_discrete_map=COLOR_MAP_CHURN
+                        )
+                    fig_dyn.update_layout(**CHART_LAYOUT)
+                    st.plotly_chart(fig_dyn, use_container_width=True)
+                    
+                with col_table:
+                    st.markdown("""
+                    <div class="section-header" style="margin-top:0;">
+                        <span class="icon">🗂️</span>
+                        <span class="text">AI Compiled Data Slice</span>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    ai_slice = filtered_df[['customerID', 'tenure', 'Contract', 'InternetService', 'MonthlyCharges', 'CLTV', 'Churn']].head(100)
+                    ai_rows = ""
+                    for _, arow in ai_slice.iterrows():
+                        churn_c = '#f87171' if arow['Churn'] == 'Yes' else '#34d399'
+                        contract_c = '#f87171' if arow['Contract'] == 'Month-to-month' else ('#fbbf24' if arow['Contract'] == 'One year' else '#34d399')
+                        ai_rows += f'<tr style="border-bottom:1px solid rgba(20,184,166,0.07);"><td style="padding:9px 12px; color:#94a3b8; font-size:0.78rem; font-family:JetBrains Mono,monospace;">{arow["customerID"]}</td><td style="padding:9px 12px; text-align:right; color:#e2e8f0; font-family:JetBrains Mono,monospace; font-size:0.8rem;">{int(arow["tenure"])} m</td><td style="padding:9px 12px; font-size:0.8rem; font-weight:600; color:{contract_c};">{arow["Contract"]}</td><td style="padding:9px 12px; font-size:0.8rem; color:#94a3b8;">{arow["InternetService"]}</td><td style="padding:9px 12px; text-align:right; color:#e2e8f0; font-family:JetBrains Mono,monospace; font-size:0.8rem;">${arow["MonthlyCharges"]:.2f}</td><td style="padding:9px 12px; text-align:right; color:#38bdf8; font-family:JetBrains Mono,monospace; font-size:0.8rem; font-weight:600;">${arow["CLTV"]:,.0f}</td><td style="padding:9px 12px; text-align:center; font-size:0.8rem; font-weight:700; color:{churn_c};">{arow["Churn"]}</td></tr>'
+                    ai_table = '<div style="overflow-x:auto; border:1px solid rgba(20,184,166,0.15); border-radius:14px; background:linear-gradient(135deg,rgba(8,12,20,0.85),rgba(16,24,40,0.7)); backdrop-filter:blur(20px); box-shadow:0 12px 36px rgba(0,0,0,0.35); max-height:280px; overflow-y:auto;"><table style="width:100%; border-collapse:collapse; font-family:Inter,sans-serif;"><thead style="position:sticky; top:0; z-index:2;"><tr style="border-bottom:1.5px solid rgba(20,184,166,0.2); background:rgba(8,12,20,0.95);"><th style="padding:10px 12px; font-size:0.63rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px;">Customer ID</th><th style="padding:10px 12px; font-size:0.63rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Tenure</th><th style="padding:10px 12px; font-size:0.63rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px;">Contract</th><th style="padding:10px 12px; font-size:0.63rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px;">Internet</th><th style="padding:10px 12px; font-size:0.63rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Monthly</th><th style="padding:10px 12px; font-size:0.63rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">CLTV</th><th style="padding:10px 12px; font-size:0.63rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:center;">Churn</th></tr></thead><tbody>' + ai_rows + '</tbody></table></div>'
+                    st.markdown(ai_table, unsafe_allow_html=True)
+                    
+                    csv_dyn = filtered_df.to_csv(index=False).encode('utf-8')
+                    st.download_button(
+                        label="📥 Download Segment Data (CSV)",
+                        data=csv_dyn,
+                        file_name='ai_generated_report_segment.csv',
+                        mime='text/csv',
+                        use_container_width=True
+                    )
 
 # ==================== FOOTER ====================
 st.markdown("""
