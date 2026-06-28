@@ -23,6 +23,10 @@ def clean_data(df):
     # Fill missing TotalCharges: since these are new customers (tenure=0), TotalCharges can be 0 or equal to MonthlyCharges
     df['TotalCharges'] = df['TotalCharges'].fillna(df['MonthlyCharges'])
     
+    # Feature Engineering
+    df['TenureInYears'] = df['tenure'] / 12.0
+    df['ChargeRatio'] = df['MonthlyCharges'] / (df['TotalCharges'] + 0.001)
+    
     # SeniorCitizen is 0 or 1, let's convert to string Yes/No for cleaner EDA/Segmentation, 
     # but we'll encode it back in preprocessing
     df['SeniorCitizen'] = df['SeniorCitizen'].map({0: 'No', 1: 'Yes'})

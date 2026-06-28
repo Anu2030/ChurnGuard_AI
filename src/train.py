@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from xgboost import XGBClassifier
 from sklearn.metrics import (
     accuracy_score, precision_score, recall_score, f1_score, 
@@ -51,6 +51,11 @@ def train_and_evaluate():
             'model': RandomForestClassifier(random_state=config.RANDOM_STATE, class_weight='balanced'),
             'tune': True,
             'grid': config.GRID_PARAMS_RF
+        },
+        'Gradient Boosting': {
+            'model': GradientBoostingClassifier(random_state=config.RANDOM_STATE),
+            'tune': True,
+            'grid': config.GRID_PARAMS_GB
         },
         'XGBoost': {
             'model': XGBClassifier(eval_metric='logloss', random_state=config.RANDOM_STATE, scale_pos_weight=scale_pos_weight_val),

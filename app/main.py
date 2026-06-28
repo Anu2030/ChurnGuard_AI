@@ -26,13 +26,13 @@ st.set_page_config(
 
 # ==================== PREMIUM DESIGN SYSTEM ====================
 st.markdown("""
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
     /* ===== ANIMATIONS ===== */
     @keyframes pulse-risk {
-        0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.5); }
-        70% { box-shadow: 0 0 0 12px rgba(244, 63, 94, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
+        0% { box-shadow: 0 0 0 0 rgba(255, 0, 127, 0.5); }
+        70% { box-shadow: 0 0 0 12px rgba(255, 0, 127, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(255, 0, 127, 0); }
     }
     @keyframes pulse-badge {
         0% { opacity: 1; }
@@ -59,9 +59,9 @@ st.markdown("""
 
     /* ===== FUTURISTIC AI CONTAINERS ===== */
     @keyframes ai-glow {
-        0% { box-shadow: 0 0 5px rgba(139, 92, 246, 0.1), inset 0 0 10px rgba(20, 184, 166, 0.05); }
-        50% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3), inset 0 0 20px rgba(20, 184, 166, 0.15); }
-        100% { box-shadow: 0 0 5px rgba(139, 92, 246, 0.1), inset 0 0 10px rgba(20, 184, 166, 0.05); }
+        0% { box-shadow: 0 0 5px rgba(255, 0, 127, 0.1), inset 0 0 10px rgba(0, 229, 255, 0.05); }
+        50% { box-shadow: 0 0 20px rgba(255, 0, 127, 0.3), inset 0 0 20px rgba(0, 229, 255, 0.15); }
+        100% { box-shadow: 0 0 5px rgba(255, 0, 127, 0.1), inset 0 0 10px rgba(0, 229, 255, 0.05); }
     }
     @keyframes text-fade-in {
         0% { opacity: 0; transform: translateY(5px); }
@@ -69,7 +69,7 @@ st.markdown("""
     }
     .ai-container {
         background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85));
-        border: 1px solid rgba(139, 92, 246, 0.4);
+        border: 1px solid rgba(255, 0, 127, 0.4);
         border-radius: 14px;
         padding: 24px;
         margin-top: 15px;
@@ -84,14 +84,14 @@ st.markdown("""
         position: absolute;
         top: 0; left: 0; right: 0;
         height: 3px;
-        background: linear-gradient(90deg, #14b8a6, #8b5cf6, #3b82f6, #14b8a6);
+        background: linear-gradient(90deg, #00E5FF, #FF007F, #3b82f6, #00E5FF);
         animation: gradient-sweep 3s linear infinite;
         background-size: 200% auto;
     }
     .ai-header {
         font-family: 'JetBrains Mono', monospace;
         font-size: 0.8rem;
-        color: #5eead4;
+        color: #00E5FF;
         text-transform: uppercase;
         letter-spacing: 2px;
         margin-bottom: 16px;
@@ -99,7 +99,7 @@ st.markdown("""
         align-items: center;
         gap: 10px;
         font-weight: 600;
-        border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+        border-bottom: 1px solid rgba(255, 0, 127, 0.2);
         padding-bottom: 12px;
     }
     .ai-header-icon {
@@ -107,7 +107,7 @@ st.markdown("""
         font-size: 1.2rem;
     }
     .ai-text {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Space Grotesk', sans-serif;
         color: #f8fafc;
         font-size: 0.95rem;
         line-height: 1.7;
@@ -121,7 +121,7 @@ st.markdown("""
         position: fixed;
         top: 0; left: 0; right: 0;
         height: 3px;
-        background: linear-gradient(90deg, #14b8a6, #8b5cf6, #f43f5e, #f59e0b, #14b8a6);
+        background: linear-gradient(90deg, #00E5FF, #FF007F, #FF007F, #FFD700, #00E5FF);
         background-size: 200% auto;
         animation: top-bar-sweep 4s linear infinite;
         z-index: 9999;
@@ -130,30 +130,30 @@ st.markdown("""
     /* ===== GLOBAL RESET & TYPOGRAPHY ===== */
     *, *::before, *::after { box-sizing: border-box; }
     .stApp {
-        background: linear-gradient(160deg, #080c14 0%, #0c1220 45%, #101828 100%);
+        background: linear-gradient(160deg, #0B0B1A 0%, #111122 45%, #16162D 100%);
         color: #cbd5e1;
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
     }
     div[data-testid="stVerticalBlock"] > div {
         animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
     h1, h2, h3, h4, h5, h6 {
-        font-family: 'Inter', sans-serif !important;
+        font-family: 'Space Grotesk', sans-serif !important;
         color: #f1f5f9 !important;
         letter-spacing: -0.02em;
     }
-    label, p { font-family: 'Inter', sans-serif; }
+    label, p { font-family: 'Space Grotesk', sans-serif; }
 
     /* ===== SCROLLBAR ===== */
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(20, 184, 166, 0.35); border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(20, 184, 166, 0.6); }
+    ::-webkit-scrollbar-thumb { background: rgba(0, 229, 255, 0.35); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(0, 229, 255, 0.6); }
 
     /* ===== SIDEBAR ===== */
     section[data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #080c14 0%, #0d1520 100%) !important;
-        border-right: 1px solid rgba(20, 184, 166, 0.12) !important;
+        background: linear-gradient(180deg, #0B0B1A 0%, #16162D 100%) !important;
+        border-right: 1px solid rgba(0, 229, 255, 0.12) !important;
         box-shadow: 4px 0 24px rgba(0,0,0,0.4);
     }
     section[data-testid="stSidebar"]::before {
@@ -161,7 +161,7 @@ st.markdown("""
         position: absolute;
         left: 0; top: 0; bottom: 0;
         width: 3px;
-        background: linear-gradient(180deg, #14b8a6, #8b5cf6, #f43f5e);
+        background: linear-gradient(180deg, #00E5FF, #FF007F, #FF007F);
         border-radius: 0 2px 2px 0;
     }
     section[data-testid="stSidebar"] .stMarkdown p { color: #64748b !important; }
@@ -172,7 +172,7 @@ st.markdown("""
         background: rgba(8, 12, 20, 0.7);
         border-radius: 14px;
         padding: 6px;
-        border: 1px solid rgba(20, 184, 166, 0.1);
+        border: 1px solid rgba(0, 229, 255, 0.1);
         backdrop-filter: blur(12px);
     }
     .stTabs [data-baseweb="tab"] {
@@ -188,21 +188,21 @@ st.markdown("""
     }
     .stTabs [data-baseweb="tab"]:hover {
         color: #e2e8f0;
-        background: rgba(20, 184, 166, 0.07);
+        background: rgba(0, 229, 255, 0.07);
     }
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, rgba(20, 184, 166, 0.18), rgba(139, 92, 246, 0.18)) !important;
-        color: #5eead4 !important;
+        background: linear-gradient(135deg, rgba(0, 229, 255, 0.18), rgba(255, 0, 127, 0.18)) !important;
+        color: #00E5FF !important;
         font-weight: 600;
-        border: 1px solid rgba(20, 184, 166, 0.25) !important;
-        box-shadow: 0 0 18px rgba(20, 184, 166, 0.12);
+        border: 1px solid rgba(0, 229, 255, 0.25) !important;
+        box-shadow: 0 0 18px rgba(0, 229, 255, 0.12);
     }
     .stTabs [data-baseweb="tab-highlight"] { display: none; }
     .stTabs [data-baseweb="tab-border"] { display: none; }
 
     /* ===== GLASSMORPHISM METRIC CARDS ===== */
     .glass-card {
-        background: linear-gradient(135deg, rgba(12, 18, 32, 0.85), rgba(20, 30, 50, 0.6));
+        background: linear-gradient(135deg, rgba(11, 11, 26, 0.85), rgba(22, 22, 45, 0.6));
         backdrop-filter: blur(24px);
         -webkit-backdrop-filter: blur(24px);
         border: 1px solid rgba(255,255,255,0.07);
@@ -218,7 +218,7 @@ st.markdown("""
         position: absolute;
         bottom: 0; left: 10%; right: 10%;
         height: 2px;
-        background: linear-gradient(90deg, transparent, var(--accent-color, #14b8a6), transparent);
+        background: linear-gradient(90deg, transparent, var(--accent-color, #00E5FF), transparent);
         border-radius: 0 0 18px 18px;
         opacity: 0.7;
         transition: opacity 0.3s ease;
@@ -232,8 +232,8 @@ st.markdown("""
     }
     .glass-card:hover {
         transform: translateY(-7px);
-        border-color: rgba(20, 184, 166, 0.25);
-        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4), 0 0 40px rgba(20, 184, 166, 0.08);
+        border-color: rgba(0, 229, 255, 0.25);
+        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4), 0 0 40px rgba(0, 229, 255, 0.08);
     }
     .glass-card:hover::after { opacity: 1; }
     .card-icon {
@@ -265,7 +265,7 @@ st.markdown("""
         gap: 14px;
         margin: 30px 0 18px 0;
         padding-bottom: 14px;
-        border-bottom: 1px solid rgba(20, 184, 166, 0.1);
+        border-bottom: 1px solid rgba(0, 229, 255, 0.1);
         position: relative;
     }
     .section-header::before {
@@ -273,21 +273,21 @@ st.markdown("""
         position: absolute;
         bottom: -1px; left: 0;
         width: 60px; height: 2px;
-        background: linear-gradient(90deg, #14b8a6, #8b5cf6);
+        background: linear-gradient(90deg, #00E5FF, #FF007F);
         border-radius: 2px;
     }
     .section-header .icon {
         font-size: 1.3rem;
-        background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(139, 92, 246, 0.15));
+        background: linear-gradient(135deg, rgba(0, 229, 255, 0.15), rgba(255, 0, 127, 0.15));
         padding: 9px 11px;
         border-radius: 11px;
-        border: 1px solid rgba(20, 184, 166, 0.2);
+        border: 1px solid rgba(0, 229, 255, 0.2);
         transition: transform 0.35s ease, box-shadow 0.35s ease;
         animation: icon-spin-in 0.5s ease forwards;
     }
     .section-header:hover .icon {
         transform: rotate(-6deg) scale(1.08);
-        box-shadow: 0 0 20px rgba(20, 184, 166, 0.3);
+        box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
     }
     .section-header .text {
         font-size: 1.12rem;
@@ -307,7 +307,7 @@ st.markdown("""
         background: linear-gradient(135deg, rgba(12, 18, 32, 0.75), rgba(20, 30, 50, 0.45));
         backdrop-filter: blur(14px);
         border: 1px solid rgba(255, 255, 255, 0.05);
-        border-left: 4px solid var(--card-accent, #14b8a6);
+        border-left: 4px solid var(--card-accent, #00E5FF);
         border-radius: 0 14px 14px 0;
         padding: 18px 20px;
         margin-bottom: 14px;
@@ -321,13 +321,13 @@ st.markdown("""
     }
     .strat-card h4 { font-size: 1rem; font-weight: 700; margin: 0 0 6px 0; }
     .strat-card p { font-size: 0.82rem; color: #64748b; line-height: 1.6; margin: 0; }
-    .strat-card b { color: #5eead4; }
+    .strat-card b { color: #00E5FF; }
 
     /* ===== NBA RESULT CARDS ===== */
     .nba-card {
         background: linear-gradient(135deg, rgba(12, 18, 32, 0.85), rgba(20, 30, 50, 0.55));
         backdrop-filter: blur(18px);
-        border: 1px solid rgba(20, 184, 166, 0.15);
+        border: 1px solid rgba(0, 229, 255, 0.15);
         border-radius: 16px;
         padding: 22px 24px;
         margin-top: 12px;
@@ -353,28 +353,28 @@ st.markdown("""
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: rgba(20, 184, 166, 0.1);
-        border: 1px solid rgba(20, 184, 166, 0.25);
+        background: rgba(0, 229, 255, 0.1);
+        border: 1px solid rgba(0, 229, 255, 0.25);
         border-radius: 20px;
         padding: 4px 12px 4px 8px;
         font-size: 0.72rem;
         font-weight: 600;
-        color: #5eead4;
+        color: #00E5FF;
         letter-spacing: 0.05em;
         margin-bottom: 12px;
     }
     .model-status-pill .dot {
         width: 7px; height: 7px;
-        background: #14b8a6;
+        background: #00E5FF;
         border-radius: 50%;
         animation: pulse-badge 2s ease-in-out infinite;
-        box-shadow: 0 0 8px rgba(20, 184, 166, 0.6);
+        box-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
     }
     .hero-header {
         font-size: 2.6rem;
         font-weight: 900;
         letter-spacing: -0.05em;
-        background: linear-gradient(135deg, #5eead4 0%, #a78bfa 35%, #f43f5e 65%, #5eead4 100%);
+        background: linear-gradient(135deg, #00E5FF 0%, #FF007F 35%, #FF007F 65%, #00E5FF 100%);
         background-size: 250% auto;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -392,7 +392,7 @@ st.markdown("""
         line-height: 1.6;
     }
     .hero-subtitle span {
-        color: #5eead4;
+        color: #00E5FF;
         font-weight: 600;
     }
 
@@ -400,7 +400,7 @@ st.markdown("""
     .sidebar-brand {
         text-align: center;
         padding: 24px 10px 26px 10px;
-        border-bottom: 1px solid rgba(20, 184, 166, 0.1);
+        border-bottom: 1px solid rgba(0, 229, 255, 0.1);
         margin-bottom: 20px;
     }
     .sidebar-logo-badge {
@@ -408,14 +408,14 @@ st.markdown("""
         align-items: center;
         justify-content: center;
         width: 52px; height: 52px;
-        background: linear-gradient(135deg, #14b8a6, #8b5cf6);
+        background: linear-gradient(135deg, #00E5FF, #FF007F);
         border-radius: 14px;
         font-size: 1.3rem;
         font-weight: 900;
         color: #fff;
         margin-bottom: 10px;
         font-family: 'JetBrains Mono', monospace;
-        box-shadow: 0 8px 24px rgba(20, 184, 166, 0.35);
+        box-shadow: 0 8px 24px rgba(0, 229, 255, 0.35);
         transition: transform 0.4s ease;
     }
     .sidebar-brand:hover .sidebar-logo-badge { transform: rotate(6deg) scale(1.05); }
@@ -448,7 +448,7 @@ st.markdown("""
         cursor: default;
     }
     .sidebar-nav .nav-item:hover {
-        background: rgba(20, 184, 166, 0.1);
+        background: rgba(0, 229, 255, 0.1);
         color: #e2e8f0;
         transform: translateX(5px);
     }
@@ -469,15 +469,15 @@ st.markdown("""
         text-align: center;
         padding: 28px 0;
         margin-top: 50px;
-        border-top: 1px solid rgba(20, 184, 166, 0.08);
+        border-top: 1px solid rgba(0, 229, 255, 0.08);
         color: #334155;
         font-size: 0.74rem;
         letter-spacing: 0.04em;
         transition: color 0.3s ease;
     }
     .app-footer:hover { color: #475569; }
-    .app-footer a { color: #5eead4; text-decoration: none; transition: color 0.3s ease; }
-    .app-footer a:hover { color: #a78bfa; text-decoration: underline; }
+    .app-footer a { color: #00E5FF; text-decoration: none; transition: color 0.3s ease; }
+    .app-footer a:hover { color: #FF007F; text-decoration: underline; }
 
     /* ===== HIDE STREAMLIT DEFAULTS ===== */
     #MainMenu { visibility: hidden; }
@@ -492,19 +492,19 @@ st.markdown("""
     }
     div[data-baseweb="select"] > div {
         background: rgba(8, 12, 20, 0.7) !important;
-        border-color: rgba(20, 184, 166, 0.15) !important;
+        border-color: rgba(0, 229, 255, 0.15) !important;
         border-radius: 10px !important;
         transition: all 0.3s ease;
     }
     div[data-baseweb="select"] > div:hover {
-        border-color: rgba(20, 184, 166, 0.4) !important;
-        box-shadow: 0 0 12px rgba(20, 184, 166, 0.1);
+        border-color: rgba(0, 229, 255, 0.4) !important;
+        box-shadow: 0 0 12px rgba(0, 229, 255, 0.1);
     }
-    .stSlider > div > div > div > div { background-color: #14b8a6 !important; }
+    .stSlider > div > div > div > div { background-color: #00E5FF !important; }
 
     /* ===== DATAFRAME ===== */
     .stDataFrame {
-        border: 1px solid rgba(20, 184, 166, 0.1) !important;
+        border: 1px solid rgba(0, 229, 255, 0.1) !important;
         border-radius: 14px !important;
         overflow: hidden;
     }
@@ -512,16 +512,16 @@ st.markdown("""
     /* ===== INFO / ALERT BOXES ===== */
     .stAlert {
         border-radius: 12px !important;
-        border-left-color: #14b8a6 !important;
+        border-left-color: #00E5FF !important;
     }
 
     /* ===== AI BUTTONS ===== */
     div.stButton > button {
-        background: linear-gradient(135deg, rgba(20, 184, 166, 0.1), rgba(139, 92, 246, 0.1)) !important;
-        color: #5eead4 !important;
-        border: 1px solid rgba(20, 184, 166, 0.3) !important;
+        background: linear-gradient(135deg, rgba(0, 229, 255, 0.1), rgba(255, 0, 127, 0.1)) !important;
+        color: #00E5FF !important;
+        border: 1px solid rgba(0, 229, 255, 0.3) !important;
         border-radius: 10px !important;
-        font-family: 'Inter', sans-serif !important;
+        font-family: 'Space Grotesk', sans-serif !important;
         font-weight: 600 !important;
         font-size: 0.83rem !important;
         padding: 10px 18px !important;
@@ -529,30 +529,30 @@ st.markdown("""
         letter-spacing: 0.01em !important;
     }
     div.stButton > button:hover {
-        background: linear-gradient(135deg, rgba(20, 184, 166, 0.2), rgba(139, 92, 246, 0.2)) !important;
-        border-color: rgba(20, 184, 166, 0.6) !important;
-        box-shadow: 0 0 18px rgba(20, 184, 166, 0.25), 0 4px 16px rgba(0,0,0,0.3) !important;
+        background: linear-gradient(135deg, rgba(0, 229, 255, 0.2), rgba(255, 0, 127, 0.2)) !important;
+        border-color: rgba(0, 229, 255, 0.6) !important;
+        box-shadow: 0 0 18px rgba(0, 229, 255, 0.25), 0 4px 16px rgba(0,0,0,0.3) !important;
         transform: translateY(-2px);
-        color: #a78bfa !important;
+        color: #FF007F !important;
     }
     div.stButton > button:active {
         transform: translateY(0px) !important;
-        box-shadow: 0 0 8px rgba(20, 184, 166, 0.15) !important;
+        box-shadow: 0 0 8px rgba(0, 229, 255, 0.15) !important;
     }
     div.stDownloadButton > button {
-        background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(20, 184, 166, 0.08)) !important;
-        color: #38bdf8 !important;
-        border: 1px solid rgba(56, 189, 248, 0.3) !important;
+        background: linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(0, 229, 255, 0.08)) !important;
+        color: #FFD700 !important;
+        border: 1px solid rgba(255, 215, 0, 0.3) !important;
         border-radius: 10px !important;
-        font-family: 'Inter', sans-serif !important;
+        font-family: 'Space Grotesk', sans-serif !important;
         font-weight: 600 !important;
         font-size: 0.83rem !important;
         transition: all 0.25s ease !important;
     }
     div.stDownloadButton > button:hover {
-        background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(20, 184, 166, 0.15)) !important;
-        border-color: rgba(56, 189, 248, 0.6) !important;
-        box-shadow: 0 0 16px rgba(56, 189, 248, 0.2) !important;
+        background: linear-gradient(135deg, rgba(255, 215, 0, 0.18), rgba(0, 229, 255, 0.15)) !important;
+        border-color: rgba(255, 215, 0, 0.6) !important;
+        box-shadow: 0 0 16px rgba(255, 215, 0, 0.2) !important;
         transform: translateY(-2px);
     }
 
@@ -603,21 +603,21 @@ CHART_LAYOUT = dict(
     template='plotly_dark',
     plot_bgcolor='rgba(0,0,0,0)',
     paper_bgcolor='rgba(0,0,0,0)',
-    font=dict(family='Inter, sans-serif', color='#64748b', size=12),
-    title_font=dict(size=14, color='#e2e8f0', family='Inter, sans-serif'),
+    font=dict(family='Space Grotesk, sans-serif', color='#64748b', size=12),
+    title_font=dict(size=14, color='#e2e8f0', family='Outfit, sans-serif'),
     margin=dict(l=20, r=20, t=50, b=20),
-    xaxis=dict(gridcolor='rgba(20, 184, 166, 0.07)', zerolinecolor='rgba(20, 184, 166, 0.12)'),
-    yaxis=dict(gridcolor='rgba(20, 184, 166, 0.07)', zerolinecolor='rgba(20, 184, 166, 0.12)'),
+    xaxis=dict(gridcolor='rgba(0, 229, 255, 0.07)', zerolinecolor='rgba(0, 229, 255, 0.12)'),
+    yaxis=dict(gridcolor='rgba(0, 229, 255, 0.07)', zerolinecolor='rgba(0, 229, 255, 0.12)'),
     legend=dict(bgcolor='rgba(0,0,0,0)', font=dict(size=11)),
-    colorway=['#14b8a6', '#8b5cf6', '#f43f5e', '#f59e0b', '#38bdf8', '#10b981', '#a78bfa']
+    colorway=['#00E5FF', '#FF007F', '#FF007F', '#FFD700', '#FFD700', '#10b981', '#FF007F']
 )
 
-COLOR_MAP_CHURN = {'Yes': '#f43f5e', 'No': '#14b8a6'}
+COLOR_MAP_CHURN = {'Yes': '#FF007F', 'No': '#00E5FF'}
 COLOR_MAP_SEGMENTS = {
-    'Loyal Premium': '#14b8a6',
-    'Loyal Value': '#38bdf8',
-    'High-Spend At-Risk': '#f43f5e',
-    'New Budget': '#f59e0b'
+    'Loyal Premium': '#00E5FF',
+    'Loyal Value': '#FFD700',
+    'High-Spend At-Risk': '#FF007F',
+    'New Budget': '#FFD700'
 }
 
 # ==================== SIDEBAR ====================
@@ -647,16 +647,16 @@ with st.sidebar:
     <div style="padding: 12px 14px;">
         <div style="font-size:0.68rem;font-weight:700;color:#334155;text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;">Pipeline Status</div>
         <div style="font-size:0.8rem;color:#64748b;margin-bottom:8px;display:flex;align-items:center;gap:8px;">
-            <span class="sidebar-badge live" style="background:rgba(20,184,166,0.15);color:#14b8a6;">● LIVE</span> XGBoost · ROC-AUC 0.844
+            <span class="sidebar-badge live" style="background:rgba(20,184,166,0.15);color:#00E5FF;">● LIVE</span> XGBoost · ROC-AUC 0.844
         </div>
         <div style="font-size:0.8rem;color:#64748b;margin-bottom:8px;display:flex;align-items:center;gap:8px;">
-            <span class="sidebar-badge" style="background:rgba(20,184,166,0.1);color:#5eead4;">✓</span> SHAP Explainer Active
+            <span class="sidebar-badge" style="background:rgba(20,184,166,0.1);color:#00E5FF;">✓</span> SHAP Explainer Active
         </div>
         <div style="font-size:0.8rem;color:#64748b;margin-bottom:8px;display:flex;align-items:center;gap:8px;">
-            <span class="sidebar-badge" style="background:rgba(139,92,246,0.1);color:#a78bfa;">✓</span> K-Means K=4 Fitted
+            <span class="sidebar-badge" style="background:rgba(139,92,246,0.1);color:#FF007F;">✓</span> K-Means K=4 Fitted
         </div>
         <div style="font-size:0.8rem;color:#64748b;display:flex;align-items:center;gap:8px;">
-            <span class="sidebar-badge" style="background:rgba(56,189,248,0.1);color:#38bdf8;">✓</span> Cox PH Model Ready
+            <span class="sidebar-badge" style="background:rgba(56,189,248,0.1);color:#FFD700;">✓</span> Cox PH Model Ready
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -676,7 +676,7 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("""
     <div style="padding: 0 14px; margin-bottom: 10px;">
-        <div style="font-size:0.72rem;font-weight:600;color:#8b5cf6;text-transform:uppercase;letter-spacing:1.5px;display:flex;align-items:center;gap:6px;">
+        <div style="font-size:0.72rem;font-weight:600;color:#FF007F;text-transform:uppercase;letter-spacing:1.5px;display:flex;align-items:center;gap:6px;">
             <span>🤖</span> AI Copilot
         </div>
     </div>
@@ -757,9 +757,9 @@ with tab1:
     alerts = llm_service.generate_anomaly_alerts(metrics_dict)
     alerts_html = ""
     for alert in alerts:
-        color = "#f43f5e" if "CRITICAL" in alert else ("#fbbf24" if "WARNING" in alert else "#38bdf8")
-        bg_color = "rgba(244, 63, 94, 0.08)" if "CRITICAL" in alert else ("rgba(251, 191, 36, 0.08)" if "WARNING" in alert else "rgba(56, 189, 248, 0.08)")
-        border_color = "rgba(244, 63, 94, 0.25)" if "CRITICAL" in alert else ("rgba(251, 191, 36, 0.25)" if "WARNING" in alert else "rgba(56, 189, 248, 0.25)")
+        color = "#FF007F" if "CRITICAL" in alert else ("#fbbf24" if "WARNING" in alert else "#FFD700")
+        bg_color = "rgba(255, 0, 127, 0.08)" if "CRITICAL" in alert else ("rgba(251, 191, 36, 0.08)" if "WARNING" in alert else "rgba(255, 215, 0, 0.08)")
+        border_color = "rgba(255, 0, 127, 0.25)" if "CRITICAL" in alert else ("rgba(251, 191, 36, 0.25)" if "WARNING" in alert else "rgba(255, 215, 0, 0.25)")
         badge = "CRITICAL" if "CRITICAL" in alert else ("WARNING" if "WARNING" in alert else "AI INSIGHT")
         clean_text = alert.replace("CRITICAL ANOMALY: ", "").replace("WARNING: ", "").replace("INSIGHT: ", "")
         
@@ -792,18 +792,18 @@ with tab1:
         """, unsafe_allow_html=True)
     with col3:
         st.markdown(f"""
-        <div class="glass-card" style="--accent-color: #34d399;">
+        <div class="glass-card" style="--accent-color: #00E5FF;">
             <span class="card-icon">💎</span>
             <div class="card-label">Average CLTV</div>
-            <div class="card-value" style="color: #34d399;">${avg_cltv:,.0f}</div>
+            <div class="card-value" style="color: #00E5FF;">${avg_cltv:,.0f}</div>
         </div>
         """, unsafe_allow_html=True)
     with col4:
         st.markdown(f"""
-        <div class="glass-card" style="--accent-color: #38bdf8;">
+        <div class="glass-card" style="--accent-color: #FFD700;">
             <span class="card-icon">🏦</span>
             <div class="card-label">Active Portfolio</div>
-            <div class="card-value" style="color: #38bdf8;">${total_projected_value/1e6:.1f}M</div>
+            <div class="card-value" style="color: #FFD700;">${total_projected_value/1e6:.1f}M</div>
         </div>
         """, unsafe_allow_html=True)
         
@@ -942,11 +942,15 @@ with tab2:
         
         # Build feature vector
         input_dict = {feat: 0 for feat in features_list}
-        num_df = pd.DataFrame([[sim_tenure, sim_monthly, sim_total]], columns=config.NUMERIC_COLS)
+        sim_tenure_years = sim_tenure / 12.0
+        sim_charge_ratio = sim_monthly / (sim_total + 0.001)
+        num_df = pd.DataFrame([[sim_tenure, sim_monthly, sim_total, sim_tenure_years, sim_charge_ratio]], columns=config.NUMERIC_COLS)
         scaled_nums = scaler.transform(num_df)[0]
         input_dict['tenure'] = scaled_nums[0]
         input_dict['MonthlyCharges'] = scaled_nums[1]
         input_dict['TotalCharges'] = scaled_nums[2]
+        input_dict['TenureInYears'] = scaled_nums[3]
+        input_dict['ChargeRatio'] = scaled_nums[4]
         
         if sim_gender == "Male": input_dict['gender_Male'] = 1
         if sim_senior == "Yes": input_dict['SeniorCitizen_Yes'] = 1
@@ -977,7 +981,7 @@ with tab2:
         prob = model.predict_proba(sim_df)[0, 1]
         
         # Risk Gauge
-        risk_color = "#34d399" if prob < 0.3 else ("#fbbf24" if prob < 0.7 else "#f87171")
+        risk_color = "#00E5FF" if prob < 0.3 else ("#fbbf24" if prob < 0.7 else "#f87171")
         risk_level = "LOW RISK" if prob < 0.3 else ("MEDIUM RISK" if prob < 0.7 else "HIGH RISK")
         risk_bg = "rgba(52,211,153,0.08)" if prob < 0.3 else ("rgba(251,191,36,0.08)" if prob < 0.7 else "rgba(248,113,113,0.08)")
         
@@ -1043,21 +1047,21 @@ with tab2:
         col_c1, col_c2, col_c3 = st.columns(3)
         with col_c1:
             st.markdown(f"""
-            <div class="glass-card" style="--accent-color: #a78bfa; padding: 14px 12px;">
+            <div class="glass-card" style="--accent-color: #FF007F; padding: 14px 12px;">
                 <div class="card-label" style="font-size:0.65rem;">Remaining Months</div>
-                <div class="card-value" style="color: #a78bfa; font-size: 1.4rem;">{remaining_tenure:.0f}</div>
+                <div class="card-value" style="color: #FF007F; font-size: 1.4rem;">{remaining_tenure:.0f}</div>
             </div>""", unsafe_allow_html=True)
         with col_c2:
             st.markdown(f"""
-            <div class="glass-card" style="--accent-color: #34d399; padding: 14px 12px;">
+            <div class="glass-card" style="--accent-color: #00E5FF; padding: 14px 12px;">
                 <div class="card-label" style="font-size:0.65rem;">Predicted CLTV</div>
-                <div class="card-value" style="color: #34d399; font-size: 1.4rem;">${sim_cltv:,.0f}</div>
+                <div class="card-value" style="color: #00E5FF; font-size: 1.4rem;">${sim_cltv:,.0f}</div>
             </div>""", unsafe_allow_html=True)
         with col_c3:
             st.markdown(f"""
-            <div class="glass-card" style="--accent-color: #38bdf8; padding: 14px 12px;">
+            <div class="glass-card" style="--accent-color: #FFD700; padding: 14px 12px;">
                 <div class="card-label" style="font-size:0.65rem;">Survival at Tenure</div>
-                <div class="card-value" style="color: #38bdf8; font-size: 1.4rem;">{s_current*100:.0f}%</div>
+                <div class="card-value" style="color: #FFD700; font-size: 1.4rem;">{s_current*100:.0f}%</div>
             </div>""", unsafe_allow_html=True)
             
         st.markdown("<br>", unsafe_allow_html=True)
@@ -1110,7 +1114,7 @@ with tab2:
             x=top_shap['Impact'],
             y=top_shap['Feature'],
             orientation='h',
-            marker_color=top_shap['Impact'].apply(lambda x: '#f87171' if x > 0 else '#34d399'),
+            marker_color=top_shap['Impact'].apply(lambda x: '#f87171' if x > 0 else '#00E5FF'),
             marker_line_width=0,
             text=top_shap['Impact'].apply(lambda x: f"{x:+.3f}"),
             textposition='auto',
@@ -1139,7 +1143,7 @@ with tab2:
         if prob < 0.3:
             st.markdown("""
             <div class="nba-card" style="border-color: rgba(52,211,153,0.3);">
-                <div class="nba-label" style="color: #34d399;">✅ STATUS: SECURE</div>
+                <div class="nba-label" style="color: #00E5FF;">✅ STATUS: SECURE</div>
                 <div class="nba-text">This customer profile shows <strong>low churn risk</strong>. 
                 <strong>Recommended:</strong> Cross-sell premium add-on services and enroll in the referral rewards program to maximize CLTV.</div>
             </div>
@@ -1212,8 +1216,8 @@ with tab3:
     col_seg1, col_seg2 = st.columns(2)
     with col_seg1:
         st.markdown("""
-        <div class="strat-card" style="--card-accent: #34d399;">
-            <h4 style="color:#34d399;margin:0 0 6px 0;">🏆 Loyal Premium</h4>
+        <div class="strat-card" style="--card-accent: #00E5FF;">
+            <h4 style="color:#00E5FF;margin:0 0 6px 0;">🏆 Loyal Premium</h4>
             <p>High tenure, high monthly spend. VIP subscribers with multiple add-ons. 
             <b>Strategy:</b> Premium cross-selling (streaming, home protection) and exclusive loyalty benefits.</p>
         </div>
@@ -1226,8 +1230,8 @@ with tab3:
         
     with col_seg2:
         st.markdown("""
-        <div class="strat-card" style="--card-accent: #38bdf8;">
-            <h4 style="color:#38bdf8;margin:0 0 6px 0;">💙 Loyal Value</h4>
+        <div class="strat-card" style="--card-accent: #FFD700;">
+            <h4 style="color:#FFD700;margin:0 0 6px 0;">💙 Loyal Value</h4>
             <p>High tenure, low monthly spend. Budget-conscious subscribers with long-term contracts. 
             <b>Strategy:</b> Offer minor upgrades, reward longevity, contract roll-overs.</p>
         </div>
@@ -1259,11 +1263,11 @@ with tab3:
         seg_color = COLOR_MAP_SEGMENTS.get(seg_name, '#e2e8f0')
         
         if churn > 30:
-            churn_badge = f'<span style="background: rgba(244, 63, 94, 0.12); color: #f87171; border: 1px solid rgba(244, 63, 94, 0.25); padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; font-family: \'JetBrains Mono\', monospace;">{churn:.1f}%</span>'
+            churn_badge = f'<span style="background: rgba(255, 0, 127, 0.12); color: #f87171; border: 1px solid rgba(255, 0, 127, 0.25); padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; font-family: \'JetBrains Mono\', monospace;">{churn:.1f}%</span>'
         else:
-            churn_badge = f'<span style="background: rgba(20, 184, 166, 0.12); color: #34d399; border: 1px solid rgba(20, 184, 166, 0.25); padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; font-family: \'JetBrains Mono\', monospace;">{churn:.1f}%</span>'
+            churn_badge = f'<span style="background: rgba(0, 229, 255, 0.12); color: #00E5FF; border: 1px solid rgba(0, 229, 255, 0.25); padding: 4px 10px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; font-family: \'JetBrains Mono\', monospace;">{churn:.1f}%</span>'
             
-        row = f'<tr style="border-bottom: 1px solid rgba(20, 184, 166, 0.08); background: transparent;">'
+        row = f'<tr style="border-bottom: 1px solid rgba(0, 229, 255, 0.08); background: transparent;">'
         row += f'<td style="padding: 14px 16px; font-weight: 700; color: {seg_color}; font-size: 0.88rem;">{seg_name}</td>'
         row += f'<td style="padding: 14px 16px; text-align: right; color: #e2e8f0; font-family: \'JetBrains Mono\', monospace; font-size: 0.85rem;">{count:,}</td>'
         row += f'<td style="padding: 14px 16px; text-align: right; color: #e2e8f0; font-family: \'JetBrains Mono\', monospace; font-size: 0.85rem;">{tenure:.1f} m</td>'
@@ -1274,16 +1278,16 @@ with tab3:
         row += '</tr>'
         table_rows += row
         
-    table_html = '<div style="overflow-x: auto; border: 1px solid rgba(20, 184, 166, 0.15); border-radius: 14px; background: linear-gradient(135deg, rgba(8, 12, 20, 0.85), rgba(16, 24, 40, 0.7)); backdrop-filter: blur(24px); box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4); margin-bottom: 25px;">'
+    table_html = '<div style="overflow-x: auto; border: 1px solid rgba(0, 229, 255, 0.15); border-radius: 14px; background: linear-gradient(135deg, rgba(8, 12, 20, 0.85), rgba(16, 24, 40, 0.7)); backdrop-filter: blur(24px); box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4); margin-bottom: 25px;">'
     table_html += '<table style="width: 100%; border-collapse: collapse; text-align: left; font-family: \'Inter\', sans-serif;">'
-    table_html += '<thead><tr style="border-bottom: 1.5px solid rgba(20, 184, 166, 0.2); background: rgba(20, 184, 166, 0.04);">'
-    table_html += '<th style="padding: 14px 16px; font-size: 0.68rem; font-weight: 700; color: #5eead4; text-transform: uppercase; letter-spacing: 1.5px;">Segment</th>'
-    table_html += '<th style="padding: 14px 16px; font-size: 0.68rem; font-weight: 700; color: #5eead4; text-transform: uppercase; letter-spacing: 1.5px; text-align: right;">Customer Count</th>'
-    table_html += '<th style="padding: 14px 16px; font-size: 0.68rem; font-weight: 700; color: #5eead4; text-transform: uppercase; letter-spacing: 1.5px; text-align: right;">Avg Tenure</th>'
-    table_html += '<th style="padding: 14px 16px; font-size: 0.68rem; font-weight: 700; color: #5eead4; text-transform: uppercase; letter-spacing: 1.5px; text-align: right;">Avg Monthly</th>'
-    table_html += '<th style="padding: 14px 16px; font-size: 0.68rem; font-weight: 700; color: #5eead4; text-transform: uppercase; letter-spacing: 1.5px; text-align: right;">Avg Total</th>'
-    table_html += '<th style="padding: 14px 16px; font-size: 0.68rem; font-weight: 700; color: #5eead4; text-transform: uppercase; letter-spacing: 1.5px; text-align: right;">Churn Rate</th>'
-    table_html += '<th style="padding: 14px 16px; font-size: 0.68rem; font-weight: 700; color: #5eead4; text-transform: uppercase; letter-spacing: 1.5px;">Strategic Recommendation</th>'
+    table_html += '<thead><tr style="border-bottom: 1.5px solid rgba(0, 229, 255, 0.2); background: rgba(0, 229, 255, 0.04);">'
+    table_html += '<th style="padding: 14px 16px; font-size: 0.68rem; font-weight: 700; color: #00E5FF; text-transform: uppercase; letter-spacing: 1.5px;">Segment</th>'
+    table_html += '<th style="padding: 14px 16px; font-size: 0.68rem; font-weight: 700; color: #00E5FF; text-transform: uppercase; letter-spacing: 1.5px; text-align: right;">Customer Count</th>'
+    table_html += '<th style="padding: 14px 16px; font-size: 0.68rem; font-weight: 700; color: #00E5FF; text-transform: uppercase; letter-spacing: 1.5px; text-align: right;">Avg Tenure</th>'
+    table_html += '<th style="padding: 14px 16px; font-size: 0.68rem; font-weight: 700; color: #00E5FF; text-transform: uppercase; letter-spacing: 1.5px; text-align: right;">Avg Monthly</th>'
+    table_html += '<th style="padding: 14px 16px; font-size: 0.68rem; font-weight: 700; color: #00E5FF; text-transform: uppercase; letter-spacing: 1.5px; text-align: right;">Avg Total</th>'
+    table_html += '<th style="padding: 14px 16px; font-size: 0.68rem; font-weight: 700; color: #00E5FF; text-transform: uppercase; letter-spacing: 1.5px; text-align: right;">Churn Rate</th>'
+    table_html += '<th style="padding: 14px 16px; font-size: 0.68rem; font-weight: 700; color: #00E5FF; text-transform: uppercase; letter-spacing: 1.5px;">Strategic Recommendation</th>'
     table_html += '</tr></thead><tbody>' + table_rows + '</tbody></table></div>'
     
     st.markdown(table_html, unsafe_allow_html=True)
@@ -1370,7 +1374,7 @@ with tab4:
         </div>
         """, unsafe_allow_html=True)
         
-        km_colors = {'Month-to-month': '#f87171', 'One year': '#fbbf24', 'Two year': '#34d399'}
+        km_colors = {'Month-to-month': '#f87171', 'One year': '#fbbf24', 'Two year': '#00E5FF'}
         fig_km = go.Figure()
         for contract_type, c_data in km_cohorts_data.items():
             fig_km.add_trace(go.Scatter(
@@ -1416,7 +1420,7 @@ with tab4:
             df_cltv, x='CLTV', color='CLTV_Level',
             nbins=50,
             title='Customer Count by Lifetime Value ($)',
-            color_discrete_map={'Low Value': '#f43f5e', 'Medium Value': '#f59e0b', 'High Value': '#14b8a6'},
+            color_discrete_map={'Low Value': '#FF007F', 'Medium Value': '#FFD700', 'High Value': '#00E5FF'},
         )
         fig_cltv_dist.update_layout(**CHART_LAYOUT, height=400)
         fig_cltv_dist.update_traces(marker_line_width=0, opacity=0.85)
@@ -1483,10 +1487,10 @@ with tab4:
             hole=0.45,
             color=bucket_counts.index,
             color_discrete_map={
-                'VIP at Risk': '#f43f5e',
-                'VIP Loyal': '#14b8a6',
-                'Low-Value Churner': '#f59e0b',
-                'Stable Budget': '#38bdf8'
+                'VIP at Risk': '#FF007F',
+                'VIP Loyal': '#00E5FF',
+                'Low-Value Churner': '#FFD700',
+                'Stable Budget': '#FFD700'
             },
         )
         fig_pie.update_layout(**CHART_LAYOUT, height=400, title="Strategic Bucket Distribution", showlegend=True)
@@ -1495,16 +1499,16 @@ with tab4:
         
     with col_b2:
         st.markdown(f"""
-        <div class="strat-card" style="--card-accent: #f43f5e;">
-            <h4 style="color:#f43f5e;margin:0 0 6px 0;">🚨 VIP at Risk ({bucket_counts.get('VIP at Risk', 0):,})</h4>
+        <div class="strat-card" style="--card-accent: #FF007F;">
+            <h4 style="color:#FF007F;margin:0 0 6px 0;">🚨 VIP at Risk ({bucket_counts.get('VIP at Risk', 0):,})</h4>
             <p>High CLTV, high churn risk. <b>Playbook:</b> Assign dedicated account manager. Maximum contract discount incentives. Priority technical issue resolution.</p>
         </div>
-        <div class="strat-card" style="--card-accent: #14b8a6;">
-            <h4 style="color:#14b8a6;margin:0 0 6px 0;">💎 VIP Loyal ({bucket_counts.get('VIP Loyal', 0):,})</h4>
+        <div class="strat-card" style="--card-accent: #00E5FF;">
+            <h4 style="color:#00E5FF;margin:0 0 6px 0;">💎 VIP Loyal ({bucket_counts.get('VIP Loyal', 0):,})</h4>
             <p>High CLTV, low churn risk. <b>Playbook:</b> Enroll in referral programs. Cross-sell premium add-ons. Request reviews and case studies.</p>
         </div>
-        <div class="strat-card" style="--card-accent: #f59e0b;">
-            <h4 style="color:#f59e0b;margin:0 0 6px 0;">⚡ Low-Value Churner ({bucket_counts.get('Low-Value Churner', 0):,})</h4>
+        <div class="strat-card" style="--card-accent: #FFD700;">
+            <h4 style="color:#FFD700;margin:0 0 6px 0;">⚡ Low-Value Churner ({bucket_counts.get('Low-Value Churner', 0):,})</h4>
             <p>Low CLTV, high churn risk. <b>Playbook:</b> Automated digital email campaigns with low-cost offers. No manual sales rep hours.</p>
         </div>
         """, unsafe_allow_html=True)
@@ -1576,10 +1580,10 @@ with tab5:
                         risk_html = '<span style="background: rgba(251,191,36,0.12); color:#fbbf24; border:1px solid rgba(251,191,36,0.3); padding:3px 10px; border-radius:20px; font-size:0.78rem; font-weight:700;">Medium</span>'
                         prob_color = '#fbbf24'
                     else:
-                        risk_html = '<span style="background: rgba(20,184,166,0.12); color:#34d399; border:1px solid rgba(20,184,166,0.3); padding:3px 10px; border-radius:20px; font-size:0.78rem; font-weight:700;">Low</span>'
-                        prob_color = '#34d399'
+                        risk_html = '<span style="background: rgba(20,184,166,0.12); color:#00E5FF; border:1px solid rgba(20,184,166,0.3); padding:3px 10px; border-radius:20px; font-size:0.78rem; font-weight:700;">Low</span>'
+                        prob_color = '#00E5FF'
                     batch_rows += f'<tr style="border-bottom: 1px solid rgba(20,184,166,0.07);"><td style="padding:11px 14px; color:#94a3b8; font-size:0.8rem; font-family:JetBrains Mono,monospace;">{brow["customerID"]}</td><td style="padding:11px 14px; text-align:right; color:#e2e8f0; font-family:JetBrains Mono,monospace; font-size:0.83rem;">{int(brow["tenure"])} m</td><td style="padding:11px 14px; text-align:right; color:#e2e8f0; font-family:JetBrains Mono,monospace; font-size:0.83rem;">${brow["MonthlyCharges"]:.2f}</td><td style="padding:11px 14px; text-align:right; color:{prob_color}; font-family:JetBrains Mono,monospace; font-size:0.83rem; font-weight:600;">{brow["Churn_Risk_Probability"]:.3f}</td><td style="padding:11px 14px; text-align:center;">{risk_html}</td></tr>'
-                batch_table = '<div style="overflow-x:auto; border:1px solid rgba(20,184,166,0.15); border-radius:14px; background:linear-gradient(135deg,rgba(8,12,20,0.85),rgba(16,24,40,0.7)); backdrop-filter:blur(20px); box-shadow:0 12px 36px rgba(0,0,0,0.35); margin-bottom:20px;"><table style="width:100%; border-collapse:collapse; font-family:Inter,sans-serif;"><thead><tr style="border-bottom:1.5px solid rgba(20,184,166,0.2); background:rgba(20,184,166,0.04);"><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px;">Customer ID</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Tenure</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Monthly Charges</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Churn Probability</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:center;">Risk Level</th></tr></thead><tbody>' + batch_rows + '</tbody></table></div>'
+                batch_table = '<div style="overflow-x:auto; border:1px solid rgba(20,184,166,0.15); border-radius:14px; background:linear-gradient(135deg,rgba(8,12,20,0.85),rgba(16,24,40,0.7)); backdrop-filter:blur(20px); box-shadow:0 12px 36px rgba(0,0,0,0.35); margin-bottom:20px;"><table style="width:100%; border-collapse:collapse; font-family:Inter,sans-serif;"><thead><tr style="border-bottom:1.5px solid rgba(20,184,166,0.2); background:rgba(20,184,166,0.04);"><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#00E5FF; text-transform:uppercase; letter-spacing:1.5px;">Customer ID</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#00E5FF; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Tenure</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#00E5FF; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Monthly Charges</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#00E5FF; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Churn Probability</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#00E5FF; text-transform:uppercase; letter-spacing:1.5px; text-align:center;">Risk Level</th></tr></thead><tbody>' + batch_rows + '</tbody></table></div>'
                 st.markdown(batch_table, unsafe_allow_html=True)
                 
                 # 4. Download
@@ -1658,11 +1662,11 @@ with tab6:
                 title=None,
                 color='Segment',
                 color_discrete_map={
-                    'Champions': '#14b8a6',
-                    'Loyal Customers': '#38bdf8',
-                    'Potential Loyalists': '#8b5cf6',
-                    'At Risk': '#f59e0b',
-                    'Hibernating': '#f43f5e',
+                    'Champions': '#00E5FF',
+                    'Loyal Customers': '#FFD700',
+                    'Potential Loyalists': '#FF007F',
+                    'At Risk': '#FFD700',
+                    'Hibernating': '#FF007F',
                     'Needs Attention': '#64748b'
                 }
             )
@@ -1686,20 +1690,20 @@ with tab6:
         with col_r2:
             st.markdown("#### Segment Strategies")
             st.markdown("""
-            <div class="strat-card" style="--card-accent: #14b8a6;">
-                <h4 style="color:#14b8a6;margin:0 0 6px 0;">🏆 Champions</h4>
+            <div class="strat-card" style="--card-accent: #00E5FF;">
+                <h4 style="color:#00E5FF;margin:0 0 6px 0;">🏆 Champions</h4>
                 <p>Bought recently, buy often, and spend the most. <b>Reward and retain</b> them with loyalty perks.</p>
             </div>
-            <div class="strat-card" style="--card-accent: #38bdf8;">
-                <h4 style="color:#38bdf8;margin:0 0 6px 0;">💙 Loyal Customers</h4>
+            <div class="strat-card" style="--card-accent: #FFD700;">
+                <h4 style="color:#FFD700;margin:0 0 6px 0;">💙 Loyal Customers</h4>
                 <p>Good frequency and recency. <b>Upsell</b> higher-value products and services.</p>
             </div>
-            <div class="strat-card" style="--card-accent: #f59e0b;">
-                <h4 style="color:#f59e0b;margin:0 0 6px 0;">⚠️ At Risk</h4>
+            <div class="strat-card" style="--card-accent: #FFD700;">
+                <h4 style="color:#FFD700;margin:0 0 6px 0;">⚠️ At Risk</h4>
                 <p>Used to buy often, but haven't recently. <b>Send win-back</b> incentives immediately.</p>
             </div>
-            <div class="strat-card" style="--card-accent: #f43f5e;">
-                <h4 style="color:#f43f5e;margin:0 0 6px 0;">❄️ Hibernating</h4>
+            <div class="strat-card" style="--card-accent: #FF007F;">
+                <h4 style="color:#FF007F;margin:0 0 6px 0;">❄️ Hibernating</h4>
                 <p>Last purchase was long ago. <b>Low priority</b> — automated re-engagement only.</p>
             </div>
             """, unsafe_allow_html=True)
@@ -1711,13 +1715,13 @@ with tab6:
         </div>
         """, unsafe_allow_html=True)
         rfm_display = df_rfm[['customerID', 'Recency', 'Frequency', 'Monetary', 'RFM_Segment', 'Churn']].head(50)
-        rfm_seg_colors = {'Champions': '#14b8a6', 'Loyal Customers': '#38bdf8', 'Potential Loyalists': '#8b5cf6', 'At Risk': '#f59e0b', 'Hibernating': '#f43f5e', 'Needs Attention': '#64748b'}
+        rfm_seg_colors = {'Champions': '#00E5FF', 'Loyal Customers': '#FFD700', 'Potential Loyalists': '#FF007F', 'At Risk': '#FFD700', 'Hibernating': '#FF007F', 'Needs Attention': '#64748b'}
         rfm_rows = ""
         for _, rrow in rfm_display.iterrows():
             seg_c = rfm_seg_colors.get(rrow['RFM_Segment'], '#94a3b8')
-            churn_c = '#f87171' if rrow['Churn'] == 'Yes' else '#34d399'
+            churn_c = '#f87171' if rrow['Churn'] == 'Yes' else '#00E5FF'
             rfm_rows += f'<tr style="border-bottom:1px solid rgba(20,184,166,0.07);"><td style="padding:11px 14px; color:#94a3b8; font-size:0.8rem; font-family:JetBrains Mono,monospace;">{rrow["customerID"]}</td><td style="padding:11px 14px; text-align:right; color:#e2e8f0; font-family:JetBrains Mono,monospace; font-size:0.83rem;">{int(rrow["Recency"])} d</td><td style="padding:11px 14px; text-align:right; color:#e2e8f0; font-family:JetBrains Mono,monospace; font-size:0.83rem;">{int(rrow["Frequency"])}</td><td style="padding:11px 14px; text-align:right; color:#e2e8f0; font-family:JetBrains Mono,monospace; font-size:0.83rem;">${rrow["Monetary"]:,.0f}</td><td style="padding:11px 14px; font-size:0.83rem; font-weight:700; color:{seg_c};">{rrow["RFM_Segment"]}</td><td style="padding:11px 14px; text-align:center; font-size:0.8rem; font-weight:700; color:{churn_c};">{rrow["Churn"]}</td></tr>'
-        rfm_table = '<div style="overflow-x:auto; border:1px solid rgba(20,184,166,0.15); border-radius:14px; background:linear-gradient(135deg,rgba(8,12,20,0.85),rgba(16,24,40,0.7)); backdrop-filter:blur(20px); box-shadow:0 12px 36px rgba(0,0,0,0.35); margin-bottom:20px; max-height:480px; overflow-y:auto;"><table style="width:100%; border-collapse:collapse; font-family:Inter,sans-serif;"><thead><tr style="border-bottom:1.5px solid rgba(20,184,166,0.2); background:rgba(20,184,166,0.04);"><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px;">Customer ID</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Recency</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Frequency</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Monetary</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px;">RFM Segment</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:center;">Churn</th></tr></thead><tbody>' + rfm_rows + '</tbody></table></div>'
+        rfm_table = '<div style="overflow-x:auto; border:1px solid rgba(20,184,166,0.15); border-radius:14px; background:linear-gradient(135deg,rgba(8,12,20,0.85),rgba(16,24,40,0.7)); backdrop-filter:blur(20px); box-shadow:0 12px 36px rgba(0,0,0,0.35); margin-bottom:20px; max-height:480px; overflow-y:auto;"><table style="width:100%; border-collapse:collapse; font-family:Inter,sans-serif;"><thead><tr style="border-bottom:1.5px solid rgba(20,184,166,0.2); background:rgba(20,184,166,0.04);"><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#00E5FF; text-transform:uppercase; letter-spacing:1.5px;">Customer ID</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#00E5FF; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Recency</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#00E5FF; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Frequency</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#00E5FF; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Monetary</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#00E5FF; text-transform:uppercase; letter-spacing:1.5px;">RFM Segment</th><th style="padding:12px 14px; font-size:0.65rem; font-weight:700; color:#00E5FF; text-transform:uppercase; letter-spacing:1.5px; text-align:center;">Churn</th></tr></thead><tbody>' + rfm_rows + '</tbody></table></div>'
         st.markdown(rfm_table, unsafe_allow_html=True)
         
     except FileNotFoundError:
@@ -1790,15 +1794,15 @@ with tab7:
                     </div>""", unsafe_allow_html=True)
                 with m3:
                     st.markdown(f"""
-                    <div class="glass-card" style="--accent-color: #34d399; padding: 16px 14px;">
+                    <div class="glass-card" style="--accent-color: #00E5FF; padding: 16px 14px;">
                         <div class="card-label" style="font-size:0.65rem;">Segment Avg CLTV</div>
-                        <div class="card-value" style="color: #34d399; font-size: 1.6rem;">${sub_avg_cltv:,.0f}</div>
+                        <div class="card-value" style="color: #00E5FF; font-size: 1.6rem;">${sub_avg_cltv:,.0f}</div>
                     </div>""", unsafe_allow_html=True)
                 with m4:
                     st.markdown(f"""
-                    <div class="glass-card" style="--accent-color: #38bdf8; padding: 16px 14px;">
+                    <div class="glass-card" style="--accent-color: #FFD700; padding: 16px 14px;">
                         <div class="card-label" style="font-size:0.65rem;">Segment Value</div>
-                        <div class="card-value" style="color: #38bdf8; font-size: 1.6rem;">${sub_total_value/1e6:.2f}M</div>
+                        <div class="card-value" style="color: #FFD700; font-size: 1.6rem;">${sub_total_value/1e6:.2f}M</div>
                     </div>""", unsafe_allow_html=True)
                 
                 st.markdown("<br>", unsafe_allow_html=True)
@@ -1833,10 +1837,10 @@ with tab7:
                     ai_slice = filtered_df[['customerID', 'tenure', 'Contract', 'InternetService', 'MonthlyCharges', 'CLTV', 'Churn']].head(100)
                     ai_rows = ""
                     for _, arow in ai_slice.iterrows():
-                        churn_c = '#f87171' if arow['Churn'] == 'Yes' else '#34d399'
-                        contract_c = '#f87171' if arow['Contract'] == 'Month-to-month' else ('#fbbf24' if arow['Contract'] == 'One year' else '#34d399')
-                        ai_rows += f'<tr style="border-bottom:1px solid rgba(20,184,166,0.07);"><td style="padding:9px 12px; color:#94a3b8; font-size:0.78rem; font-family:JetBrains Mono,monospace;">{arow["customerID"]}</td><td style="padding:9px 12px; text-align:right; color:#e2e8f0; font-family:JetBrains Mono,monospace; font-size:0.8rem;">{int(arow["tenure"])} m</td><td style="padding:9px 12px; font-size:0.8rem; font-weight:600; color:{contract_c};">{arow["Contract"]}</td><td style="padding:9px 12px; font-size:0.8rem; color:#94a3b8;">{arow["InternetService"]}</td><td style="padding:9px 12px; text-align:right; color:#e2e8f0; font-family:JetBrains Mono,monospace; font-size:0.8rem;">${arow["MonthlyCharges"]:.2f}</td><td style="padding:9px 12px; text-align:right; color:#38bdf8; font-family:JetBrains Mono,monospace; font-size:0.8rem; font-weight:600;">${arow["CLTV"]:,.0f}</td><td style="padding:9px 12px; text-align:center; font-size:0.8rem; font-weight:700; color:{churn_c};">{arow["Churn"]}</td></tr>'
-                    ai_table = '<div style="overflow-x:auto; border:1px solid rgba(20,184,166,0.15); border-radius:14px; background:linear-gradient(135deg,rgba(8,12,20,0.85),rgba(16,24,40,0.7)); backdrop-filter:blur(20px); box-shadow:0 12px 36px rgba(0,0,0,0.35); max-height:280px; overflow-y:auto;"><table style="width:100%; border-collapse:collapse; font-family:Inter,sans-serif;"><thead style="position:sticky; top:0; z-index:2;"><tr style="border-bottom:1.5px solid rgba(20,184,166,0.2); background:rgba(8,12,20,0.95);"><th style="padding:10px 12px; font-size:0.63rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px;">Customer ID</th><th style="padding:10px 12px; font-size:0.63rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Tenure</th><th style="padding:10px 12px; font-size:0.63rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px;">Contract</th><th style="padding:10px 12px; font-size:0.63rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px;">Internet</th><th style="padding:10px 12px; font-size:0.63rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Monthly</th><th style="padding:10px 12px; font-size:0.63rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">CLTV</th><th style="padding:10px 12px; font-size:0.63rem; font-weight:700; color:#5eead4; text-transform:uppercase; letter-spacing:1.5px; text-align:center;">Churn</th></tr></thead><tbody>' + ai_rows + '</tbody></table></div>'
+                        churn_c = '#f87171' if arow['Churn'] == 'Yes' else '#00E5FF'
+                        contract_c = '#f87171' if arow['Contract'] == 'Month-to-month' else ('#fbbf24' if arow['Contract'] == 'One year' else '#00E5FF')
+                        ai_rows += f'<tr style="border-bottom:1px solid rgba(20,184,166,0.07);"><td style="padding:9px 12px; color:#94a3b8; font-size:0.78rem; font-family:JetBrains Mono,monospace;">{arow["customerID"]}</td><td style="padding:9px 12px; text-align:right; color:#e2e8f0; font-family:JetBrains Mono,monospace; font-size:0.8rem;">{int(arow["tenure"])} m</td><td style="padding:9px 12px; font-size:0.8rem; font-weight:600; color:{contract_c};">{arow["Contract"]}</td><td style="padding:9px 12px; font-size:0.8rem; color:#94a3b8;">{arow["InternetService"]}</td><td style="padding:9px 12px; text-align:right; color:#e2e8f0; font-family:JetBrains Mono,monospace; font-size:0.8rem;">${arow["MonthlyCharges"]:.2f}</td><td style="padding:9px 12px; text-align:right; color:#FFD700; font-family:JetBrains Mono,monospace; font-size:0.8rem; font-weight:600;">${arow["CLTV"]:,.0f}</td><td style="padding:9px 12px; text-align:center; font-size:0.8rem; font-weight:700; color:{churn_c};">{arow["Churn"]}</td></tr>'
+                    ai_table = '<div style="overflow-x:auto; border:1px solid rgba(20,184,166,0.15); border-radius:14px; background:linear-gradient(135deg,rgba(8,12,20,0.85),rgba(16,24,40,0.7)); backdrop-filter:blur(20px); box-shadow:0 12px 36px rgba(0,0,0,0.35); max-height:280px; overflow-y:auto;"><table style="width:100%; border-collapse:collapse; font-family:Inter,sans-serif;"><thead style="position:sticky; top:0; z-index:2;"><tr style="border-bottom:1.5px solid rgba(20,184,166,0.2); background:rgba(8,12,20,0.95);"><th style="padding:10px 12px; font-size:0.63rem; font-weight:700; color:#00E5FF; text-transform:uppercase; letter-spacing:1.5px;">Customer ID</th><th style="padding:10px 12px; font-size:0.63rem; font-weight:700; color:#00E5FF; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Tenure</th><th style="padding:10px 12px; font-size:0.63rem; font-weight:700; color:#00E5FF; text-transform:uppercase; letter-spacing:1.5px;">Contract</th><th style="padding:10px 12px; font-size:0.63rem; font-weight:700; color:#00E5FF; text-transform:uppercase; letter-spacing:1.5px;">Internet</th><th style="padding:10px 12px; font-size:0.63rem; font-weight:700; color:#00E5FF; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">Monthly</th><th style="padding:10px 12px; font-size:0.63rem; font-weight:700; color:#00E5FF; text-transform:uppercase; letter-spacing:1.5px; text-align:right;">CLTV</th><th style="padding:10px 12px; font-size:0.63rem; font-weight:700; color:#00E5FF; text-transform:uppercase; letter-spacing:1.5px; text-align:center;">Churn</th></tr></thead><tbody>' + ai_rows + '</tbody></table></div>'
                     st.markdown(ai_table, unsafe_allow_html=True)
                     
                     csv_dyn = filtered_df.to_csv(index=False).encode('utf-8')

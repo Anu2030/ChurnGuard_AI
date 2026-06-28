@@ -24,7 +24,7 @@ TARGET_COL = 'Churn'
 ID_COL = 'customerID'
 
 # Numeric columns to scale
-NUMERIC_COLS = ['tenure', 'MonthlyCharges', 'TotalCharges']
+NUMERIC_COLS = ['tenure', 'MonthlyCharges', 'TotalCharges', 'TenureInYears', 'ChargeRatio']
 
 # Categorical columns to encode
 CATEGORICAL_COLS = [
@@ -39,16 +39,22 @@ RANDOM_STATE = 42
 
 # Hyperparameter grids for training (balanced: deep enough to be rigorous, fast enough to run)
 GRID_PARAMS_RF = {
-    'n_estimators': [100, 200],
-    'max_depth': [5, 10, None],
-    'min_samples_split': [2, 5],
-    'min_samples_leaf': [1, 2]
-}  # 24 candidates × 3 folds = 72 fits
+    'n_estimators': [100, 200, 300],
+    'max_depth': [10, 20, None],
+    'min_samples_split': [2, 5, 10],
+    'min_samples_leaf': [1, 2, 4]
+}
 
 GRID_PARAMS_XGB = {
-    'n_estimators': [100, 200],
-    'learning_rate': [0.05, 0.1],
-    'max_depth': [3, 5, 7],
+    'n_estimators': [100, 200, 300],
+    'learning_rate': [0.01, 0.05, 0.1],
+    'max_depth': [3, 5, 7, 9],
     'subsample': [0.8, 1.0],
     'colsample_bytree': [0.8, 1.0]
-}  # 48 candidates × 3 folds = 144 fits
+}
+
+GRID_PARAMS_GB = {
+    'n_estimators': [100, 200, 300],
+    'learning_rate': [0.01, 0.05, 0.1],
+    'max_depth': [3, 5, 7]
+}

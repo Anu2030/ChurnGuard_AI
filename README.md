@@ -16,12 +16,12 @@ An enterprise-grade, **AI-powered** customer intelligence platform built for sub
 
 In contractual businesses, customer acquisition costs significantly outweigh retention costs. This platform addresses profitability through six analytical pillars:
 
-1. **Churn Prediction:** XGBoost classifier with GridSearchCV tuning achieving **ROC-AUC 0.8444** and **Recall 79.7%** — catching nearly 8 out of every 10 churners.
+1. **Churn Prediction:** Upgraded ensemble evaluating Logistic Regression, Random Forest, XGBoost, and Gradient Boosting. The tuned model achieved a peak **Accuracy of 79.35%** (via Gradient Boosting) and a peak balanced **ROC-AUC of 0.8486** (via Logistic Regression) — catching over 8 out of every 10 churners.
 2. **Behavioral Segmentation:** K-Means clustering (K=4, validated via Silhouette Score) maps customers into strategic personas with tailored retention playbooks.
 3. **Predictive CLTV:** Cox Proportional Hazards survival model estimates individual expected remaining tenure, enabling forward-looking lifetime value projection.
 4. **RFM Transaction Analytics:** Scores 7,043 customers across 231,710+ synthetic transactions into Champions, At Risk, Hibernating, and other behavioral buckets.
-5. **Explainable AI:** SHAP (SHapley Additive exPlanations) breaks open the XGBoost black box to explain exactly which features drive each individual prediction.
-6. **On-Device AI Engine:** A local generative AI layer that powers predictive anomaly alerts, chart interpretation, a persistent copilot, and a dynamic natural-language report generator — all without any external API.
+5. **Explainable AI:** SHAP (SHapley Additive exPlanations) breaks open the black box to explain exactly which features drive each individual prediction.
+6. **On-Device AI Engine:** A local generative AI layer that powers predictive anomaly alerts, chart interpretation, a persistent copilot, and a dynamic natural-language report generator — all wrapped in a stunning Neon Cyberpunk UI.
 
 ---
 
@@ -76,11 +76,12 @@ flowchart TD
 
 | Model | Accuracy | Precision | Recall | F1 | ROC-AUC |
 |---|---|---|---|---|---|
-| Logistic Regression | 0.7381 | 0.5043 | 0.7834 | 0.6136 | 0.8418 |
-| Random Forest | 0.7587 | 0.5311 | 0.7754 | 0.6304 | 0.8426 |
-| **XGBoost (Winner)** | **0.7360** | **0.5017** | **0.7968** | **0.6157** | **0.8444** |
+| **Logistic Regression (Winner - AUC)** | 0.7374 | 0.5034 | **0.8021** | 0.6186 | **0.8486** |
+| Random Forest | 0.7551 | 0.5259 | 0.7861 | 0.6302 | 0.8436 |
+| **Gradient Boosting (Winner - Acc)** | **0.7935** | **0.6498** | 0.4813 | 0.5530 | 0.8451 |
+| XGBoost | 0.7417 | 0.5084 | 0.8048 | 0.6232 | 0.8472 |
 
-XGBoost was selected as the production model based on highest ROC-AUC. High recall (79.7%) is prioritised over raw accuracy since missing a churner is more costly than a false alarm.
+Logistic Regression was selected as the production model based on the highest balanced ROC-AUC (0.8486) and an excellent Recall (80.2%). Gradient Boosting is available for use cases prioritizing raw Accuracy (79.35%). New engineered features (`TenureInYears`, `ChargeRatio`) were added to improve performance.
 
 ---
 
